@@ -1,0 +1,10 @@
+# 水泉沟·山居 民宿管理系统
+# 临时文件
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

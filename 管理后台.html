@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水泉沟·山居 — 总管后台</title>
+<style>
+:root {
+  --red: #8B3A3A; --red-light: #A05252; --red-dark: #5C2828;
+  --gold: #C9A96E; --gold-light: #E0D0A8;
+  --jade: #5B8C5A; --jade-light: #A8C8A0;
+  --lake: #4A7A8C; --lake-dark: #2C4A5A;
+  --ink: #2C2C2C; --ink-light: #666;
+  --paper: #FDFAF5;
+  --sidebar-bg: #1A2530; --sidebar-hover: #243040; --sidebar-active: #2C3D50;
+  --bg: #F0F2F5;
+  --card: #fff;
+  --border: #E8E8E8;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--ink);
+  -webkit-font-smoothing: antialiased; display:flex; min-height:100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px; background: var(--sidebar-bg); color: #B0C0D0;
+  display:flex; flex-direction:column; flex-shrink:0; position:fixed;
+  top:0; left:0; bottom:0; z-index:100; overflow-y:auto;
+}
+.sidebar-logo {
+  padding: 20px 18px; border-bottom:1px solid rgba(255,255,255,0.06);
+  text-align:center;
+}
+.sidebar-logo .logo-icon { font-size:32px; }
+.sidebar-logo .logo-text { font-size:15px; font-weight:700; color:#fff; margin-top:4px; letter-spacing:2px; }
+.sidebar-logo .logo-sub { font-size:10px; color:#607080; letter-spacing:1px; }
+.sidebar-menu { flex:1; padding:10px 0; }
+.sidebar-group {
+  font-size:10px; color:#506070; padding:14px 18px 6px;
+  text-transform:uppercase; letter-spacing:2px; font-weight:600;
+}
+.sidebar-item {
+  padding:10px 18px; cursor:pointer; display:flex; align-items:center;
+  gap:8px; font-size:13px; transition:all 0.15s; border-left:2px solid transparent;
+}
+.sidebar-item:hover { background:var(--sidebar-hover); color:#D0D8E0; }
+.sidebar-item.active { background:var(--sidebar-active); color:#fff; border-left-color:var(--gold); font-weight:600; }
+.sidebar-item .si-icon { font-size:16px; width:22px; text-align:center; }
+.sidebar-footer {
+  padding:14px 18px; border-top:1px solid rgba(255,255,255,0.06);
+  font-size:11px; color:#506070;
+}
+
+/* ===== MAIN ===== */
+.main {
+  margin-left:220px; flex:1; padding:24px 28px; min-height:100vh;
+}
+
+/* Top bar */
+.topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:24px;
+}
+.topbar h1 { font-size:20px; font-weight:700; color:var(--red-dark); }
+.topbar .breadcrumb { font-size:11px; color:var(--ink-light); }
+.topbar .admin-info { font-size:12px; color:var(--ink-light); }
+
+/* Cards */
+.card {
+  background:var(--card); border-radius:12px; padding:20px 24px;
+  margin-bottom:16px; box-shadow:var(--shadow);
+}
+.card-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);
+}
+.card-header h3 { font-size:15px; color:var(--ink); }
+.card-header .actions { display:flex; gap:8px; }
+
+/* Stat row */
+.stat-row { display:flex; gap:16px; margin-bottom:16px; }
+.stat-card {
+  flex:1; background:var(--card); border-radius:12px; padding:18px 20px;
+  box-shadow:var(--shadow); text-align:center;
+}
+.stat-card .stat-icon { font-size:28px; margin-bottom:4px; }
+.stat-card .stat-val { font-size:28px; font-weight:900; }
+.stat-card .stat-label { font-size:11px; color:var(--ink-light); margin-top:2px; }
+.stat-card.red .stat-val { color:var(--red); }
+.stat-card.gold .stat-val { color:var(--gold); }
+.stat-card.jade .stat-val { color:var(--jade); }
+.stat-card.lake .stat-val { color:var(--lake); }
+
+/* Tables */
+table {
+  width:100%; border-collapse:collapse; font-size:12px;
+}
+th {
+  background:#F8F9FA; padding:10px 12px; text-align:left;
+  font-weight:600; color:#555; border-bottom:2px solid #EEE;
+}
+td { padding:10px 12px; border-bottom:1px solid #F0F0F0; }
+tr:hover td { background:#FAFAF8; }
+
+/* Tags */
+.tag {
+  display:inline-block; padding:2px 8px; border-radius:10px;
+  font-size:10px; font-weight:600; margin:0 2px;
+}
+.tag.on { background:#E8F5E8; color:var(--jade); }
+.tag.off { background:#F5F5F5; color:#999; }
+.tag.red { background:#FDF0F0; color:var(--red); }
+.tag.gold { background:#FDF6EC; color:var(--gold); }
+
+/* Buttons */
+.btn {
+  display:inline-block; padding:8px 18px; border-radius:8px;
+  font-size:12px; font-weight:600; border:none; cursor:pointer;
+  transition:all 0.15s;
+}
+.btn:hover { opacity:0.85; }
+.btn:active { transform:scale(0.97); }
+.btn-primary { background:var(--lake); color:#fff; }
+.btn-success { background:var(--jade); color:#fff; }
+.btn-danger { background:#E8D0D0; color:var(--red); }
+.btn-gold { background:var(--gold); color:#fff; }
+.btn-sm { padding:4px 10px; font-size:11px; }
+.btn-xs { padding:2px 8px; font-size:10px; border-radius:6px; }
+
+/* Forms */
+.form-group {
+  display:flex; align-items:flex-start; gap:12px; margin-bottom:10px;
+}
+.form-group label {
+  width:90px; text-align:right; font-size:12px; color:var(--ink-light);
+  padding-top:8px; flex-shrink:0;
+}
+.form-group input, .form-group textarea, .form-group select {
+  flex:1; padding:8px 12px; border:1px solid #DDD; border-radius:6px;
+  font-size:12px; outline:none; font-family:inherit;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color:var(--lake);
+}
+.form-group textarea { resize:vertical; min-height:60px; }
+
+/* Modal */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.25s;
+}
+.modal-overlay.show { opacity:1; pointer-events:auto; }
+.modal {
+  background:#fff; border-radius:14px; width:90%; max-width:680px; max-height:85vh;
+  overflow-y:auto; box-shadow:0 12px 48px rgba(0,0,0,0.2);
+}
+.modal-header {
+  padding:16px 20px; border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:15px; font-weight:700;
+}
+.modal-close { cursor:pointer; font-size:20px; color:#999; background:none; border:none; }
+.modal-body { padding:20px; }
+.modal-footer {
+  padding:14px 20px; border-top:1px solid var(--border);
+  display:flex; justify-content:flex-end; gap:8px;
+}
+
+/* Toast */
+.toast {
+  position:fixed; top:20px; left:50%; transform:translateX(-50%);
+  background:#333; color:#fff; padding:10px 24px; border-radius:20px;
+  font-size:13px; z-index:9999; pointer-events:none;
+  opacity:0; transition:all 0.3s;
+}
+.toast.show { opacity:1; }
+
+/* Sections */
+.section { display:none; }
+.section.active { display:block; }
+
+/* Responsive */
+@media (max-width:768px) {
+  .sidebar { width:160px; }
+  .main { margin-left:160px; padding:16px; }
+  .stat-row { flex-wrap:wrap; }
+  .stat-card { min-width:calc(50% - 8px); }
+  .form-group { flex-direction:column; }
+  .form-group label { width:auto; text-align:left; padding-top:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== SIDEBAR ====== -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🏛️</div>
+    <div class="logo-text">水泉沟·山居</div>
+    <div class="logo-sub">总管后台 · 藏书阁</div>
+  </div>
+  <div class="sidebar-menu">
+    <div class="sidebar-group">📊 概览</div>
+    <div class="sidebar-item active" data-page="dashboard" onclick="switchPage('dashboard')">
+      <span class="si-icon">📈</span> 数据看板
+    </div>
+    <div class="sidebar-group">🏛 内容管理</div>
+    <div class="sidebar-item" data-page="routes" onclick="switchPage('routes')">
+      <span class="si-icon">📜</span> 游玩路线
+    </div>
+    <div class="sidebar-item" data-page="foods" onclick="switchPage('foods')">
+      <span class="si-icon">🍜</span> 美食推荐
+    </div>
+    <div class="sidebar-item" data-page="scenic" onclick="switchPage('scenic')">
+      <span class="si-icon">🏯</span> 景区管理
+    </div>
+    <div class="sidebar-item" data-page="tips" onclick="switchPage('tips')">
+      <span class="si-icon">💡</span> 每日贴士
+    </div>
+    <div class="sidebar-group">⚙️ 系统配置</div>
+    <div class="sidebar-item" data-page="password" onclick="switchPage('password')">
+      <span class="si-icon">🔐</span> 门锁密码
+    </div>
+    <div class="sidebar-item" data-page="config" onclick="switchPage('config')">
+      <span class="si-icon">⚙️</span> 全局设置
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    💾 数据自动保存至浏览器<br>
+    🔗 与小程序客户端共享数据
+  </div>
+</div>
+
+<!-- ====== MAIN CONTENT ====== -->
+<div class="main" id="mainContent">
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== DATA STORE ====================
+const DB_KEY = 'shuiquangou_miniapp';
+const META_KEY = 'shuiquangou_meta';
+
+function getMeta() {
+  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}'); } catch(e) { return {}; }
+}
+function saveMeta(m) { localStorage.setItem(META_KEY, JSON.stringify(m)); }
+function touchModified() {
+  const meta = getMeta();
+  meta.lastModified = new Date().toISOString();
+  meta.totalExports = (meta.totalExports || 0) + 1;
+  saveMeta(meta);
+}
+
+function loadDB() {
+  try {
+    const d = localStorage.getItem(DB_KEY);
+    if (d) return JSON.parse(d);
+  } catch(e) { console.warn('数据读取失败，使用默认数据', e); }
+  const def = getDefaultDB();
+  saveDB(def);
+  return def;
+}
+
+function saveDB(db) {
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+  touchModified();
+}
+
+// Unified default data — matches client version for consistency
+function getDefaultDB() {
+  return {
+    config: { wifiName:'水泉沟山居', wifiPassword:'chengde2024', hostPhone:'1380314XXXX', hostWechat:'watervalley_host', remoteDataURL:'' },
+    password: { code:String(Math.floor(100000+Math.random()*900000)), guestName:'住客', checkIn:'2024-08-03', checkOut:'2024-08-05' },
+    dailyTip: { date:new Date().toISOString().slice(0,10), content:'今日山庄游人稀少，建议辰时（早8点）入园，从丽正门进，先游博物馆区，再乘舟游湖~', weather:'晴', temp:26, sunrise:'05:12', openTime:'08:00-17:30' },
+    routes: [
+      { id:'r1', name:'一日精华', type:'day1', intro:'仿帝王巡游路线，一日看尽承德精华', active:true, days:[{ label:'一日精华游', items:[{ time:'07:30', place:'老三羊汤', desc:'早餐·步行8分钟', tip:'必点：羊汤+烧饼，人均¥25' },{ time:'08:30', place:'避暑山庄', desc:'丽正门入·3-4小时', tip:'门票¥130，自带干粮和水' },{ time:'12:30', place:'乔家满族八大碗', desc:'午餐·满族风味', tip:'鹿肉、满族火锅必点' },{ time:'14:00', place:'普宁寺', desc:'世界最大木雕千手观音', tip:'门票¥80，约1.5小时' },{ time:'17:00', place:'磬锤峰', desc:'缆车观日落', tip:'缆车¥50单程' },{ time:'19:30', place:'水泉沟夜市', desc:'烧烤·步行回民宿', tip:'' }] }] },
+      { id:'r2', name:'两日深度', type:'day2', intro:'慢游承德，体验皇家与民间', active:true, days:[{ label:'Day 1 — 避暑山庄 + 外八庙', items:[{ time:'07:30', place:'老三羊汤', desc:'早餐', tip:'步行10分钟' },{ time:'08:30-12:00', place:'避暑山庄', desc:'丽正门进 → 博物馆 → 湖区 → 平原区', tip:'门票¥130' },{ time:'12:30', place:'大清花饺子', desc:'午餐·满族风味', tip:'' },{ time:'14:00-16:30', place:'普陀宗乘之庙+须弥福寿之庙', desc:'小布达拉宫', tip:'联票¥80' },{ time:'17:30', place:'磬锤峰', desc:'看日落', tip:'' },{ time:'19:00', place:'乔家满族八大碗', desc:'晚餐', tip:'' }] },{ label:'Day 2 — 周边深度', items:[{ time:'08:00', place:'承德杏仁茶', desc:'特色早餐', tip:'' },{ time:'09:00-11:30', place:'双塔山', desc:'自然奇观', tip:'门票¥50' },{ time:'12:30', place:'满族火锅', desc:'午餐', tip:'' },{ time:'14:00', place:'承德特产街', desc:'杏仁·山楂糕·榛子', tip:'' },{ time:'16:00', place:'返程', desc:'带上一罐杏仁回家~', tip:'' }] }] },
+      { id:'r3', name:'三日全览', type:'day3', intro:'深度游承德，不留遗憾', active:true, days:[{ label:'Day 1 — 避暑山庄沉浸游', items:[{ time:'07:30', place:'老三羊汤', desc:'早餐', tip:'' },{ time:'08:30-15:00', place:'避暑山庄全天深度游', desc:'博物馆→湖区划船→平原区→山区电瓶车', tip:'带午餐干粮' },{ time:'15:30', place:'普宁寺', desc:'下午光线好', tip:'' },{ time:'18:00', place:'乔家满族八大碗', desc:'晚餐', tip:'' }] },{ label:'Day 2 — 外八庙 + 磬锤峰', items:[{ time:'07:30', place:'杏仁茶+煎饼', desc:'早餐', tip:'' },{ time:'08:30', place:'普陀宗乘之庙', desc:'小布达拉宫', tip:'' },{ time:'12:30', place:'午餐', desc:'', tip:'' },{ time:'14:00', place:'磬锤峰国家森林公园', desc:'', tip:'' }] },{ label:'Day 3 — 周边探秘', items:[{ time:'08:00', place:'早餐', desc:'', tip:'' },{ time:'09:00', place:'双塔山或棒槌山', desc:'二选一', tip:'' },{ time:'14:00', place:'特产采购 → 返程', desc:'', tip:'' }] }] },
+      { id:'r4', name:'亲子御游', type:'family', intro:'带娃慢游，轻松愉快', active:true, days:[{ label:'推荐行程（2天1晚）', items:[{ time:'09:00', place:'睡到自然醒', desc:'慢慢吃个早餐', tip:'' },{ time:'10:00-12:00', place:'避暑山庄博物馆+湖区划船', desc:'孩子对划船和喂鱼更感兴趣', tip:'' },{ time:'12:30', place:'午餐后回民宿午休', desc:'', tip:'' },{ time:'15:00', place:'普宁寺', desc:'1小时足够', tip:'' },{ time:'17:00', place:'武烈河边散步', desc:'', tip:'' },{ time:'18:30', place:'晚餐', desc:'推荐有包间的餐厅', tip:'' }] }] }
+    ],
+    foods: [
+      { id:'f1', name:'老三羊汤', category:'breakfast', stars:4.8, distance:'步行8分钟', price:'¥25/人', tag:'30年老店', desc:'承德人从小吃到大的羊汤馆，汤白味浓，一定要配烧饼', rank:1, active:true },
+      { id:'f2', name:'乔家满族八大碗', category:'lunch', stars:4.6, distance:'3公里', price:'¥60/人', tag:'满族风味', desc:'鹿肉、野猪肉、满族火锅，体验正宗满族大餐', rank:2, active:true },
+      { id:'f3', name:'杏仁茶老店', category:'breakfast', stars:4.5, distance:'步行5分钟', price:'¥8/人', tag:'特色早餐', desc:'承德特产杏仁做的热饮，配煎饼果子一绝', rank:3, active:true },
+      { id:'f4', name:'大清花饺子', category:'lunch', stars:4.4, distance:'2.5公里', price:'¥40/人', tag:'满族饺子', desc:'满族传统饺子馆，酸菜猪肉馅必点，量大实惠', rank:4, active:true },
+      { id:'f5', name:'满族火锅城', category:'lunch', stars:4.3, distance:'3公里', price:'¥70/人', tag:'冬季首选', desc:'铜锅炭火，满族传统火锅，天冷时吃最舒服', rank:5, active:true },
+      { id:'f6', name:'水泉沟烧烤夜市', category:'snack', stars:4.2, distance:'步行3分钟', price:'¥35/人', tag:'夜宵', desc:'本地人晚上的聚集地，烤串+啤酒，烟火气十足', rank:6, active:true },
+      { id:'f7', name:'承德山楂糕', category:'snack', stars:4.7, distance:'特产店有售', price:'¥15/盒', tag:'必带特产', desc:'承德山楂是地理标志产品，酸甜可口', rank:7, active:true },
+      { id:'f8', name:'承德露露杏仁露', category:'snack', stars:4.5, distance:'超市有售', price:'¥5/罐', tag:'本地饮品', desc:'承德本土品牌，杏仁含量高，比外面的浓很多', rank:8, active:true },
+    ],
+    scenicSpots: [
+      { id:'s1', name:'避暑山庄', category:'皇家园林', location:'承德市双桥区丽正门大街', distance:'距民宿3km · 驾车约10分钟', openTime:'08:00-17:30', ticket:'¥130/人', duration:'3-4小时', tags:['世界遗产','5A'], history:'避暑山庄始建于康熙四十二年（1703年），历经康熙、雍正、乾隆三朝，耗时89年建成。它是中国现存最大的皇家园林，占地564万平方米。\n\n1994年被联合国教科文组织列入世界文化遗产名录。', highlights:['丽正门 — 山庄正门','澹泊敬诚殿 — 楠木主殿','烟雨楼 — 《还珠格格》取景地','热河泉 — 世界最短的河'], tips:'建议早上8点开门就入园，先去博物馆区（人少），然后乘船游湖，最后坐电瓶车上山。山庄内没有餐厅，建议自带干粮和水~', images:['🏛️','🏞️','🌊'], rating:4.7, reviewCount:'3.2万', sort:1, active:true },
+      { id:'s2', name:'普陀宗乘之庙', category:'外八庙', location:'承德市双桥区狮子沟镇', distance:'距民宿4km · 驾车约12分钟', openTime:'08:00-17:30', ticket:'¥80/人', duration:'2小时', tags:['世界遗产'], history:'又称"小布达拉宫"，建于乾隆三十二年（1767年），仿西藏布达拉宫而建，是外八庙中规模最大的一座。', highlights:['大红台 — 43米高主体建筑','万法归一殿 — 金顶辉煌','琉璃牌坊 — 精美绝伦','五塔门 — 藏式风格'], tips:'建议上午去，光线好适合拍照。可以和须弥福寿之庙一起游览，两庙相距不远，联票更划算。', images:['🛕','🏯','⛩️'], rating:4.6, reviewCount:'1.8万', sort:2, active:true },
+      { id:'s3', name:'磬锤峰', category:'奇峰异石', location:'承德市双桥区', distance:'距民宿2.5km · 驾车约8分钟', openTime:'08:00-17:30', ticket:'¥50/人', duration:'2小时', tags:['国家森林公园'], history:'俗称"棒槌山"，上粗下细形似棒槌，高38.29米。康熙皇帝赐名"磬锤峰"，是承德标志性自然景观。', highlights:['磬锤峰主峰 — 38米奇石','缆车观光 — 俯瞰承德','蛤蟆石 — 形似蛤蟆','夕阳剪影 — 最佳拍摄时间'], tips:'推荐下午去，乘缆车上山，在山顶等日落。缆车¥50单程。', images:['⛰️','🌅','🚡'], rating:4.5, reviewCount:'1.2万', sort:3, active:true },
+      { id:'s4', name:'普宁寺', category:'外八庙', location:'承德市双桥区普宁路', distance:'距民宿3.5km · 驾车约10分钟', openTime:'08:00-17:30', ticket:'¥80/人', duration:'1.5小时', tags:['世界遗产'], history:'建于乾隆二十年，寺内供奉世界最大木雕千手千眼观音菩萨，高22.28米，重约110吨。', highlights:['千手观音 — 世界最大木雕','大乘之阁 — 汉藏结合','天王殿 — 四大天王','碑亭 — 四体文字'], tips:'千手观音非常震撼，站在大乘之阁楼下仰望才能真正感受其宏伟。寺内禁止对佛像拍照。', images:['🛕','🙏','🏯'], rating:4.5, reviewCount:'1.5万', sort:4, active:true },
+    ]
+  };
+}
+
+let DB = loadDB();
+let currentPage = 'dashboard';
+
+// ==================== PAGE SWITCH ====================
+function switchPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+  renderPage(page);
+}
+
+// ==================== RENDER ====================
+function renderPage(page) {
+  const main = document.getElementById('mainContent');
+  switch(page) {
+    case 'dashboard': renderDashboard(main); break;
+    case 'routes': renderRoutePage(main); break;
+    case 'foods': renderFoodPage(main); break;
+    case 'scenic': renderScenicPage(main); break;
+    case 'tips': renderTipsPage(main); break;
+    case 'password': renderPasswordPage(main); break;
+    case 'config': renderConfigPage(main); break;
+  }
+}
+
+// ===== DASHBOARD =====
+function renderDashboard(main) {
+  const activeRoutes = DB.routes.filter(r=>r.active).length;
+  const activeFoods = DB.foods.filter(f=>f.active).length;
+  const activeSpots = DB.scenicSpots.filter(s=>s.active).length;
+  const scans = parseInt(localStorage.getItem('admin_scan_count')||'0');
+  const meta = getMeta();
+  const hasRemote = !!(DB.config.remoteDataURL && DB.config.remoteDataURL.startsWith('http'));
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>📈 数据看板</h1><div class="breadcrumb">概览 / 实时数据</div></div>
+      <div class="admin-info">🏛️ 总管大人 · ${new Date().toLocaleDateString('zh-CN')}</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card red"><div class="stat-icon">📜</div><div class="stat-val">${activeRoutes}</div><div class="stat-label">启用路线</div></div>
+      <div class="stat-card gold"><div class="stat-icon">🍜</div><div class="stat-val">${activeFoods}</div><div class="stat-label">美食推荐</div></div>
+      <div class="stat-card jade"><div class="stat-icon">🏯</div><div class="stat-val">${activeSpots}</div><div class="stat-label">景区展示</div></div>
+      <div class="stat-card lake">
+        <div class="stat-icon">${hasRemote ? '☁️' : '💻'}</div>
+        <div style="font-size:11px;font-weight:700;">${hasRemote ? '云端同步' : '本地模式'}</div>
+        <div class="stat-label">${hasRemote ? '远程URL已配置' : '未配置远程'}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>📋 内容概览</h3></div>
+      <table>
+        <tr><th>模块</th><th>总数</th><th>启用中</th><th>已隐藏</th><th>最后更新</th></tr>
+        <tr><td>📜 游玩路线</td><td>${DB.routes.length}</td><td>${activeRoutes}</td><td>${DB.routes.length-activeRoutes}</td><td>${meta.lastModified ? new Date(meta.lastModified).toLocaleString('zh-CN') : '—'}</td></tr>
+        <tr><td>🍜 美食推荐</td><td>${DB.foods.length}</td><td>${activeFoods}</td><td>${DB.foods.length-activeFoods}</td><td>—</td></tr>
+        <tr><td>🏯 景区信息</td><td>${DB.scenicSpots.length}</td><td>${activeSpots}</td><td>${DB.scenicSpots.length-activeSpots}</td><td>—</td></tr>
+        <tr><td>🔐 门锁密码</td><td colspan="2">${DB.password.code}</td><td>${DB.password.checkIn} → ${DB.password.checkOut}</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>💡 每日贴士预览</h3></div>
+      <div style="background:#FFF9F0;border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;">
+        <strong>${DB.dailyTip.date} · ${DB.dailyTip.weather} ${DB.dailyTip.temp}°C：</strong>${DB.dailyTip.content}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🔗 快速操作</h3>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="switchPage('password')">🔐 更新门锁密码</button>
+        <button class="btn btn-success" onclick="switchPage('routes')">📜 编辑游玩路线</button>
+        <button class="btn btn-gold" onclick="switchPage('scenic')">🏯 管理景区信息</button>
+        <button class="btn btn-danger btn-sm" onclick="simulateScan()">📱 模拟一次扫码</button>
+        <button class="btn btn-sm" style="background:#ddd;" onclick="exportData()">📥 导出数据</button>
+      </div>
+    </div>
+  `;
+}
+
+function simulateScan() {
+  const count = parseInt(localStorage.getItem('admin_scan_count')||'0') + 1;
+  localStorage.setItem('admin_scan_count', count);
+  showToast('✅ 模拟扫码成功！当前累计: '+count+' 次');
+  renderDashboard(document.getElementById('mainContent'));
+}
+
+// ===== ROUTES =====
+function renderRoutePage(main) {
+  const routes = DB.routes;
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>📜 游玩路线管理</h1><div class="breadcrumb">内容管理 / 游玩路线</div></div>
+      <button class="btn btn-primary" onclick="openRouteModal()">+ 新建路线</button>
+    </div>
+    <div class="card">
+      <table>
+        <tr><th>名称</th><th>类型</th><th>简介</th><th>天数</th><th>状态</th><th>操作</th></tr>
+        ${routes.map(r => `
+          <tr>
+            <td><b>${r.name}</b></td>
+            <td>${r.type}</td>
+            <td style="font-size:11px;">${r.intro||''}</td>
+            <td>${r.days.length}天</td>
+            <td><span class="tag ${r.active?'on':'off'}">${r.active?'启用':'隐藏'}</span></td>
+            <td>
+              <button class="btn btn-sm btn-primary" onclick="openRouteModal('${r.id}')">✏️</button>
+              <button class="btn btn-sm btn-danger" onclick="toggleRoute('${r.id}')">${r.active?'隐藏':'启用'}</button>
+              <button class="btn btn-sm" style="background:#ddd;" onclick="deleteRoute('${r.id}')">🗑</button>
+            </td>
+          </tr>
+        `).join('')}
+      </table>
+    </div>
+    <div id="routeModal"></div>
+  `;
+}
+
+function openRouteModal(id) {
+  const route = id ? DB.routes.find(r=>r.id===id) : null;
+  const isNew = !route;
+  const r = route || { id:'r'+Date.now(), name:'', type:'day1', intro:'', active:true, days:[{ label:'', items:[] }] };
+  let daysHTML = r.days.map((d,di) => `
+    <div style="background:#F8F9FA;border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong>Day ${di+1}</strong>
+        <div>
+          <button class="btn btn-xs btn-primary" onclick="addRouteItem(${di})">+ 添加节点</button>
+          ${r.days.length>1 ? `<button class="btn btn-xs btn-danger" onclick="removeRouteDay(${di})">删除本天</button>` : ''}
+        </div>
+      </div>
+      <div class="form-group"><label>天数标题</label><input value="${d.label||''}" id="dayLabel${di}" placeholder="如：一日精华游" /></div>
+      <div id="dayItems${di}">
+        ${(d.items||[]).map((item,ii) => `
+          <div style="display:flex;gap:6px;margin-bottom:4px;align-items:center;">
+            <input value="${item.time||''}" id="itemTime${di}_${ii}" placeholder="时间" style="width:70px;font-size:11px;" />
+            <input value="${item.place||''}" id="itemPlace${di}_${ii}" placeholder="地点" style="flex:1;font-size:11px;" />
+            <input value="${item.desc||''}" id="itemDesc${di}_${ii}" placeholder="描述" style="flex:1;font-size:11px;" />
+            <input value="${item.tip||''}" id="itemTip${di}_${ii}" placeholder="提示" style="width:100px;font-size:11px;" />
+            <button class="btn btn-xs btn-danger" onclick="this.parentElement.remove()">×</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  const modal = document.getElementById('routeModal');
+  modal.innerHTML = `
+    <div class="modal-overlay show" onclick="if(event.target===this)closeRouteModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span>${isNew?'新建':'编辑'}游玩路线</span>
+          <button class="modal-close" onclick="closeRouteModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>路线名称</label><input id="rName" value="${r.name}" placeholder="如：一日精华" /></div>
+          <div class="form-group"><label>路线类型</label>
+            <select id="rType">
+              ${['day1','day2','day3','family'].map(t => `<option value="${t}" ${r.type===t?'selected':''}>${t==='day1'?'一日精华':t==='day2'?'两日深度':t==='day3'?'三日全览':'亲子御游'}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group"><label>简介</label><input id="rIntro" value="${r.intro||''}" placeholder="一句话介绍" /></div>
+          <div class="form-group"><label>状态</label>
+            <select id="rActive"><option value="1" ${r.active?'selected':''}>启用</option><option value="0" ${!r.active?'selected':''}>隐藏</option></select>
+          </div>
+          <div style="margin-top:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong>行程安排</strong>
+              <button class="btn btn-xs btn-primary" onclick="addRouteDay()">+ 添加一天</button>
+            </div>
+            <div id="daysContainer">${daysHTML}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#eee;" onclick="closeRouteModal()">取消</button>
+          <button class="btn btn-success" onclick="saveRoute('${r.id}', ${isNew})">💾 保存路线</button>
+        </div>
+      </div>
+    </div>
+  `;
+  window._editingRoute = r;
+  window._editingRouteIsNew = isNew;
+}
+
+function closeRouteModal() {
+  document.getElementById('routeModal').innerHTML = '';
+  window._editingRoute = null;
+  window._editingRouteIsNew = null;
+}
+
+function syncFormToEditingRoute() {
+  // BUG-002 fix: collect current DOM form values before modal rebuild
+  if (!window._editingRoute) return;
+  const r = window._editingRoute;
+  r.name = document.getElementById('rName')?.value || r.name;
+  r.type = document.getElementById('rType')?.value || r.type;
+  r.intro = document.getElementById('rIntro')?.value || r.intro;
+  r.active = document.getElementById('rActive')?.value === '1';
+
+  // Collect days
+  const daysContainer = document.getElementById('daysContainer');
+  if (daysContainer) {
+    const dayDivs = daysContainer.children;
+    const newDays = [];
+    for (let di = 0; di < dayDivs.length; di++) {
+      const labelEl = document.getElementById('dayLabel'+di);
+      const label = labelEl?.value || '';
+      const items = [];
+      const itemsDiv = document.getElementById('dayItems'+di);
+      if (itemsDiv) {
+        const itemRows = itemsDiv.children;
+        for (let ii = 0; ii < itemRows.length; ii++) {
+          const timeEl = document.getElementById('itemTime'+di+'_'+ii);
+          const placeEl = document.getElementById('itemPlace'+di+'_'+ii);
+          const descEl = document.getElementById('itemDesc'+di+'_'+ii);
+          const tipEl = document.getElementById('itemTip'+di+'_'+ii);
+          if (placeEl || timeEl) {
+            items.push({
+              time: timeEl?.value || '',
+              place: placeEl?.value || '',
+              desc: descEl?.value || '',
+              tip: tipEl?.value || ''
+            });
+          }
+        }
+      }
+      newDays.push({ label, items });
+    }
+    r.days = newDays;
+  }
+}
+
+function addRouteDay() {
+  // BUG-002 fix: sync form data first
+  syncFormToEditingRoute();
+  if (!window._editingRoute) return;
+  window._editingRoute.days.push({ label:'', items:[] });
+  const clone = JSON.parse(JSON.stringify(window._editingRoute));
+  const isNew = window._editingRouteIsNew;
+  closeRouteModal();
+  setTimeout(() => {
+    window._editingRoute = clone;
+    window._editingRouteIsNew = isNew;
+    document.getElementById('routeModal').innerHTML = buildRouteModalHTML(clone, isNew);
+  }, 30);
+}
+
+function addRouteItem(dayIdx) {
+  // BUG-002 fix: sync form data first
+  syncFormToEditingRoute();
+  if (!window._editingRoute || !window._editingRoute.days[dayIdx]) return;
+  if (!window._editingRoute.days[dayIdx].items) window._editingRoute.days[dayIdx].items = [];
+  window._editingRoute.days[dayIdx].items.push({ time:'', place:'', desc:'', tip:'' });
+  const clone = JSON.parse(JSON.stringify(window._editingRoute));
+  const isNew = window._editingRouteIsNew;
+  closeRouteModal();
+  setTimeout(() => {
+    window._editingRoute = clone;
+    window._editingRouteIsNew = isNew;
+    document.getElementById('routeModal').innerHTML = buildRouteModalHTML(clone, isNew);
+  }, 30);
+}
+
+function buildRouteModalHTML(r, isNew) {
+  let daysHTML = (r.days||[]).map((d,di) => `
+    <div style="background:#F8F9FA;border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong>Day ${di+1}</strong>
+        <div>
+          <button class="btn btn-xs btn-primary" onclick="addRouteItem(${di})">+ 添加节点</button>
+          ${(r.days||[]).length>1 ? `<button class="btn btn-xs btn-danger" onclick="removeRouteDay(${di})">删除本天</button>` : ''}
+        </div>
+      </div>
+      <div class="form-group"><label>天数标题</label><input value="${d.label||''}" id="dayLabel${di}" placeholder="如：一日精华游" /></div>
+      <div id="dayItems${di}">
+        ${(d.items||[]).map((item,ii) => `
+          <div style="display:flex;gap:4px;margin-bottom:4px;align-items:center;">
+            <input value="${item.time||''}" id="itemTime${di}_${ii}" placeholder="时间" style="width:65px;font-size:11px;padding:4px;" />
+            <input value="${item.place||''}" id="itemPlace${di}_${ii}" placeholder="地点" style="flex:1;font-size:11px;padding:4px;" />
+            <input value="${item.desc||''}" id="itemDesc${di}_${ii}" placeholder="描述" style="flex:1;font-size:11px;padding:4px;" />
+            <input value="${item.tip||''}" id="itemTip${di}_${ii}" placeholder="提示" style="width:90px;font-size:11px;padding:4px;" />
+            <button class="btn btn-xs btn-danger" onclick="this.parentElement.remove()">×</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="modal-overlay show" onclick="if(event.target===this)closeRouteModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span>${isNew?'新建':'编辑'}游玩路线</span>
+          <button class="modal-close" onclick="closeRouteModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>路线名称</label><input id="rName" value="${r.name}" placeholder="如：一日精华" /></div>
+          <div class="form-group"><label>路线类型</label>
+            <select id="rType">
+              ${['day1','day2','day3','family'].map(t => `<option value="${t}" ${r.type===t?'selected':''}>${t==='day1'?'一日精华':t==='day2'?'两日深度':t==='day3'?'三日全览':'亲子御游'}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group"><label>简介</label><input id="rIntro" value="${r.intro||''}" placeholder="一句话介绍" /></div>
+          <div class="form-group"><label>状态</label>
+            <select id="rActive"><option value="1" ${r.active?'selected':''}>启用</option><option value="0" ${!r.active?'selected':''}>隐藏</option></select>
+          </div>
+          <div style="margin-top:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong>行程安排</strong>
+              <button class="btn btn-xs btn-primary" onclick="addRouteDay()">+ 添加一天</button>
+            </div>
+            <div id="daysContainer">${daysHTML}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#eee;" onclick="closeRouteModal()">取消</button>
+          <button class="btn btn-success" onclick="saveRoute('${r.id}', ${isNew})">💾 保存路线</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function removeRouteDay(di) {
+  syncFormToEditingRoute();
+  if (!window._editingRoute) return;
+  window._editingRoute.days.splice(di, 1);
+  const clone = JSON.parse(JSON.stringify(window._editingRoute));
+  const isNew = window._editingRouteIsNew;
+  closeRouteModal();
+  setTimeout(() => {
+    window._editingRoute = clone;
+    window._editingRouteIsNew = isNew;
+    document.getElementById('routeModal').innerHTML = buildRouteModalHTML(clone, isNew);
+  }, 30);
+}
+
+function saveRoute(id, isNew) {
+  const name = document.getElementById('rName')?.value || '';
+  const type = document.getElementById('rType')?.value || 'day1';
+  const intro = document.getElementById('rIntro')?.value || '';
+  const active = document.getElementById('rActive')?.value === '1';
+  // Collect days
+  const days = [];
+  const daysContainer = document.getElementById('daysContainer');
+  if (daysContainer) {
+    const dayDivs = daysContainer.children;
+    for (let di = 0; di < dayDivs.length; di++) {
+      const labelEl = document.getElementById('dayLabel'+di);
+      const label = labelEl?.value || '';
+      const items = [];
+      const itemsDiv = document.getElementById('dayItems'+di);
+      if (itemsDiv) {
+        const itemRows = itemsDiv.children;
+        for (let ii = 0; ii < itemRows.length; ii++) {
+          const timeEl = document.getElementById('itemTime'+di+'_'+ii);
+          const placeEl = document.getElementById('itemPlace'+di+'_'+ii);
+          const descEl = document.getElementById('itemDesc'+di+'_'+ii);
+          const tipEl = document.getElementById('itemTip'+di+'_'+ii);
+          if (placeEl?.value || timeEl?.value) {
+            items.push({
+              time: timeEl?.value || '',
+              place: placeEl?.value || '',
+              desc: descEl?.value || '',
+              tip: tipEl?.value || ''
+            });
+          }
+        }
+      }
+      if (label || items.length > 0) days.push({ label, items });
+    }
+  }
+  const routeData = { id, name, type, intro, active, days };
+
+  if (isNew) {
+    DB.routes.push(routeData);
+  } else {
+    const idx = DB.routes.findIndex(r => r.id === id);
+    if (idx >= 0) DB.routes[idx] = routeData;
+  }
+  saveDB(DB);
+  closeRouteModal();
+  showToast('✅ 路线保存成功！');
+  renderRoutePage(document.getElementById('mainContent'));
+}
+
+function toggleRoute(id) {
+  const r = DB.routes.find(r => r.id === id);
+  if (r) { r.active = !r.active; saveDB(DB); showToast(r.active?'✅ 已启用':'👻 已隐藏'); }
+  renderRoutePage(document.getElementById('mainContent'));
+}
+
+function deleteRoute(id) {
+  if (!confirm('确定删除这条路线吗？')) return;
+  DB.routes = DB.routes.filter(r => r.id !== id);
+  saveDB(DB);
+  showToast('🗑 路线已删除');
+  renderRoutePage(document.getElementById('mainContent'));
+}
+
+// ===== FOODS =====
+function renderFoodPage(main) {
+  const foods = DB.foods;
+  const cats = { breakfast:'晨膳', lunch:'正宴', snack:'点心' };
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>🍜 美食推荐管理</h1><div class="breadcrumb">内容管理 / 美食推荐</div></div>
+      <button class="btn btn-primary" onclick="openFoodModal()">+ 添加美食</button>
+    </div>
+    <div class="card">
+      <table>
+        <tr><th>排名</th><th>名称</th><th>分类</th><th>评分</th><th>距离</th><th>价格</th><th>状态</th><th>操作</th></tr>
+        ${foods.sort((a,b)=>a.rank-b.rank).map(f => `
+          <tr>
+            <td><b>#${f.rank}</b></td>
+            <td>${f.name} <span class="tag gold">${f.tag}</span></td>
+            <td>${cats[f.category]||f.category}</td>
+            <td>★ ${f.stars}</td>
+            <td>${f.distance}</td>
+            <td>${f.price}</td>
+            <td><span class="tag ${f.active?'on':'off'}">${f.active?'启用':'隐藏'}</span></td>
+            <td>
+              <button class="btn btn-xs btn-primary" onclick="openFoodModal('${f.id}')">✏️</button>
+              <button class="btn btn-xs btn-danger" onclick="toggleFood('${f.id}')">${f.active?'隐藏':'启用'}</button>
+              <button class="btn btn-xs" style="background:#ddd;" onclick="deleteFood('${f.id}')">🗑</button>
+            </td>
+          </tr>
+        `).join('')}
+      </table>
+    </div>
+    <div id="foodModal"></div>
+  `;
+}
+
+function openFoodModal(id) {
+  const food = id ? DB.foods.find(f=>f.id===id) : null;
+  const isNew = !food;
+  const f = food || { id:'f'+Date.now(), name:'', category:'lunch', stars:4.0, distance:'', price:'', tag:'', desc:'', rank:DB.foods.length+1, active:true };
+  const cats = { breakfast:'晨膳', lunch:'正宴', snack:'点心' };
+  const modal = document.getElementById('foodModal');
+  modal.innerHTML = `
+    <div class="modal-overlay show" onclick="if(event.target===this)closeFoodModal()">
+      <div class="modal" style="max-width:500px;" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span>${isNew?'添加':'编辑'}美食</span>
+          <button class="modal-close" onclick="closeFoodModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>名称</label><input id="fName" value="${f.name}" /></div>
+          <div class="form-group"><label>分类</label>
+            <select id="fCat">${Object.entries(cats).map(([k,v])=>`<option value="${k}" ${f.category===k?'selected':''}>${v}</option>`).join('')}</select>
+          </div>
+          <div class="form-group"><label>评分</label><input id="fStars" type="number" step="0.1" min="1" max="5" value="${f.stars}" /></div>
+          <div class="form-group"><label>距离</label><input id="fDist" value="${f.distance}" placeholder="如：步行8分钟" /></div>
+          <div class="form-group"><label>价格</label><input id="fPrice" value="${f.price}" placeholder="如：¥25/人" /></div>
+          <div class="form-group"><label>标签</label><input id="fTag" value="${f.tag}" placeholder="如：30年老店" /></div>
+          <div class="form-group"><label>描述</label><textarea id="fDesc">${f.desc}</textarea></div>
+          <div class="form-group"><label>排名</label><input id="fRank" type="number" value="${f.rank}" /></div>
+          <div class="form-group"><label>状态</label>
+            <select id="fActive"><option value="1" ${f.active?'selected':''}>启用</option><option value="0" ${!f.active?'selected':''}>隐藏</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#eee;" onclick="closeFoodModal()">取消</button>
+          <button class="btn btn-success" onclick="saveFood('${f.id}', ${isNew})">💾 保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function closeFoodModal() {
+  document.getElementById('foodModal').innerHTML = '';
+  window._editingFood = null;
+}
+
+function saveFood(id, isNew) {
+  const data = {
+    id, name: document.getElementById('fName')?.value || '',
+    category: document.getElementById('fCat')?.value || 'lunch',
+    stars: parseFloat(document.getElementById('fStars')?.value || '4.0'),
+    distance: document.getElementById('fDist')?.value || '',
+    price: document.getElementById('fPrice')?.value || '',
+    tag: document.getElementById('fTag')?.value || '',
+    desc: document.getElementById('fDesc')?.value || '',
+    rank: parseInt(document.getElementById('fRank')?.value || '99'),
+    active: document.getElementById('fActive')?.value === '1'
+  };
+  if (isNew) { DB.foods.push(data); }
+  else { const idx = DB.foods.findIndex(f=>f.id===id); if(idx>=0) DB.foods[idx]=data; }
+  saveDB(DB); closeFoodModal(); showToast('✅ 美食保存成功！');
+  renderFoodPage(document.getElementById('mainContent'));
+}
+
+function toggleFood(id) {
+  const f = DB.foods.find(x=>x.id===id);
+  if(f) { f.active=!f.active; saveDB(DB); showToast(f.active?'✅ 已启用':'👻 已隐藏'); }
+  renderFoodPage(document.getElementById('mainContent'));
+}
+
+function deleteFood(id) {
+  if(!confirm('确定删除？')) return;
+  DB.foods = DB.foods.filter(f=>f.id!==id);
+  saveDB(DB); showToast('🗑 已删除');
+  renderFoodPage(document.getElementById('mainContent'));
+}
+
+// ===== SCENIC =====
+function renderScenicPage(main) {
+  const spots = DB.scenicSpots;
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>🏯 景区信息管理</h1><div class="breadcrumb">内容管理 / 景区管理</div></div>
+      <button class="btn btn-primary" onclick="openScenicModal()">+ 添加景区</button>
+    </div>
+    <div class="card">
+      <table>
+        <tr><th>排序</th><th>名称</th><th>分类</th><th>图片</th><th>评分</th><th>门票</th><th>状态</th><th>操作</th></tr>
+        ${spots.sort((a,b)=>a.sort-b.sort).map(s => `
+          <tr>
+            <td><b>#${s.sort}</b></td>
+            <td>${s.name} ${(s.tags||[]).map(t=>`<span class="tag ${t==='世界遗产'?'red':'gold'}">${t}</span>`).join('')}</td>
+            <td>${s.category}</td>
+            <td>${(s.images||[]).length}张</td>
+            <td>★ ${s.rating}</td>
+            <td>${s.ticket}</td>
+            <td><span class="tag ${s.active?'on':'off'}">${s.active?'显示':'隐藏'}</span></td>
+            <td>
+              <button class="btn btn-xs btn-primary" onclick="openScenicModal('${s.id}')">✏️</button>
+              <button class="btn btn-xs btn-danger" onclick="toggleScenic('${s.id}')">${s.active?'隐藏':'显示'}</button>
+              <button class="btn btn-xs" style="background:#ddd;" onclick="deleteScenic('${s.id}')">🗑</button>
+            </td>
+          </tr>
+        `).join('')}
+      </table>
+    </div>
+    <div id="scenicModal"></div>
+  `;
+}
+
+function openScenicModal(id) {
+  const spot = id ? DB.scenicSpots.find(s=>s.id===id) : null;
+  const isNew = !spot;
+  const s = spot || { id:'s'+Date.now(), name:'', category:'皇家园林', location:'', distance:'', openTime:'', ticket:'', duration:'', tags:[], history:'', highlights:[], tips:'', images:[], rating:4.0, reviewCount:'', sort:DB.scenicSpots.length+1, active:true };
+  const modal = document.getElementById('scenicModal');
+  modal.innerHTML = `
+    <div class="modal-overlay show" onclick="if(event.target===this)closeScenicModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span>${isNew?'添加':'编辑'}景区</span>
+          <button class="modal-close" onclick="closeScenicModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label>名称</label><input id="sName" value="${s.name}" /></div>
+          <div class="form-group"><label>分类</label>
+            <select id="sCat">${['皇家园林','外八庙','奇峰异石','古迹遗址'].map(c=>`<option value="${c}" ${s.category===c?'selected':''}>${c}</option>`).join('')}</select>
+          </div>
+          <div class="form-group"><label>位置</label><input id="sLoc" value="${s.location}" /></div>
+          <div class="form-group"><label>距民宿</label><input id="sDist" value="${s.distance}" /></div>
+          <div class="form-group"><label>开放时间</label><input id="sTime" value="${s.openTime}" /></div>
+          <div class="form-group"><label>门票</label><input id="sTicket" value="${s.ticket}" /></div>
+          <div class="form-group"><label>建议游玩</label><input id="sDuration" value="${s.duration}" /></div>
+          <div class="form-group"><label>标签(逗号分隔)</label><input id="sTags" value="${(s.tags||[]).join(',')}" placeholder="世界遗产,5A" /></div>
+          <div class="form-group"><label>评分</label><input id="sRating" type="number" step="0.1" value="${s.rating}" /></div>
+          <div class="form-group"><label>评价数</label><input id="sReviews" value="${s.reviewCount||''}" placeholder="如：3.2万" /></div>
+          <div class="form-group"><label>排序</label><input id="sSort" type="number" value="${s.sort}" /></div>
+          <div class="form-group"><label>图标(逗号分隔)</label><input id="sImages" value="${(s.images||[]).join(',')}" placeholder="🏛️,🏞️,🌊" /></div>
+          <div class="form-group"><label>历史介绍</label><textarea id="sHistory" style="min-height:100px;">${s.history}</textarea></div>
+          <div class="form-group"><label>必看亮点(每行一个)</label><textarea id="sHighlights">${(s.highlights||[]).join('\n')}</textarea></div>
+          <div class="form-group"><label>房东Tips</label><textarea id="sTips">${s.tips}</textarea></div>
+          <div class="form-group"><label>状态</label>
+            <select id="sActive"><option value="1" ${s.active?'selected':''}>显示</option><option value="0" ${!s.active?'selected':''}>隐藏</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#eee;" onclick="closeScenicModal()">取消</button>
+          <button class="btn btn-success" onclick="saveScenic('${s.id}', ${isNew})">💾 保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function closeScenicModal() {
+  document.getElementById('scenicModal').innerHTML = '';
+  window._editingScenic = null;
+}
+
+function saveScenic(id, isNew) {
+  const data = {
+    id, name: document.getElementById('sName')?.value || '',
+    category: document.getElementById('sCat')?.value || '皇家园林',
+    location: document.getElementById('sLoc')?.value || '',
+    distance: document.getElementById('sDist')?.value || '',
+    openTime: document.getElementById('sTime')?.value || '',
+    ticket: document.getElementById('sTicket')?.value || '',
+    duration: document.getElementById('sDuration')?.value || '',
+    tags: (document.getElementById('sTags')?.value || '').split(',').map(t=>t.trim()).filter(Boolean),
+    rating: parseFloat(document.getElementById('sRating')?.value || '4.0'),
+    reviewCount: document.getElementById('sReviews')?.value || '',
+    sort: parseInt(document.getElementById('sSort')?.value || '99'),
+    images: (document.getElementById('sImages')?.value || '').split(',').map(t=>t.trim()).filter(Boolean),
+    history: document.getElementById('sHistory')?.value || '',
+    highlights: (document.getElementById('sHighlights')?.value || '').split('\n').filter(Boolean),
+    tips: document.getElementById('sTips')?.value || '',
+    active: document.getElementById('sActive')?.value === '1'
+  };
+  if (isNew) { DB.scenicSpots.push(data); }
+  else { const idx = DB.scenicSpots.findIndex(s=>s.id===id); if(idx>=0) DB.scenicSpots[idx]=data; }
+  saveDB(DB); closeScenicModal(); showToast('✅ 景区保存成功！');
+  renderScenicPage(document.getElementById('mainContent'));
+}
+
+function toggleScenic(id) {
+  const s = DB.scenicSpots.find(x=>x.id===id);
+  if(s) { s.active=!s.active; saveDB(DB); showToast(s.active?'✅ 已显示':'👻 已隐藏'); }
+  renderScenicPage(document.getElementById('mainContent'));
+}
+
+function deleteScenic(id) {
+  if(!confirm('确定删除？')) return;
+  DB.scenicSpots = DB.scenicSpots.filter(s=>s.id!==id);
+  saveDB(DB); showToast('🗑 已删除');
+  renderScenicPage(document.getElementById('mainContent'));
+}
+
+// ===== TIPS =====
+function renderTipsPage(main) {
+  const t = DB.dailyTip;
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>💡 每日贴士</h1><div class="breadcrumb">内容管理 / 每日贴士</div></div>
+    </div>
+    <div class="card">
+      <div class="form-group"><label>日期</label><input id="tipDate" type="date" value="${t.date}" /></div>
+      <div class="form-group"><label>天气描述</label><input id="tipWeather" value="${t.weather}" placeholder="晴" /></div>
+      <div class="form-group"><label>温度</label><input id="tipTemp" type="number" value="${t.temp}" /></div>
+      <div class="form-group"><label>日出时间</label><input id="tipSunrise" value="${t.sunrise||'05:12'}" /></div>
+      <div class="form-group"><label>景区开放</label><input id="tipOpenTime" value="${t.openTime||'08:00-17:30'}" /></div>
+      <div class="form-group"><label>贴士内容</label><textarea id="tipContent" style="min-height:80px;">${t.content}</textarea></div>
+      <div style="text-align:right;margin-top:12px;">
+        <button class="btn btn-success" onclick="saveTip()">💾 保存贴士</button>
+      </div>
+    </div>
+  `;
+}
+
+function saveTip() {
+  DB.dailyTip = {
+    date: document.getElementById('tipDate')?.value || '',
+    weather: document.getElementById('tipWeather')?.value || '',
+    temp: parseInt(document.getElementById('tipTemp')?.value || '20'),
+    sunrise: document.getElementById('tipSunrise')?.value || '',
+    openTime: document.getElementById('tipOpenTime')?.value || '',
+    content: document.getElementById('tipContent')?.value || ''
+  };
+  saveDB(DB); showToast('✅ 贴士已更新！小程序客户端刷新后生效');
+}
+
+// ===== PASSWORD =====
+function renderPasswordPage(main) {
+  const p = DB.password;
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>🔐 门锁密码管理</h1><div class="breadcrumb">系统配置 / 门锁密码</div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--ink-light);margin-bottom:14px;">
+        💡 密码在住客退房日24:00后自动失效。新密码生成后小程序实时同步。
+      </div>
+      <div class="form-group"><label>当前密码</label>
+        <input value="${p.code}" readonly style="background:#F8F8F8;font-family:monospace;font-size:22px;letter-spacing:6px;font-weight:900;color:var(--red);" />
+        <button class="btn btn-primary" onclick="generateNewPassword()" style="white-space:nowrap;">🔄 生成新密码</button>
+      </div>
+      <div class="form-group"><label>手动设置</label>
+        <input id="manualPwd" placeholder="输入6位数字密码" maxlength="6" style="width:150px;" />
+        <button class="btn btn-gold" onclick="setManualPassword()">设定</button>
+      </div>
+      <div class="form-group"><label>住客姓名</label><input id="pwdGuest" value="${p.guestName}" /></div>
+      <div class="form-group"><label>入住日期</label><input id="pwdIn" type="date" value="${p.checkIn}" /></div>
+      <div class="form-group"><label>退房日期</label><input id="pwdOut" type="date" value="${p.checkOut}" /></div>
+      <div style="text-align:right;margin-top:12px;">
+        <button class="btn btn-success" onclick="savePasswordInfo()">💾 保存信息</button>
+      </div>
+    </div>
+  `;
+}
+
+function generateNewPassword() {
+  DB.password.code = String(Math.floor(100000 + Math.random() * 900000));
+  saveDB(DB); showToast('✅ 新密码: ' + DB.password.code);
+  renderPasswordPage(document.getElementById('mainContent'));
+}
+
+function setManualPassword() {
+  const val = document.getElementById('manualPwd')?.value;
+  if (!val || val.length !== 6 || !/^\d{6}$/.test(val)) { showToast('⚠️ 请输入6位数字'); return; }
+  DB.password.code = val;
+  saveDB(DB); showToast('✅ 密码已设为: ' + val);
+  renderPasswordPage(document.getElementById('mainContent'));
+}
+
+function savePasswordInfo() {
+  DB.password.guestName = document.getElementById('pwdGuest')?.value || '';
+  DB.password.checkIn = document.getElementById('pwdIn')?.value || '';
+  DB.password.checkOut = document.getElementById('pwdOut')?.value || '';
+  saveDB(DB); showToast('✅ 信息已保存');
+}
+
+// ===== CONFIG =====
+function renderConfigPage(main) {
+  const c = DB.config;
+  const meta = getMeta();
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>⚙️ 全局设置</h1><div class="breadcrumb">系统配置 / 全局设置</div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:14px;">🔧 基础配置</h3>
+      <div class="form-group"><label>WiFi名称</label><input id="cfgWifi" value="${c.wifiName}" /></div>
+      <div class="form-group"><label>WiFi密码</label><input id="cfgWifiPwd" value="${c.wifiPassword}" /></div>
+      <div class="form-group"><label>房东电话</label><input id="cfgPhone" value="${c.hostPhone}" /></div>
+      <div class="form-group"><label>房东微信</label><input id="cfgWechat" value="${c.hostWechat}" /></div>
+      <div style="text-align:right;margin-top:12px;">
+        <button class="btn btn-success" onclick="saveConfig()">💾 保存设置</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:14px;">☁️ 远程数据同步</h3>
+      <p style="font-size:12px;color:var(--ink-light);margin-bottom:10px;">
+        配置客户端的远程数据URL，实现管理端修改 → 客户端自动更新。将导出的JSON文件上传到服务器后，在此填入文件URL。
+      </p>
+      <div class="form-group"><label>数据文件URL</label><input id="cfgRemoteURL" value="${c.remoteDataURL||''}" placeholder="https://你的存储桶.cos.ap-beijing.myqcloud.com/data.json" /></div>
+      <div style="font-size:10px;color:#999;margin-left:102px;margin-bottom:8px;">
+        💡 客户端页面中 <code>REMOTE_DATA_URL</code> 变量需与此处URL保持一致
+      </div>
+      <div style="font-size:10px;color:#999;margin-left:102px;margin-bottom:12px;">
+        📌 修改此处URL后，<b>需同时更新客户端HTML中的 REMOTE_DATA_URL 变量</b>并重新上传
+      </div>
+      <div style="text-align:right;">
+        <button class="btn btn-success" onclick="saveConfig()">💾 保存URL</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:14px;">🔄 数据同步操作</h3>
+      <p style="font-size:12px;color:var(--ink-light);margin-bottom:12px;">
+        同步流程：管理端修改 → <b>导出JSON</b> → <b>上传到COS服务器</b> → 客户端自动拉取最新数据（每5分钟检查一次）
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-primary" onclick="exportData()">📥 导出数据备份（下载JSON）</button>
+        <button class="btn btn-gold" onclick="copyDataJSON()">📋 一键复制JSON内容</button>
+        <button class="btn btn-danger" onclick="resetData()">⚠️ 恢复默认数据</button>
+      </div>
+      ${c.remoteDataURL ? `
+      <div style="margin-top:12px;padding:10px 14px;background:#F0F7F0;border-radius:8px;font-size:12px;">
+        <strong>📤 同步步骤：</strong><br>
+        ① 点击上方"导出"或"复制JSON" → ② 登录腾讯云COS → ③ 上传/覆盖 <code>data.json</code> → ④ 客户端5分钟内自动更新
+      </div>
+      ` : `
+      <div style="margin-top:12px;padding:10px 14px;background:#FFFBF5;border-radius:8px;font-size:12px;">
+        <strong>⚠️ 尚未配置远程URL：</strong>请在上方"远程数据同步"中填入data.json的线上地址
+      </div>
+      `}
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:14px;">📊 数据状态</h3>
+      <table>
+        <tr><td width="100">最后修改时间</td><td>${meta.lastModified ? new Date(meta.lastModified).toLocaleString('zh-CN') : '—'}</td></tr>
+        <tr><td>导出次数</td><td>${meta.totalExports || 0} 次</td></tr>
+        <tr><td>路线总数</td><td>${DB.routes.length} 条（${DB.routes.filter(r=>r.active).length} 条启用）</td></tr>
+        <tr><td>美食总数</td><td>${DB.foods.length} 条（${DB.foods.filter(f=>f.active).length} 条启用）</td></tr>
+        <tr><td>景区总数</td><td>${DB.scenicSpots.length} 条（${DB.scenicSpots.filter(s=>s.active).length} 条启用）</td></tr>
+        <tr><td>远程URL</td><td>${c.remoteDataURL || '<span style="color:#999;">未配置</span>'}</td></tr>
+      </table>
+    </div>
+  `;
+}
+
+function saveConfig() {
+  DB.config = {
+    wifiName: document.getElementById('cfgWifi')?.value || '',
+    wifiPassword: document.getElementById('cfgWifiPwd')?.value || '',
+    hostPhone: document.getElementById('cfgPhone')?.value || '',
+    hostWechat: document.getElementById('cfgWechat')?.value || '',
+    remoteDataURL: document.getElementById('cfgRemoteURL')?.value || ''
+  };
+  saveDB(DB); showToast('✅ 设置已保存');
+}
+
+function exportData() {
+  touchModified();
+  const json = JSON.stringify(DB, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'data.json';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('📥 数据已导出为 data.json · 可直接上传到COS');
+}
+
+function copyDataJSON() {
+  touchModified();
+  const json = JSON.stringify(DB, null, 2);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(json).then(() => {
+      showToast('✅ JSON已复制到剪贴板 · 可直接粘贴上传');
+    }).catch(() => {
+      showToast('⚠️ 复制失败，请使用导出按钮');
+    });
+  } else {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = json; ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('✅ JSON已复制到剪贴板'); }
+    catch(e) { showToast('⚠️ 复制失败，请使用导出按钮下载文件'); }
+    document.body.removeChild(ta);
+  }
+}
+
+function resetData() {
+  if (!confirm('⚠️ 确定恢复默认数据？当前数据将丢失！\n建议先导出备份。')) return;
+  DB = getDefaultDB(); saveDB(DB);
+  showToast('✅ 已恢复默认数据');
+  renderPage(currentPage);
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ===== INIT =====
+function init() {
+  DB = loadDB();
+  renderPage('dashboard');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

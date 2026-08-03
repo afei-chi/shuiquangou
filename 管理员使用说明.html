@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水泉沟·山居 — 管理员使用说明</title>
+<style>
+:root {
+  --red:#8B3A3A; --gold:#C9A96E; --jade:#5B8C5A; --lake:#4A7A8C;
+  --ink:#2C2C2C; --bg:#FAF7F2;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.9;
+}
+.container { max-width:900px; margin:0 auto; padding:20px; }
+
+/* Cover */
+.cover {
+  background:linear-gradient(160deg,#1A2530,#263548,#2C3D50);
+  color:#fff; padding:60px 20px; text-align:center; border-radius:16px;
+  margin-bottom:30px; position:relative; overflow:hidden;
+}
+.cover::before {
+  content:''; position:absolute; width:200px; height:200px;
+  background:rgba(201,169,110,0.08); border-radius:50%;
+  top:-60px; right:-40px;
+}
+.cover::after {
+  content:''; position:absolute; width:140px; height:140px;
+  background:rgba(91,140,90,0.06); border-radius:50%;
+  bottom:-30px; left:-30px;
+}
+.cover-badge {
+  display:inline-block; border:1px solid rgba(255,255,255,0.25);
+  padding:5px 20px; border-radius:16px; font-size:11px;
+  letter-spacing:3px; margin-bottom:20px; position:relative; z-index:1;
+}
+.cover h1 { font-size:34px; letter-spacing:3px; margin-bottom:8px; position:relative; z-index:1; }
+.cover .sub { font-size:15px; opacity:0.7; position:relative; z-index:1; }
+.cover .ver { font-size:11px; opacity:0.4; margin-top:12px; position:relative; z-index:1; }
+
+/* Card */
+.card {
+  background:#fff; border-radius:14px; padding:28px 32px; margin-bottom:22px;
+  box-shadow:0 2px 14px rgba(0,0,0,0.05);
+}
+
+/* Typography */
+h2 {
+  font-size:22px; color:var(--red); border-bottom:2px solid #F0EDE5;
+  padding-bottom:10px; margin-bottom:18px; display:flex; align-items:center; gap:10px;
+}
+h2 .num {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px; background:linear-gradient(135deg,var(--red),#A05252);
+  color:#fff; border-radius:10px; font-size:18px; flex-shrink:0;
+}
+h3 { font-size:17px; color:#5C2828; margin:22px 0 10px; padding-left:12px; border-left:3px solid var(--gold); }
+h4 { font-size:14px; color:var(--ink); margin:14px 0 6px; }
+
+/* Step */
+.step {
+  display:flex; gap:14px; margin:12px 0; align-items:flex-start;
+}
+.step-num {
+  width:30px; height:30px; background:var(--lake); color:#fff;
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; flex-shrink:0; margin-top:2px;
+}
+.step-body { flex:1; font-size:13px; }
+.step-body strong { color:var(--lake-dark); }
+
+/* Tips */
+.tip {
+  padding:12px 16px; border-radius:10px; margin:10px 0; font-size:12px;
+}
+.tip.info { background:#F0F5F8; border-left:3px solid var(--lake); color:#2C4A5A; }
+.tip.warn { background:#FFFBF5; border-left:3px solid var(--gold); color:#8B6914; }
+.tip.success { background:#F0F7F0; border-left:3px solid var(--jade); color:#2C4A2A; }
+
+/* Table */
+table {
+  width:100%; border-collapse:collapse; font-size:12px; margin:10px 0;
+}
+th { background:#F8F9FA; padding:9px 12px; text-align:left; font-weight:600; color:#555; border-bottom:2px solid #EEE; }
+td { padding:9px 12px; border-bottom:1px solid #F0F0F0; vertical-align:top; }
+tr:nth-child(even) td { background:#FDFDFC; }
+
+/* Screenshot placeholder */
+.screenshot {
+  background:#F8F9FA; border:2px dashed #DDD; border-radius:12px;
+  padding:30px; text-align:center; margin:14px 0; font-size:12px; color:#aaa;
+}
+.screenshot .ss-icon { font-size:40px; margin-bottom:6px; }
+
+/* Flow */
+.flow {
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  margin:14px 0; font-size:11px;
+}
+.flow-step {
+  padding:6px 14px; border-radius:16px; background:var(--lake); color:#fff;
+  font-weight:600; white-space:nowrap;
+}
+.flow-arrow { color:#ccc; font-weight:bold; }
+
+/* Tag */
+.tag {
+  display:inline-block; padding:2px 8px; border-radius:8px; font-size:10px;
+  font-weight:600; margin:0 2px;
+}
+.tag.primary { background:#E8F5E8; color:var(--jade); }
+.tag.warn { background:#FFF3E8; color:var(--gold); }
+
+/* Responsive */
+@media (max-width:600px) {
+  .container { padding:10px; }
+  .card { padding:18px; }
+  .cover h1 { font-size:24px; }
+  table { font-size:10px; }
+  th,td { padding:6px 8px; }
+}
+
+/* ToC */
+.toc-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.toc-item {
+  display:flex; align-items:center; gap:8px; padding:10px 14px;
+  background:#F8F9FA; border-radius:8px; font-size:13px; cursor:pointer;
+  text-decoration:none; color:var(--ink); transition:background 0.15s;
+}
+.toc-item:hover { background:#F0F5F8; }
+.toc-item .toc-num { font-weight:700; color:var(--lake); }
+@media (max-width:500px) { .toc-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ====== 封面 ====== -->
+<div class="cover">
+  <div class="cover-badge">ADMINISTRATOR MANUAL</div>
+  <h1>🏛️ 水泉沟·山居</h1>
+  <div class="sub">管理后台使用说明</div>
+  <div class="ver">版本 v1.0 · 2024年8月</div>
+</div>
+
+<!-- ====== 0. 快速入门 ====== -->
+<div class="card">
+  <h2><span class="num">0</span>快速入门（30秒上手）</h2>
+  <p>管理后台是控制整个民宿小程序内容的<b>"总控制台"</b>。你在后台做的任何修改，保存后刷新小程序客户端页面即可生效。</p>
+
+  <div class="flow">
+    <span class="flow-step">🚀 打开管理后台.html</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">📊 看数据看板</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">✏️ 点击侧边栏修改内容</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">💾 保存</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">🔄 刷新客户端</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">✅ 住客可见</span>
+  </div>
+
+  <div class="tip success">
+    <strong>💡 核心概念：</strong>管理后台和小程序客户端共享同一份数据（浏览器localStorage）。<b>同一个浏览器</b>中打开两个文件，数据自动互通。
+  </div>
+
+  <h3>界面布局说明</h3>
+  <table>
+    <tr><th>区域</th><th>位置</th><th>功能</th></tr>
+    <tr><td>📋 侧边栏</td><td>左侧深色区域</td><td>8个管理模块的导航菜单，点击切换</td></tr>
+    <tr><td>📊 主内容区</td><td>右侧白色区域</td><td>当前模块的具体操作界面</td></tr>
+    <tr><td>🔔 顶部栏</td><td>主内容区顶部</td><td>显示当前页面标题和面包屑导航</td></tr>
+  </table>
+</div>
+
+<!-- ====== 目录 ====== -->
+<div class="card">
+  <h2>📑 目录</h2>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span> 数据看板 — 查看运营数据</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span> 游玩路线 — 管理旅游攻略</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span> 美食推荐 — 管理餐厅信息</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span> 景区管理 — 管理景点展示</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span> 每日贴士 — 编辑每日提醒</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span> 门锁密码 — 管理入住密码</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span> 全局设置 — WiFi & 联系方式</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span> 数据维护 — 备份 & 恢复</a>
+    <a class="toc-item" href="#s9"><span class="toc-num">09</span> 常见问题 FAQ</a>
+    <a class="toc-item" href="#s10"><span class="toc-num">10</span> 日常运营工作流</a>
+  </div>
+</div>
+
+<!-- ====== 1. 数据看板 ====== -->
+<div class="card" id="s1">
+  <h2><span class="num">1</span>📈 数据看板 — 查看运营数据</h2>
+
+  <p>打开管理后台后默认进入的页面，一眼看清民宿小程序的运行状况。</p>
+
+  <h3>界面说明</h3>
+  <table>
+    <tr><th>区域</th><th>显示内容</th><th>说明</th></tr>
+    <tr><td>📊 顶部统计卡片</td><td>启用路线数 / 美食推荐数 / 景区展示数 / 扫码次数</td><td>快速了解当前内容规模</td></tr>
+    <tr><td>📋 内容概览表</td><td>各模块总数 / 启用中 / 已隐藏</td><td>查看哪些内容对住客可见</td></tr>
+    <tr><td>💡 贴士预览</td><td>当前每日贴士内容</td><td>确认住客首页看到的提醒是否最新</td></tr>
+    <tr><td>🔗 快速操作</td><td>4个快捷按钮</td><td>直达密码、路线、景区管理</td></tr>
+  </table>
+
+  <div class="tip info">
+    <strong>📱 "模拟一次扫码"按钮：</strong>点击可模拟住客扫码行为，用于测试扫码计数功能。实际部署后，扫码统计需对接微信小程序后台数据。
+  </div>
+</div>
+
+<!-- ====== 2. 游玩路线 ====== -->
+<div class="card" id="s2">
+  <h2><span class="num">2</span>📜 游玩路线 — 管理旅游攻略</h2>
+
+  <p>这是最核心的功能模块。这里配置的路线会显示在住客小程序的<b>"皇家游线"</b>页面。</p>
+
+  <h3>路线列表说明</h3>
+  <p>每条路线包含：路线名称、类型（一日/两日/三日/亲子）、简介、天数。启用中的路线住客可见，隐藏的路线不显示。</p>
+
+  <h3>📝 新建一条路线</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">点击右上角 <strong>"+ 新建路线"</strong> 按钮，弹出编辑窗口</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">填写 <strong>路线名称</strong>（如"一日精华游"）、选择<strong>路线类型</strong>、填写<strong>简介</strong></div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">在"行程安排"区域，点击 <strong>"+ 添加一天"</strong> 增加天数（如Day 1、Day 2）</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">在每天内点击 <strong>"+ 添加节点"</strong>，逐行填入：<strong>时间 → 地点 → 描述 → 提示</strong></div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">检查"状态"选择<strong>"启用"</strong>，点击 <strong>"💾 保存路线"</strong></div></div>
+
+  <div class="tip warn">
+    <strong>⚠️ 注意：</strong>填写表单过程中，如需添加新天数或新节点，<b>请放心点击</b>。系统会自动保存你已填写的内容，不会丢失。
+  </div>
+
+  <h3>字段说明</h3>
+  <table>
+    <tr><th>字段</th><th>示例</th><th>说明</th></tr>
+    <tr><td>路线名称</td><td>一日精华游</td><td>显示在Tab标签上，简洁明了</td></tr>
+    <tr><td>类型</td><td>day1 / day2 / day3 / family</td><td>决定Tab排列顺序</td></tr>
+    <tr><td>简介</td><td>仿帝王巡游路线</td><td>在客户端Tab下方显示</td></tr>
+    <tr><td>天数标题</td><td>一日精华游 / Day 1</td><td>时间线分组标题</td></tr>
+    <tr><td>时间</td><td>07:30 / 08:30-12:00</td><td>建议出发/到达时间，支持时间段</td></tr>
+    <tr><td>地点</td><td>避暑山庄</td><td>景点或餐厅名称</td></tr>
+    <tr><td>描述</td><td>丽正门入·3-4小时</td><td>简短说明（20字以内）</td></tr>
+    <tr><td>提示</td><td>门票¥130，自带干粮</td><td>实用小贴士（选填）</td></tr>
+  </table>
+
+  <h3>常用操作</h3>
+  <table>
+    <tr><th>操作</th><th>按钮</th><th>效果</th></tr>
+    <tr><td>编辑</td><td>✏️</td><td>打开编辑弹窗修改路线</td></tr>
+    <tr><td>隐藏</td><td>隐藏 / 启用</td><td>切换路线是否对住客可见（淡季可隐藏不适宜的路线）</td></tr>
+    <tr><td>删除</td><td>🗑</td><td>确认后永久删除（不可恢复！）</td></tr>
+  </table>
+
+  <div class="tip success">
+    <strong>💡 运营建议：</strong>建议按季节准备不同路线。夏天突出避暑路线，冬天改为温泉+滑雪路线。只需切换"隐藏/启用"即可快速换季。
+  </div>
+</div>
+
+<!-- ====== 3. 美食推荐 ====== -->
+<div class="card" id="s3">
+  <h2><span class="num">3</span>🍜 美食推荐 — 管理餐厅信息</h2>
+
+  <p>配置住客小程序<b>"御膳小馆"</b>页面的餐厅列表。</p>
+
+  <h3>📝 添加一家新餐厅</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">点击右上角 <strong>"+ 添加美食"</strong></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">依次填写：名称、分类（晨膳/正宴/点心）、评分、距离、价格、标签、描述</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">设置<strong>排名</strong>数字（数字越小越靠前，1=第一位）</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">状态选"启用"，保存</div></div>
+
+  <h3>字段说明</h3>
+  <table>
+    <tr><th>字段</th><th>示例</th><th>作用</th></tr>
+    <tr><td>分类</td><td>晨膳 / 正宴 / 点心</td><td>对应客户端"晨膳""正宴""点心"三个Tab</td></tr>
+    <tr><td>评分</td><td>4.8</td><td>显示★ 4.8，建议实事求是</td></tr>
+    <tr><td>距离</td><td>步行8分钟</td><td>突出"步行可达"的便利感，比"500米"更有温度</td></tr>
+    <tr><td>标签</td><td>30年老店</td><td>显示为橙色小标签，突出卖点</td></tr>
+    <tr><td>排名</td><td>1, 2, 3...</td><td>第1名金色圆圈、第2名铜色、第3名灰色</td></tr>
+  </table>
+
+  <div class="tip info">
+    <strong>📌 排名策略：</strong>前3名推荐给住客印象最深，建议把"最想让客人去"的店排在前3。可随时调整排名数字改变显示顺序。
+  </div>
+</div>
+
+<!-- ====== 4. 景区管理 ====== -->
+<div class="card" id="s4">
+  <h2><span class="num">4</span>🏯 景区管理 — 管理景点展示</h2>
+
+  <p>配置住客小程序<b>"承德胜景"</b>页面的景区信息。这是信息量最大的模块，每个景区包含完整的历史、亮点和游玩建议。</p>
+
+  <h3>📝 添加一个新景区</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">点击 <strong>"+ 添加景区"</strong></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">填写基本信息：<strong>名称、分类、位置、距民宿距离、开放时间、门票、建议游玩时长</strong></div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">填写<strong>标签</strong>：多个标签用英文逗号分隔，如 <code>世界遗产,5A,必游TOP1</code></div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">填写<strong>图标</strong>：用emoji表示景区图片，逗号分隔，如 <code>🏛️,🏞️,🌊</code>（建议3-5个）</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">填写<strong>历史介绍</strong>：详细介绍景区的历史背景，支持多段落</div></div>
+  <div class="step"><div class="step-num">6</div><div class="step-body">填写<strong>必看亮点</strong>：每行一个亮点，如"丽正门 — 山庄正门"</div></div>
+  <div class="step"><div class="step-num">7</div><div class="step-body">填写<strong>房东Tips</strong>：你的个性化游玩建议</div></div>
+  <div class="step"><div class="step-num">8</div><div class="step-body">设置排序数字和状态，保存</div></div>
+
+  <h3>字段详解</h3>
+  <table>
+    <tr><th>字段</th><th>填入内容</th><th>显示位置</th></tr>
+    <tr><td>名称</td><td>避暑山庄</td><td>卡片标题 + 详情页标题</td></tr>
+    <tr><td>分类</td><td>皇家园林 / 外八庙 / 奇峰异石 / 古迹遗址</td><td>客户端分类Tab筛选</td></tr>
+    <tr><td>标签</td><td>世界遗产,5A</td><td>"世界遗产"红色标签、"5A"金色标签</td></tr>
+    <tr><td>图标</td><td>🏛️,🏞️,🌊</td><td>列表卡片大图区 + 详情页轮播图</td></tr>
+    <tr><td>历史介绍</td><td>2-3段历史背景</td><td>详情页"📜 历史渊源"区域</td></tr>
+    <tr><td>必看亮点</td><td>每行一个亮点</td><td>详情页"✨ 必看亮点"列表</td></tr>
+    <tr><td>房东Tips</td><td>个性化建议</td><td>详情页"💡 房东游园Tips"提示条</td></tr>
+  </table>
+
+  <div class="tip success">
+    <strong>💡 亮点就是卖点：</strong>历史介绍和房东Tips是区分你和普通民宿的关键。住客扫码看到的不只是景区信息，而是"房东亲自踩点整理的一手攻略"，这才是核心价值。
+  </div>
+</div>
+
+<!-- ====== 5. 每日贴士 ====== -->
+<div class="card" id="s5">
+  <h2><span class="num">5</span>💡 每日贴士 — 编辑每日提醒</h2>
+
+  <p>配置住客小程序<b>首页</b>的"总管今日提醒"区域，以及天气信息。</p>
+
+  <h3>字段说明</h3>
+  <table>
+    <tr><th>字段</th><th>示例</th><th>说明</th></tr>
+    <tr><td>日期</td><td>2024-08-03</td><td>选择日期，建议每天更新</td></tr>
+    <tr><td>天气描述</td><td>晴 / 多云 / 小雨</td><td>显示在首页天气区</td></tr>
+    <tr><td>温度</td><td>26</td><td>纯数字，客户端自动加°C</td></tr>
+    <tr><td>日出时间</td><td>05:12</td><td>帮助住客规划起床时间</td></tr>
+    <tr><td>景区开放</td><td>08:00-17:30</td><td>避暑山庄的开闭园时间</td></tr>
+    <tr><td>贴士内容</td><td>今日山庄游人稀少...</td><td>首页金色提示条，个性化建议</td></tr>
+  </table>
+
+  <div class="tip info">
+    <strong>📝 贴士内容怎么写？</strong>不要写"祝您愉快"这种废话。建议格式：<b>当日天气特点 + 出行建议 + 一个具体推荐</b>。例如："今日预报午后有阵雨，建议上午游山庄，带把伞。早餐推荐老三羊汤，雨天来碗热羊汤最舒服。"
+  </div>
+</div>
+
+<!-- ====== 6. 门锁密码 ====== -->
+<div class="card" id="s6">
+  <h2><span class="num">6</span>🔐 门锁密码 — 管理入住密码</h2>
+
+  <p>管理智能门锁的临时密码，每个新住客入住前更新密码。</p>
+
+  <h3>操作指南</h3>
+  <table>
+    <tr><th>场景</th><th>操作</th></tr>
+    <tr><td>🔄 <b>新客人入住前</b></td><td>点击<strong>"生成新密码"</strong>自动生成随机6位数字 → 将密码输入智能门锁 → 客人扫码即可看到</td></tr>
+    <tr><td>✏️ <b>手动指定密码</b></td><td>在"手动设置"框输入6位数字 → 点击<strong>"设定"</strong>（适合使用固定密码的门锁）</td></tr>
+    <tr><td>📝 <b>记录住客信息</b></td><td>填写住客姓名、入住日期、退房日期 → 点击<strong>"保存信息"</strong></td></tr>
+  </table>
+
+  <div class="tip warn">
+    <strong>⚠️ 安全提醒：</strong>
+    ① 每次客人退房后尽快更新密码<br>
+    ② 密码仅6位数字，不支持字母<br>
+    ③ 密码在客户端首页和"我的行宫"页两处显示<br>
+    ④ 建议配合智能门锁使用（如小米/鹿客），管理端生成密码后手动同步到门锁App
+  </div>
+</div>
+
+<!-- ====== 7. 全局设置 ====== -->
+<div class="card" id="s7">
+  <h2><span class="num">7</span>⚙️ 全局设置 — WiFi & 联系方式</h2>
+
+  <p>配置民宿的基础信息，所有修改保存后客户端实时生效。</p>
+
+  <table>
+    <tr><th>配置项</th><th>说明</th><th>客户端影响</th></tr>
+    <tr><td>WiFi名称</td><td>民宿WiFi的SSID</td><td>住客点击"园内WiFi"卡片复制的内容</td></tr>
+    <tr><td>WiFi密码</td><td>WiFi连接密码</td><td>同上，与名称一起复制</td></tr>
+    <tr><td>房东电话</td><td>你的手机号码</td><td>住客点击"传唤总管"时自动拨号</td></tr>
+    <tr><td>房东微信</td><td>你的微信号</td><td>住客点击"复制房东微信"时复制</td></tr>
+  </table>
+
+  <div class="tip info">
+    <strong>📱 电话格式：</strong>填写纯数字即可（如1380314XXXX），客户端会拼接 <code>tel:</code> 前缀实现一键拨号。
+  </div>
+</div>
+
+<!-- ====== 8. 数据维护 ====== -->
+<div class="card" id="s8">
+  <h2><span class="num">8</span>💾 数据维护 — 备份 & 恢复</h2>
+
+  <h3>📥 导出数据备份</h3>
+  <p>点击后浏览器下载一个 <code>.json</code> 文件，包含所有路线、美食、景区、密码、配置数据。建议<strong>每次大改后导出一次</strong>，保存在电脑或云盘。</p>
+
+  <h3>⚠️ 恢复默认数据</h3>
+  <p>点击后<b>所有当前数据将被清空</b>，恢复为初始默认数据。操作前会弹出确认提示。<strong>务必先导出备份！</strong></p>
+
+  <div class="tip warn">
+    <strong>⚠️ 数据存储说明：</strong>当前版本数据存储在浏览器的 localStorage 中。如果你<b>清除浏览器缓存、更换浏览器、使用无痕模式</b>，数据可能丢失。建议定期导出备份。
+  </div>
+
+  <h3>数据迁移到新电脑</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">在旧电脑的管理后台点击<strong>"导出数据备份"</strong></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">将下载的JSON文件拷贝到新电脑</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">在新电脑打开管理后台 → 进入全局设置 → 点击<strong>"恢复默认数据"</strong>清空初始数据</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">打开浏览器的开发者工具（F12） → Console → 粘贴导入脚本（见下方）</div></div>
+
+  <div class="tip info">
+    <strong>🔧 高级：</strong>如需精准导入，可在浏览器Console执行：<br>
+    <code style="font-size:11px;">const data = { /* 粘贴JSON内容 */ }; localStorage.setItem('shuiquangou_miniapp', JSON.stringify(data)); location.reload();</code>
+  </div>
+</div>
+
+<!-- ====== 9. FAQ ====== -->
+<div class="card" id="s9">
+  <h2><span class="num">9</span>🙋 常见问题 FAQ</h2>
+
+  <table>
+    <tr><th>问题</th><th>解答</th></tr>
+    <tr>
+      <td><b>改了内容，住客扫码看不到？</b></td>
+      <td>住客需要<b>刷新小程序页面</b>（下拉或重新扫码）才能看到更新。管理后台修改 → 保存 → 客户端刷新，三步缺一不可。</td>
+    </tr>
+    <tr>
+      <td><b>为什么密码在客户端没变？</b></td>
+      <td>确认：① 管理端保存成功（看到Toast提示）② 客户端刷新了页面。密码在首页和"我的行宫"两处显示。</td>
+    </tr>
+    <tr>
+      <td><b>隐藏了一条路线，还会显示吗？</b></td>
+      <td>隐藏后客户端<b>不会显示</b>。但数据仍保留在管理端，随时可以"启用"恢复。如果是删除，数据<b>永久丢失</b>。</td>
+    </tr>
+    <tr>
+      <td><b>可以在手机上操作管理后台吗？</b></td>
+      <td>技术上可以，但管理后台是桌面端设计，手机上排版较紧凑。建议用电脑浏览器操作。紧急情况手机也能用。</td>
+    </tr>
+    <tr>
+      <td><b>换浏览器后数据没了？</b></td>
+      <td>数据存储在浏览器的localStorage中，不同浏览器之间不共享。换浏览器前务必<b>导出备份</b>，在新浏览器中导入。</td>
+    </tr>
+    <tr>
+      <td><b>误删了内容能恢复吗？</b></td>
+      <td>如果没有备份，无法恢复。建议：① 删除前先确认 ② 定期导出备份 ③ 不确定时选择"隐藏"而非"删除"。</td>
+    </tr>
+    <tr>
+      <td><b>怎么给不同季节换内容？</b></td>
+      <td>方法一：修改现有路线的内容（编辑 → 改时间/地点 → 保存）。方法二：新建多条路线（夏季版/冬季版），通过"隐藏/启用"切换。</td>
+    </tr>
+    <tr>
+      <td><b>景区图标用emoji够吗？</b></td>
+      <td>当前版本用emoji模拟图片。正式部署小程序后，可替换为<b>真实照片的云存储URL</b>。管理端图标字段填入URL即可。</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ====== 10. 日常运营工作流 ====== -->
+<div class="card" id="s10">
+  <h2><span class="num">10</span>📅 日常运营工作流</h2>
+
+  <h3>🏨 有新客人预订时</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">进入 <strong>"门锁密码"</strong> → 点击"生成新密码"</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">填写住客姓名、入住日期、退房日期 → 保存</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">将新密码同步到智能门锁App</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">进入 <strong>"每日贴士"</strong> → 更新入住当天的天气和贴士</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">确认 <strong>"游玩路线"</strong>和<strong>"美食推荐"</strong>内容适合该客人（如亲子客人切换亲子路线）</div></div>
+
+  <h3>🌅 每天早上</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">进入 <strong>"每日贴士"</strong> → 查看当天天气 → 更新贴士内容</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">如有特殊推荐（如某店今天有特色菜），更新到贴士中</div></div>
+
+  <h3>👋 客人退房后</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">进入 <strong>"门锁密码"</strong> → 生成新密码（旧密码作废）</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">可选：导出数据备份，保存该批次运营数据</div></div>
+
+  <h3>🍂 季节更替时</h3>
+  <div class="step"><div class="step-num">1</div><div class="step-body">进入 <strong>"游玩路线"</strong> → 调整路线内容（如秋季加入"金山岭长城赏红叶"）</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">进入 <strong>"美食推荐"</strong> → 推荐当季美食（如冬季突出火锅）</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">进入 <strong>"景区管理"</strong> → 更新门票价格、开放时间（淡季可能有调整）</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">导出完整数据备份</div></div>
+
+  <div class="tip success" style="margin-top:16px;">
+    <strong>🎯 核心原则：</strong>管理后台的终极目标是让住客打开小程序的瞬间，看到<b>"一个懂承德的朋友帮你准备好的完美攻略"</b>。你花在后台维护上的每一分钟，都会转化为住客的好评和推荐。
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px;color:#ccc;font-size:12px;">
+  <p>水泉沟·山居 — 管理员使用说明 v1.0</p>
+  <p style="margin-top:4px;">配套系统：管理后台.html · 小程序客户端.html · 小程序设计方案.html</p>
+</div>
+
+</div>
+</body>
+</html>

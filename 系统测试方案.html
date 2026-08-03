@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水泉沟·山居 — 系统测试方案</title>
+<style>
+  :root { --red:#8B3A3A; --gold:#C9A96E; --jade:#5B8C5A; --lake:#4A7A8C; --ink:#2C2C2C; --bg:#F5F3EE; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; }
+  .container { max-width:960px; margin:0 auto; padding:20px; }
+  .cover { background:linear-gradient(135deg,#3D1C1C,#5C2828,#8B3A3A); color:#fff; padding:50px 20px; text-align:center; border-radius:16px; margin-bottom:30px; }
+  .cover h1 { font-size:32px; letter-spacing:3px; margin-bottom:8px; }
+  .cover .sub { font-size:14px; opacity:0.7; }
+  .card { background:#fff; border-radius:14px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
+  h2 { font-size:20px; color:var(--red); border-bottom:2px solid #F0EDE5; padding-bottom:8px; margin-bottom:16px; }
+  h3 { font-size:16px; color:#5C2828; margin:18px 0 8px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin:10px 0; }
+  th { background:#F8F9FA; padding:8px 12px; text-align:left; font-weight:600; border-bottom:2px solid #EEE; }
+  td { padding:8px 12px; border-bottom:1px solid #F0F0F0; font-size:12px; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+  .tag.p0 { background:#FDE8E8; color:#C03030; }
+  .tag.p1 { background:#FDF0E0; color:#C07830; }
+  .tag.p2 { background:#F0F5F8; color:#3A6B8C; }
+  .pass { color:var(--jade); font-weight:700; }
+  .fail { color:#C03030; font-weight:700; }
+  .summary-box { display:flex; gap:16px; flex-wrap:wrap; }
+  .summary-item { flex:1; min-width:140px; text-align:center; padding:16px; border-radius:10px; }
+  .summary-item.total { background:#F5F5F5; }
+  .summary-item.pass { background:#E8F5E8; }
+  .summary-item.fail { background:#FDE8E8; }
+  .summary-item .num { font-size:32px; font-weight:900; }
+  .summary-item .lbl { font-size:11px; color:#888; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="cover">
+  <h1>🧪 水泉沟·山居 系统测试方案</h1>
+  <div class="sub">小程序客户端 + 管理后台 · 全功能测试计划</div>
+  <div style="font-size:11px;opacity:0.5;margin-top:8px;">版本 v1.0 · 2024年8月</div>
+</div>
+
+<div class="card">
+  <h2>📋 测试概要</h2>
+  <table>
+    <tr><th>项目</th><th>说明</th></tr>
+    <tr><td>测试对象</td><td>小程序客户端.html + 管理后台.html</td></tr>
+    <tr><td>测试类型</td><td>功能测试、UI测试、数据同步测试、边界测试</td></tr>
+    <tr><td>测试环境</td><td>Chrome/Edge 最新版，localStorage可用</td></tr>
+    <tr><td>测试数据</td><td>使用系统内置默认数据 + 手动构造测试数据</td></tr>
+    <tr><td>测试方法</td><td>手工黑盒测试 + 代码走查</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>一、管理后台测试用例（8个模块，共38条）</h2>
+
+  <h3>1.1 数据看板（Dashboard）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A01</td><td>页面加载</td><td>打开管理后台.html</td><td>默认显示数据看板，侧边栏"数据看板"高亮</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A02</td><td>统计卡片数据</td><td>查看4个统计卡片</td><td>启用路线/美食/景区数量与实际数据一致，扫码次数显示正确</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A03</td><td>模拟扫码</td><td>点击"模拟一次扫码"按钮</td><td>扫码次数+1，页面刷新显示新数值</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A04</td><td>快速操作入口</td><td>分别点击4个快速操作按钮</td><td>正确跳转到对应管理页面</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>A05</td><td>侧边栏导航</td><td>逐个点击侧边栏菜单项</td><td>每个菜单项正确切换对应页面，active状态正确</td><td><span class="tag p0">P0</span></td></tr>
+  </table>
+
+  <h3>1.2 游玩路线管理（Routes）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A06</td><td>路线列表展示</td><td>进入路线管理页面</td><td>展示所有路线（含启用和隐藏），列：名称/类型/简介/天数/状态/操作</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A07</td><td>新建路线</td><td>点击"+新建路线"→填写信息→保存</td><td>新路线出现在列表中，客户端刷新后可见</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A08</td><td>编辑路线</td><td>点击某路线的✏️按钮→修改→保存</td><td>路线信息更新，列表刷新</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A09</td><td>添加行程天数</td><td>编辑路线→点击"+ 添加一天"</td><td>新增一天表格区域，可编辑标题</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A10</td><td>添加行程节点</td><td>在某天内点击"+ 添加节点"</td><td>新增一行输入框（时间/地点/描述/提示）</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A11</td><td>删除行程节点</td><td>点击节点行的×按钮</td><td>该行被移除</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>A12</td><td>隐藏/启用路线</td><td>点击某路线的"隐藏"→再"启用"</td><td>状态标签和按钮文字切换，客户端不显示隐藏路线</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A13</td><td>删除路线</td><td>点击🗑→确认删除</td><td>路线从列表移除，数据持久化</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A14</td><td>取消编辑</td><td>编辑弹窗→点取消或×关闭</td><td>弹窗关闭，数据不变</td><td><span class="tag p2">P2</span></td></tr>
+  </table>
+
+  <h3>1.3 美食推荐管理（Foods）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A15</td><td>美食列表展示</td><td>进入美食管理页面</td><td>按排名排序展示所有美食</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A16</td><td>添加美食</td><td>点击"+添加美食"→填写→保存</td><td>新美食出现在列表末尾</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A17</td><td>编辑美食</td><td>编辑→修改所有字段→保存</td><td>所有字段正确更新</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A18</td><td>隐藏/启用美食</td><td>切换隐藏/启用</td><td>状态更新，客户端不显示隐藏项</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A19</td><td>删除美食</td><td>删除→确认</td><td>从列表移除</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+
+  <h3>1.4 景区管理（Scenic）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A20</td><td>景区列表</td><td>进入景区管理</td><td>按排序展示所有景区</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A21</td><td>添加景区（完整字段）</td><td>新建→填写所有字段（含历史/亮点/Tips）→保存</td><td>所有字段正确保存</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A22</td><td>编辑景区</td><td>编辑→修改历史介绍→保存</td><td>长文本字段正确保存和显示</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A23</td><td>标签处理</td><td>编辑→标签栏输入"世界遗产,5A,必游"→保存</td><td>逗号分隔正确解析为数组，客户端标签显示正确</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A24</td><td>亮点换行处理</td><td>编辑→亮点每行一个→保存</td><td>换行正确解析为数组</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A25</td><td>隐藏/显示景区</td><td>切换显示/隐藏</td><td>状态更新</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+
+  <h3>1.5 每日贴士（Tips）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A26</td><td>查看当前贴士</td><td>进入每日贴士页面</td><td>表单预填当前贴士数据</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A27</td><td>编辑贴士</td><td>修改所有字段→保存</td><td>保存成功，客户端首页更新</td><td><span class="tag p0">P0</span></td></tr>
+  </table>
+
+  <h3>1.6 门锁密码（Password）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A28</td><td>查看当前密码</td><td>进入密码管理</td><td>显示当前6位密码</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A29</td><td>生成新密码</td><td>点击"生成新密码"</td><td>生成随机6位数字，客户端刷新后可见</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A30</td><td>手动设置密码</td><td>输入6位数字→点击设定</td><td>密码更新成功</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A31</td><td>密码格式校验</td><td>输入非6位数字→设定</td><td>拒绝并提示</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>A32</td><td>修改住客信息</td><td>修改姓名/日期→保存</td><td>信息更新</td><td><span class="tag p2">P2</span></td></tr>
+  </table>
+
+  <h3>1.7 全局设置（Config）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A33</td><td>修改WiFi配置</td><td>修改WiFi名称/密码→保存</td><td>客户端WiFi复制功能使用新值</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A34</td><td>修改联系方式</td><td>修改电话/微信→保存</td><td>客户端一键拨号/复制微信使用新值</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A35</td><td>导出数据备份</td><td>点击"导出数据备份"</td><td>下载JSON文件，内容完整</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>A36</td><td>恢复默认数据</td><td>点击"恢复默认数据"→确认</td><td>数据重置，需确认操作</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+
+  <h3>1.8 数据同步</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>A37</td><td>管理端→客户端同步</td><td>管理端修改密码→客户端刷新</td><td>客户端密码更新</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>A38</td><td>管理端→客户端内容同步</td><td>管理端添加新路线→客户端刷新</td><td>客户端路线Tab显示新路线</td><td><span class="tag p0">P0</span></td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>二、小程序客户端测试用例（5个Tab，共32条）</h2>
+
+  <h3>2.1 首页（Home）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C01</td><td>页面加载</td><td>打开客户端.html</td><td>首页显示，天气/密码/菜单/贴士完整渲染</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C02</td><td>天气显示</td><td>查看天气区域</td><td>温度/描述/日出/景区时间正确显示，无NaN</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C03</td><td>密码显示与复制</td><td>点击密码区域</td><td>显示6位密码，点击后提示"已复制"</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C04</td><td>WiFi复制</td><td>点击WiFi卡片</td><td>提示"WiFi信息已复制"</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C05</td><td>4格快捷菜单</td><td>分别点击4个菜单项</td><td>正确跳转到游线/美食/胜景/行宫Tab</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C06</td><td>每日贴士显示</td><td>查看首页贴士区域</td><td>内容与后台设置一致</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C07</td><td>日期显示</td><td>查看头部日期</td><td>正确显示当前月日和星期</td><td><span class="tag p2">P2</span></td></tr>
+  </table>
+
+  <h3>2.2 皇家游线（Routes）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C08</td><td>路线Tab展示</td><td>切换到游线Tab</td><td>显示所有启用路线的Tab按钮，第一条默认选中</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C09</td><td>路线Tab切换</td><td>点击不同路线Tab</td><td>内容切换到对应路线的时间线</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C10</td><td>时间线展示</td><td>查看某条路线详情</td><td>时间节点按顺序展示，dot/时间/地点/描述/提示完整</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C11</td><td>多天路线</td><td>查看"两日深度"路线</td><td>显示Day 1和Day 2两个分组，各有时间线</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C12</td><td>隐藏路线不显示</td><td>管理端隐藏某路线→客户端刷新</td><td>隐藏路线不出现在Tab中</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C13</td><td>空路线处理</td><td>管理端隐藏所有路线→客户端刷新</td><td>Tab为空，不应报错崩溃</td><td><span class="tag p2">P2</span></td></tr>
+  </table>
+
+  <h3>2.3 御膳小馆（Foods）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C14</td><td>美食列表展示</td><td>切换到美食Tab</td><td>显示全部推荐美食，含排名/名称/评分/标签</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C15</td><td>分类Tab切换</td><td>点击晨膳/正宴/点心</td><td>正确过滤对应分类美食</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C16</td><td>排名样式</td><td>查看前3名美食</td><td>第1名金色圆圈、第2名铜色、第3名灰色</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>C17</td><td>导航按钮</td><td>点击🧭导航</td><td>显示Toast提示</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>C18</td><td>隐藏美食不显示</td><td>管理端隐藏某美食→客户端刷新</td><td>隐藏美食不出现在列表中</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+
+  <h3>2.4 承德胜景（Scenic）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C19</td><td>景区列表展示</td><td>切换到胜景Tab</td><td>显示所有启用景区卡片，含渐变背景/图标/名称/标签/简介</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C20</td><td>分类Tab切换</td><td>点击皇家园林/外八庙/奇峰异石/古迹遗址</td><td>正确过滤对应分类</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C21</td><td>搜索功能</td><td>输入"避暑"→查看结果</td><td>只显示名称/历史/位置包含"避暑"的景区</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C22</td><td>搜索→分类联动</td><td>先搜索再切换分类</td><td>分类过滤和搜索共同生效</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>C23</td><td>进入景区详情</td><td>点击景区卡片</td><td>显示详情页：大图/标签/信息栏/位置/历史/亮点/Tips</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C24</td><td>返回景区列表</td><td>详情页点击"← 返回"</td><td>回到列表页，搜索框清空，列表重新渲染</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C25</td><td>图片指示器</td><td>查看详情页顶部</td><td>小圆点数量和图片数一致，第一个active</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>C26</td><td>历史介绍显示</td><td>查看详情页历史区域</td><td>段落换行正确，长文本完整显示</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>C27</td><td>隐藏景区不显示</td><td>管理端隐藏某景区→客户端刷新</td><td>隐藏景区不出现在列表</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+
+  <h3>2.5 我的行宫（My）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C28</td><td>入住信息展示</td><td>切换到行宫Tab</td><td>显示房型/日期/密码</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C29</td><td>密码显示</td><td>查看行宫密码</td><td>与首页密码、管理端密码一致</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>C30</td><td>菜单项跳转</td><td>点击"我的游线"等菜单</td><td>正确跳转到对应Tab</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>C31</td><td>一键拨号</td><td>点击"传唤总管"</td><td>触发tel:链接</td><td><span class="tag p2">P2</span></td></tr>
+  </table>
+
+  <h3>2.6 底部导航（Bottom Nav）</h3>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>C32</td><td>底部Tab切换</td><td>逐个点击5个底部Tab</td><td>每个Tab切换正确，active状态高亮红色</td><td><span class="tag p0">P0</span></td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>三、数据同步与集成测试（6条）</h2>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>S01</td><td>首次加载数据一致性</td><td>清除localStorage→同时打开两个文件</td><td>两个文件共享相同的初始数据</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>S02</td><td>密码双向同步</td><td>管理端改密码→客户端刷新</td><td>客户端所有密码展示位置更新</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>S03</td><td>路线同步</td><td>管理端增/删/改路线→客户端刷新</td><td>客户端路线Tab和内容同步更新</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>S04</td><td>美食同步</td><td>管理端增/删/改美食→客户端刷新</td><td>客户端美食列表同步</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>S05</td><td>景区同步</td><td>管理端增/删/改景区→客户端刷新</td><td>客户端景区列表和详情同步</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>S06</td><td>配置同步</td><td>管理端改WiFi/电话→客户端刷新</td><td>客户端WiFi复制/一键拨号使用新值</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>四、边界与异常测试（10条）</h2>
+  <table>
+    <tr><th width="50">编号</th><th>测试项</th><th>操作步骤</th><th>预期结果</th><th width="50">优先级</th></tr>
+    <tr><td>E01</td><td>空localStorage</td><td>清除localStorage→打开客户端</td><td>使用默认数据正常渲染，不报错</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>E02</td><td>损坏的localStorage</td><td>手动设置localStorage为非法JSON</td><td>页面不崩溃，有合理降级</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>E03</td><td>全部路线隐藏</td><td>管理端隐藏所有路线→客户端</td><td>游线Tab无路线显示，不报错</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>E04</td><td>全部美食隐藏</td><td>管理端隐藏所有美食→客户端</td><td>美食列表为空，不报错</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>E05</td><td>全部景区隐藏</td><td>管理端隐藏所有景区→客户端</td><td>景区列表为空，不报错</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>E06</td><td>管理端：路由编辑中途添加天数</td><td>编辑路线→填写表单→点击"+添加一天"不改→保存</td><td>已填写的表单数据不丢失</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>E07</td><td>管理端：路由编辑中途添加节点</td><td>编辑路线→填写表单→点击"+添加节点"不改→保存</td><td>已填写的表单数据不丢失</td><td><span class="tag p0">P0</span></td></tr>
+    <tr><td>E08</td><td>特殊字符输入</td><td>在所有文本输入框中输入HTML标签、emoji</td><td>正确显示，无XSS注入</td><td><span class="tag p1">P1</span></td></tr>
+    <tr><td>E09</td><td>移动端响应式</td><td>在375px宽度视口测试客户端</td><td>页面布局正常，不溢出</td><td><span class="tag p2">P2</span></td></tr>
+    <tr><td>E10</td><td>Clipboard API降级</td><td>在HTTP环境（非localhost）测试复制功能</td><td>有合理提示，不报错崩溃</td><td><span class="tag p1">P1</span></td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>五、测试统计</h2>
+  <div class="summary-box">
+    <div class="summary-item total"><div class="num">86</div><div class="lbl">测试用例总数</div></div>
+    <div class="summary-item" style="background:#FDF0F0;"><div class="num" style="color:#C03030;">38</div><div class="lbl">管理后台用例</div></div>
+    <div class="summary-item" style="background:#F0F5F8;"><div class="num" style="color:#3A6B8C;">32</div><div class="lbl">客户端用例</div></div>
+    <div class="summary-item" style="background:#FDF6EC;"><div class="num" style="color:#C07830;">6</div><div class="lbl">集成测试用例</div></div>
+    <div class="summary-item" style="background:#F5F5F5;"><div class="num">10</div><div class="lbl">边界测试用例</div></div>
+  </div>
+  <div style="margin-top:10px;font-size:12px;color:#888;">
+    优先级分布：P0（核心）= 28条 | P1（重要）= 32条 | P2（一般）= 26条
+  </div>
+</div>
+
+</div>
+</body>
+</html>

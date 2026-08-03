@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水泉沟·山居 — 微信小程序设计方案</title>
+<style>
+  :root {
+    --red: #8B3A3A;
+    --red-light: #A05252;
+    --gold: #C9A96E;
+    --gold-light: #E0D0A8;
+    --jade: #5B8C5A;
+    --jade-light: #A8C8A0;
+    --lake: #4A7A8C;
+    --lake-light: #B0D0D8;
+    --ink: #2C2C2C;
+    --ink-light: #666;
+    --paper: #F5F0E8;
+    --paper-dark: #E8E0D5;
+    --white: #FFFFFF;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Serif SC", "Microsoft YaHei", serif;
+    background: #F0ECE4;
+    color: var(--ink);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    background: linear-gradient(180deg, #3D1C1C 0%, #5C2828 30%, #8B3A3A 60%, #A05252 100%);
+    color: #fff;
+    padding: 80px 20px 70px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(201,169,110,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(91,140,90,0.1) 0%, transparent 50%);
+  }
+  .cover-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.3) 8px, rgba(255,255,255,0.3) 9px),
+                      repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255,255,255,0.3) 8px, rgba(255,255,255,0.3) 9px);
+  }
+  .cover-badge {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 24px;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 4px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 28px;
+  }
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 10px;
+  }
+  .cover .sub {
+    font-size: 17px;
+    opacity: 0.8;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 8px;
+  }
+  .cover .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+    opacity: 0.55;
+  }
+
+  /* ========== LAYOUT ========== */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .content {
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ========== SECTION ========== */
+  section {
+    margin-bottom: 50px;
+  }
+  .section-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px 40px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-size: 26px;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--red), var(--red-light));
+    color: #fff;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  h2 .num.admin-num {
+    background: linear-gradient(135deg, var(--lake), #5A8A9C);
+  }
+  h3 {
+    font-size: 19px;
+    color: #5C2828;
+    margin: 24px 0 12px;
+    padding-left: 14px;
+    border-left: 3px solid var(--gold);
+    font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  }
+  h4 {
+    font-size: 15px;
+    color: var(--ink);
+    margin: 16px 0 8px;
+  }
+  p { margin-bottom: 10px; font-size: 14px; color: #444; }
+
+  /* ========== DESIGN TOKENS ========== */
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .token-swatch {
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .token-color {
+    height: 70px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 6px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .token-label {
+    background: #fff;
+    padding: 8px 6px;
+    font-size: 11px;
+    color: #555;
+  }
+  .token-label strong { display: block; font-size: 12px; color: #333; }
+
+  /* ========== PHONE MOCKUP ========== */
+  .phone-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin: 28px 0;
+  }
+  .phone-wrap {
+    text-align: center;
+  }
+  .phone-wrap .phone-label {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 12px;
+    font-weight: 600;
+  }
+  .phone {
+    width: 320px;
+    background: #1C1C1E;
+    border-radius: 32px;
+    padding: 12px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+    display: inline-block;
+  }
+  .phone-screen {
+    background: #FDFAF5;
+    border-radius: 22px;
+    overflow: hidden;
+    height: 600px;
+    position: relative;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-screen.scrollable {
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .phone-screen.scrollable::-webkit-scrollbar { display: none; }
+
+  /* -- status bar -- */
+  .ph-status {
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    padding: 6px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+
+  /* -- hero -- */
+  .ph-hero {
+    background: linear-gradient(180deg, #5C2828 0%, #8B3A3A 40%, #A05252 100%);
+    color: #fff;
+    padding: 20px 18px 28px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .ph-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 60px;
+    background: #FDFAF5;
+    border-radius: 50%;
+  }
+  .ph-hero-icon {
+    font-size: 36px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .ph-hero-title {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  .ph-hero-sub {
+    font-size: 11px;
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 1px;
+  }
+
+  /* -- weather strip -- */
+  .ph-weather-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(8px);
+  }
+  .ph-weather-strip .w-icon { font-size: 28px; }
+  .ph-weather-strip .w-temp { font-size: 22px; font-weight: 700; }
+  .ph-weather-strip .w-desc { font-size: 10px; opacity: 0.85; flex:1; }
+
+  /* -- card inside phone -- */
+  .ph-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    margin: 10px 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 2;
+  }
+  .ph-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #5C2828;
+  }
+  .ph-card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .ph-card-icon.red { background: #FDF0F0; }
+  .ph-card-icon.gold { background: #FDF6EC; }
+  .ph-card-icon.jade { background: #EDF5ED; }
+
+  /* -- grid -- */
+  .ph-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .ph-grid-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .ph-grid-item:active { transform: scale(0.96); }
+  .ph-grid-item .gi-icon { font-size: 26px; margin-bottom: 4px; }
+  .ph-grid-item .gi-sub { font-size: 10px; color: #999; font-weight: 400; }
+
+  /* -- tabs -- */
+  .ph-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
+  }
+  .ph-tabs::-webkit-scrollbar { display: none; }
+  .ph-tab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 11px;
+    background: #F0EDE5;
+    color: #888;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .ph-tab.active { background: var(--red); color: #fff; }
+
+  /* -- timeline inside phone -- */
+  .ph-timeline {
+    padding: 0 4px;
+    font-size: 11px;
+  }
+  .ph-tl-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .ph-tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .ph-tl-time { color: var(--gold); font-weight: 600; white-space: nowrap; min-width: 36px; font-size: 10px; }
+  .ph-tl-text { flex: 1; font-size: 11px; line-height: 1.5; }
+  .ph-tl-note { font-size: 9px; color: #aaa; }
+
+  /* -- bottom nav -- */
+  .ph-bottom-nav {
+    display: flex;
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: 6px 0;
+    margin-top: auto;
+    font-size: 9px;
+  }
+  .ph-bottom-nav .bn-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+  .ph-bottom-nav .bn-item.active { color: var(--red); }
+  .ph-bottom-nav .bn-icon { font-size: 18px; }
+
+  /* ========== ADMIN PANEL MOCKUP ========== */
+  .admin-shell {
+    background: #F5F6F8;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin: 20px 0;
+  }
+  .admin-topbar {
+    background: #1E2D3D;
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .admin-topbar .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .admin-body {
+    display: flex;
+    min-height: 500px;
+  }
+  .admin-sidebar {
+    width: 180px;
+    background: #263548;
+    color: #B0C0D0;
+    font-size: 12px;
+    padding: 16px 0;
+    flex-shrink: 0;
+  }
+  .admin-sidebar .menu-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .admin-sidebar .menu-item:hover,
+  .admin-sidebar .menu-item.active {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+  }
+  .admin-sidebar .menu-group {
+    font-size: 10px;
+    color: #607080;
+    padding: 16px 20px 6px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .admin-main {
+    flex: 1;
+    padding: 24px;
+    background: #F5F6F8;
+    overflow-y: auto;
+  }
+  .admin-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .admin-card h4 {
+    font-size: 15px;
+    color: #1E2D3D;
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .admin-form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .admin-form-row label {
+    width: 80px;
+    font-size: 12px;
+    color: #666;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .admin-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #DDD;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+  }
+  .admin-input:focus { border-color: var(--lake); }
+  .admin-textarea {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #DDD;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+  }
+  .admin-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .admin-btn.primary { background: var(--lake); color: #fff; }
+  .admin-btn.danger { background: #E8D0D0; color: var(--red); }
+  .admin-btn.small { padding: 4px 12px; font-size: 11px; }
+  .admin-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+  }
+  .admin-table th {
+    background: #F8F9FA;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #EEE;
+  }
+  .admin-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #F0F0F0;
+  }
+  .admin-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .admin-tag.on { background: #E8F5E8; color: var(--jade); }
+  .admin-tag.off { background: #F5F5F5; color: #999; }
+
+  /* ========== TABLES (doc) ========== */
+  table.doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  table.doc-table th {
+    background: #FDF6EC;
+    color: #5C2828;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid var(--gold-light);
+  }
+  table.doc-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #F0EDE5;
+  }
+  table.doc-table tr:nth-child(even) td { background: #FDFAF7; }
+
+  .callout {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .callout.red { background: #FDF0F0; border-left: 3px solid var(--red); }
+  .callout.gold { background: #FDF8F0; border-left: 3px solid var(--gold); }
+  .callout.jade { background: #F0F7F0; border-left: 3px solid var(--jade); }
+  .callout.lake { background: #F0F5F8; border-left: 3px solid var(--lake); }
+
+  .flow-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .flow-step {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .flow-step.red { background: var(--red); }
+  .flow-step.gold { background: var(--gold); color: #5C2828; }
+  .flow-step.jade { background: var(--jade); }
+  .flow-step.lake { background: var(--lake); }
+  .flow-arrow { color: #ccc; font-size: 16px; }
+
+  .footer {
+    text-align: center;
+    padding: 50px 20px;
+    color: #bbb;
+    font-size: 12px;
+    border-top: 1px solid #E8E0D5;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .section-card { padding: 20px 18px; }
+    .phone-row { gap: 20px; }
+    .phone { width: 280px; }
+    .phone-screen { height: 520px; }
+    .admin-sidebar { width: 120px; font-size: 10px; }
+    .admin-body { flex-direction: column; }
+    .admin-sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; }
+    .admin-sidebar .menu-group { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .section-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="cover-pattern"></div>
+  <div class="cover-badge">WECHAT MINI PROGRAM</div>
+  <h1>水泉沟·山居</h1>
+  <div class="sub">微信小程序设计方案</div>
+  <div class="sub" style="font-size:14px;opacity:0.6;">客户端 · 管理端 · 避暑山庄主题</div>
+  <div class="meta-row">
+    <span>📱 客户端（用户端）</span>
+    <span>⚙️ 管理端（后台）</span>
+    <span>🎨 主题：避暑山庄皇家园林</span>
+  </div>
+</div>
+
+<!-- ============ CONTENT ============ -->
+<div class="container">
+<div class="content">
+
+<!-- ====== 1. 设计理念 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num">壹</span>设计理念与视觉定位</h2>
+
+    <h3>核心设计概念：<b>"移步换景，山庄入园"</b></h3>
+    <p>承德避暑山庄是中国古典园林的最高典范，其精髓在于<strong>"虽由人作，宛自天开"</strong>——自然山水与人工建筑的完美融合。小程序设计从避暑山庄中提取视觉基因，让住客打开小程序的瞬间，就像踏入了一座"数字化的避暑山庄"。</p>
+
+    <h3>设计关键词</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;">
+      <span style="display:inline-block;padding:8px 20px;background:var(--red);color:#fff;border-radius:20px;font-size:13px;font-weight:600;">🏛 皇家典雅</span>
+      <span style="display:inline-block;padding:8px 20px;background:var(--gold);color:#5C2828;border-radius:20px;font-size:13px;font-weight:600;">🍂 自然山水</span>
+      <span style="display:inline-block;padding:8px 20px;background:var(--jade);color:#fff;border-radius:20px;font-size:13px;font-weight:600;">🌿 园林意境</span>
+      <span style="display:inline-block;padding:8px 20px;background:var(--lake);color:#fff;border-radius:20px;font-size:13px;font-weight:600;">💧 湖光山色</span>
+      <span style="display:inline-block;padding:8px 20px;background:#5C2828;color:#fff;border-radius:20px;font-size:13px;font-weight:600;">🏺 康乾气韵</span>
+    </div>
+
+    <h3>承德景点 → 设计映射</h3>
+    <table class="doc-table">
+      <tr><th>景点</th><th>提取元素</th><th>设计应用</th></tr>
+      <tr>
+        <td>🏛 <b>避暑山庄·丽正门</b></td>
+        <td>朱红大门、金色门钉、石狮</td>
+        <td>启动页Logo设计，朱红底色+金色门钉排列成图形</td>
+      </tr>
+      <tr>
+        <td>🏛 <b>避暑山庄·烟雨楼</b></td>
+        <td>飞檐翘角、烟雨朦胧、湖中倒影</td>
+        <td>页面背景水纹纹理，卡片阴影模拟楼阁倒影</td>
+      </tr>
+      <tr>
+        <td>🛕 <b>普陀宗乘之庙（小布达拉宫）</b></td>
+        <td>白墙红檐、藏式窗楣、依山而建</td>
+        <td>建筑轮廓线作为页面分割装饰，白+红配色方案</td>
+      </tr>
+      <tr>
+        <td>⛰️ <b>磬锤峰</b></td>
+        <td>奇特棒槌形山体、夕阳剪影</td>
+        <td>路线页面顶部装饰插画，时间线节点图标</td>
+      </tr>
+      <tr>
+        <td>🌊 <b>热河泉</b></td>
+        <td>冬日不冻、雾气蒸腾、石碑</td>
+        <td>天气模块设计灵感，冷暖色调过渡</td>
+      </tr>
+      <tr>
+        <td>🛕 <b>普宁寺·千手观音</b></td>
+        <td>世界最大木雕、金漆、庄严</td>
+        <td>加载动画的旋转莲花设计</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ====== 2. 设计系统 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num">贰</span>设计系统（Design System）</h2>
+
+    <h3>🎨 色彩体系</h3>
+    <p>从避暑山庄的建筑、园林、四季中提取。</p>
+    <div class="token-grid">
+      <div class="token-swatch">
+        <div class="token-color" style="background:#8B3A3A;color:#fff;">朱砂红</div>
+        <div class="token-label"><strong>Primary</strong>#8B3A3A<br>主色调·宫殿红墙</div>
+      </div>
+      <div class="token-swatch">
+        <div class="token-color" style="background:#5C2828;color:#fff;">宫墙深红</div>
+        <div class="token-label"><strong>Dark</strong>#5C2828<br>导航栏·强调</div>
+      </div>
+      <div class="token-swatch">
+        <div class="token-color" style="background:#C9A96E;color:#fff;">鎏金</div>
+        <div class="token-label"><strong>Accent</strong>#C9A96E<br>高亮点缀·金色琉璃瓦</div>
+      </div>
+      <div class="token-swatch">
+        <div class="token-color" style="background:#5B8C5A;color:#fff;">松石绿</div>
+        <div class="token-label"><strong>Secondary</strong>#5B8C5A<br>自然·山庄草木</div>
+      </div>
+      <div class="token-swatch">
+        <div class="token-color" style="background:#4A7A8C;color:#fff;">湖水蓝</div>
+        <div class="token-label"><strong>Tertiary</strong>#4A7A8C<br>湖泊·水景</div>
+      </div>
+      <div class="token-swatch">
+        <div class="token-color" style="background:#F5F0E8;color:#333;">宣纸色</div>
+        <div class="token-label"><strong>Background</strong>#F5F0E8<br>页面底色</div>
+      </div>
+    </div>
+
+    <h3>✍️ 字体系统</h3>
+    <table class="doc-table">
+      <tr><th>用途</th><th>字体</th><th>备选</th></tr>
+      <tr><td>标题/大数字</td><td><b>Noto Serif SC</b>（思源宋体）</td><td>STSong / SimSun</td></tr>
+      <tr><td>正文/按钮</td><td><b>PingFang SC</b></td><td>Microsoft YaHei</td></tr>
+      <tr><td>密码/数字</td><td><b>SF Mono</b></td><td>Menlo / Consolas</td></tr>
+    </table>
+
+    <h3>🏺 图标系统</h3>
+    <p>使用<b>自定义中国风图标</b>，灵感来源于避暑山庄的建筑细节：</p>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin:10px 0;">
+      <div style="text-align:center;">🏛<br>山庄轮廓</div>
+      <div style="text-align:center;">🛕<br>庙宇飞檐</div>
+      <div style="text-align:center;">⛰️<br>磬锤峰</div>
+      <div style="text-align:center;">🌊<br>热河泉</div>
+      <div style="text-align:center;">🔑<br>铜锁</div>
+      <div style="text-align:center;">🗺<br>卷轴地图</div>
+      <div style="text-align:center;">🍜<br>蒸笼</div>
+      <div style="text-align:center;">🏮<br>宫灯</div>
+    </div>
+
+    <h3>🧩 组件库</h3>
+    <table class="doc-table">
+      <tr><th>组件</th><th>样式</th><th>灵感来源</th></tr>
+      <tr><td>按钮</td><td>圆角12px，朱砂红背景，金色描边hover态</td><td>宫殿门钉</td></tr>
+      <tr><td>卡片</td><td>米白底色，下方柔和投影，左上角装饰性斜纹</td><td>园林花窗</td></tr>
+      <tr><td>Tab切换</td><td>胶囊形，选中态填充朱砂红，未选中描边</td><td>廊柱排列</td></tr>
+      <tr><td>时间线</td><td>金色圆点+虚线，节点用磬锤峰剪影</td><td>山庄游廊</td></tr>
+      <tr><td>输入框</td><td>底部单线，focus态变为金色线条</td><td>楹联描金</td></tr>
+      <tr><td>弹窗</td><td>从底部升起，顶部有弧形装饰，圆角20px</td><td>戏台帷幕</td></tr>
+      <tr><td>加载</td><td>莲花旋转+热河雾气动画</td><td>普宁寺千手观音莲花座</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ====== 3. 客户端页面设计 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num">叁</span>客户端 — 页面设计</h2>
+
+    <p style="color:var(--ink-light);margin-bottom:20px;">以下为小程序客户端的<b>7个</b>核心页面高保真原型，以避暑山庄为主题贯穿始终。</p>
+
+    <!-- ---------- 页面1: 首页 ---------- -->
+    <h3>📱 页面一：首页（扫码落地页）</h3>
+    <div class="callout gold">
+      <strong>设计重点：</strong>打开即见"避暑山庄"，顶部红色渐变模拟宫殿红墙，天气卡片融入热河泉的雾气感，开门密码区设计成"铜锁解锁"的仪式感。
+    </div>
+
+    <div class="phone-row">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <!-- Status Bar -->
+            <div class="ph-status">
+              <span>20:30</span>
+              <span>📶 🔋</span>
+            </div>
+            <!-- Hero -->
+            <div class="ph-hero" style="position:relative;">
+              <div style="position:absolute;top:6px;right:12px;font-size:10px;opacity:0.6;z-index:2;">水泉沟·山居</div>
+              <div class="ph-hero-icon">🏛️</div>
+              <div class="ph-hero-title">避暑山庄·山居</div>
+              <div class="ph-hero-sub">丽正门开 · 迎客入园</div>
+              <div class="ph-weather-strip">
+                <div class="w-icon">☀️</div>
+                <div>
+                  <div class="w-temp">26°C</div>
+                  <div class="w-desc">晴 · 宜出游</div>
+                </div>
+                <div style="font-size:9px;text-align:right;opacity:0.7;">
+                  🌅 日出05:12<br>🏛 开园08:00
+                </div>
+              </div>
+            </div>
+            <!-- Unlock Card -->
+            <div style="margin-top:-20px;position:relative;z-index:3;">
+              <div class="ph-card" style="text-align:center;border:1.5px dashed var(--gold);">
+                <div style="font-size:32px;">🔐</div>
+                <div style="font-size:13px;font-weight:700;color:#5C2828;">铜锁开启</div>
+                <div style="font-size:24px;font-weight:900;letter-spacing:5px;color:var(--red);margin:6px 0;font-family:monospace;">482916</div>
+                <div style="font-size:10px;color:#aaa;">点击复制 · 6位临时密码 · 退房后失效</div>
+              </div>
+            </div>
+            <!-- Grid Menu -->
+            <div class="ph-grid" style="margin-top:8px;">
+              <div class="ph-grid-item">
+                <div class="gi-icon">🗺️</div>
+                <div>皇家游线</div>
+                <div class="gi-sub">山庄七十二景</div>
+              </div>
+              <div class="ph-grid-item">
+                <div class="gi-icon">🍜</div>
+                <div>御膳小馆</div>
+                <div class="gi-sub">满汉全席·本地味</div>
+              </div>
+              <div class="ph-grid-item">
+                <div class="gi-icon">📶</div>
+                <div>园内WiFi</div>
+                <div class="gi-sub">一键连网</div>
+              </div>
+              <div class="ph-grid-item">
+                <div class="gi-icon">📞</div>
+                <div>传唤总管</div>
+                <div class="gi-sub">联系房东</div>
+              </div>
+            </div>
+            <!-- Tip -->
+            <div class="ph-card" style="background:#FDF8F0;border-left:3px solid var(--gold);">
+              <div style="font-size:11px;color:#8B6914;">
+                <b>💡 总管今日提醒：</b>今日山庄游人稀少，建议辰时（早8点）入园，从丽正门进，先游博物馆区，再乘舟游湖~
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">首页 · 扫码落地页</div>
+      </div>
+    </div>
+
+    <!-- ---------- 页面2: 游玩路线 ---------- -->
+    <h3>📱 页面二：皇家游线（游玩攻略）</h3>
+    <div class="callout jade">
+      <strong>设计重点：</strong>路线命名融入山庄"康乾七十二景"概念，时间线用磬锤峰剪影做节点，每一天的标题用"卷轴展开"样式。
+    </div>
+
+    <div class="phone-row">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <div class="ph-status"><span>20:31</span><span>📶 🔋</span></div>
+            <div style="background:linear-gradient(180deg,#5C2828,#8B3A3A);color:#fff;padding:14px 18px;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;">
+              ← 🗺️ 皇家游线
+            </div>
+            <!-- Tabs -->
+            <div class="ph-tabs" style="margin-top:12px;">
+              <div class="ph-tab active">一日精华</div>
+              <div class="ph-tab">两日深度</div>
+              <div class="ph-tab">三日全览</div>
+              <div class="ph-tab">亲子御游</div>
+            </div>
+            <!-- Route Content -->
+            <div class="ph-card" style="margin:8px 16px;">
+              <div style="font-size:13px;font-weight:700;color:#5C2828;margin-bottom:10px;text-align:center;padding:8px;background:#FDF6EC;border-radius:8px;">
+                📜 一日精华游 · 仿帝王巡游路线
+              </div>
+              <div class="ph-timeline">
+                <div style="font-size:12px;font-weight:700;color:var(--jade);margin-bottom:6px;">🌅 晨 · 入园</div>
+                <div class="ph-tl-item">
+                  <div class="ph-tl-dot"></div>
+                  <div class="ph-tl-time">07:30</div>
+                  <div class="ph-tl-text"><b>老三羊汤</b> — 步行8分钟</div>
+                </div>
+                <div class="ph-tl-item">
+                  <div class="ph-tl-dot" style="background:var(--red);"></div>
+                  <div class="ph-tl-time">08:30</div>
+                  <div class="ph-tl-text"><b>避暑山庄</b> — 丽正门入</div>
+                  <div class="ph-tl-note">博物馆→湖区划船→烟雨楼</div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:var(--gold);margin:10px 0 6px;">☀️ 午 · 小憩</div>
+                <div class="ph-tl-item">
+                  <div class="ph-tl-dot"></div>
+                  <div class="ph-tl-time">12:30</div>
+                  <div class="ph-tl-text"><b>乔家满族八大碗</b></div>
+                  <div class="ph-tl-note">鹿肉·满族火锅</div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:var(--red);margin:10px 0 6px;">🌇 暮 · 归程</div>
+                <div class="ph-tl-item">
+                  <div class="ph-tl-dot" style="background:var(--lake);"></div>
+                  <div class="ph-tl-time">14:00</div>
+                  <div class="ph-tl-text"><b>普宁寺</b> — 千手观音</div>
+                </div>
+                <div class="ph-tl-item">
+                  <div class="ph-tl-dot"></div>
+                  <div class="ph-tl-time">17:00</div>
+                  <div class="ph-tl-text"><b>磬锤峰</b> — 缆车观日落</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">皇家游线 · 路线详情</div>
+      </div>
+    </div>
+
+    <!-- ---------- 页面3: 美食 ---------- -->
+    <h3>📱 页面三：御膳小馆（美食地图）</h3>
+    <div class="callout red">
+      <strong>设计重点：</strong>将餐厅命名为"御膳房"风格，每道推荐菜配"御膳金牌"图标，排序用"龙纹徽章"数字。分类Tab仿造宫殿匾额样式。
+    </div>
+
+    <div class="phone-row">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <div class="ph-status"><span>20:31</span><span>📶 🔋</span></div>
+            <div style="background:linear-gradient(180deg,#5C2828,#8B3A3A);color:#fff;padding:14px 18px;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;">
+              ← 🍜 御膳小馆
+            </div>
+            <div class="ph-tabs" style="margin-top:12px;">
+              <div class="ph-tab active">全部</div>
+              <div class="ph-tab">晨膳</div>
+              <div class="ph-tab">正宴</div>
+              <div class="ph-tab">点心</div>
+            </div>
+            <!-- Food List -->
+            <div class="ph-card" style="margin:8px 16px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ede5;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;">1</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:700;">老三羊汤 <span style="color:var(--gold);font-size:10px;">★4.8</span></div>
+                  <div style="font-size:10px;color:#999;">步行8分钟 · ¥25/人 · 30年老店</div>
+                </div>
+                <div style="font-size:10px;background:var(--jade);color:#fff;padding:4px 10px;border-radius:10px;">🧭导航</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ede5;">
+                <div style="width:28px;height:28px;border-radius:50%;background:#C0A080;color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;">2</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:700;">乔家满族八大碗 <span style="color:var(--gold);font-size:10px;">★4.6</span></div>
+                  <div style="font-size:10px;color:#999;">3km · ¥60/人 · 鹿肉必点</div>
+                </div>
+                <div style="font-size:10px;background:var(--jade);color:#fff;padding:4px 10px;border-radius:10px;">🧭导航</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 0;">
+                <div style="width:28px;height:28px;border-radius:50%;background:#A0A0A0;color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;">3</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:700;">承德杏仁茶 <span style="color:var(--gold);font-size:10px;">★4.5</span></div>
+                  <div style="font-size:10px;color:#999;">步行5分钟 · ¥8/人 · 特色早餐</div>
+                </div>
+                <div style="font-size:10px;background:var(--jade);color:#fff;padding:4px 10px;border-radius:10px;">🧭导航</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">御膳小馆 · 美食推荐</div>
+      </div>
+    </div>
+
+    <!-- ---------- 页面4: 我的 ---------- -->
+    <h3>📱 页面四：我的行宫（个人中心）</h3>
+    <div class="callout lake">
+      <strong>设计重点：</strong>个人中心命名为"我的行宫"，订单信息设计成"圣旨卷轴"展开样式，入住信息用"宫牌"形式展示。
+    </div>
+
+    <div class="phone-row">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <div class="ph-status"><span>20:31</span><span>📶 🔋</span></div>
+            <div style="background:linear-gradient(180deg,#5C2828,#8B3A3A);color:#fff;padding:20px 18px;text-align:center;">
+              <div style="font-size:40px;margin-bottom:6px;">🏛️</div>
+              <div style="font-size:18px;font-weight:700;">我的行宫</div>
+              <div style="font-size:11px;opacity:0.7;">水泉沟·山居 欢迎回宫</div>
+            </div>
+            <!-- Stay Card -->
+            <div style="margin-top:-16px;position:relative;z-index:3;">
+              <div class="ph-card" style="text-align:center;border:1px solid var(--gold-light);">
+                <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:4px;">━ 当前宫牌 ━</div>
+                <div style="font-size:13px;color:#5C2828;font-weight:700;">山景双卧 · 丽正阁</div>
+                <div style="font-size:10px;color:#999;">入住 8月3日 → 退房 8月5日 · 共2晚</div>
+                <div style="margin-top:10px;padding:10px;background:#FDF8F0;border-radius:8px;font-size:20px;font-weight:900;letter-spacing:6px;color:var(--red);font-family:monospace;">482916</div>
+                <div style="font-size:9px;color:#aaa;">宫门密码 · 退房即废</div>
+              </div>
+            </div>
+            <!-- Menu Items -->
+            <div class="ph-card" style="margin:8px 16px;">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0ede5;font-size:13px;">📜 我的游线<div style="color:#ccc;">›</div></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0ede5;font-size:13px;">📸 行宫留影<div style="color:#ccc;">›</div></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0ede5;font-size:13px;">🎁 御赐特产<div style="color:#ccc;">›</div></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:13px;color:var(--red);">🚪 退宫（退房）<div style="color:var(--red);">›</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">我的行宫 · 个人中心</div>
+      </div>
+    </div>
+
+    <!-- ---------- 页面5: 承德胜景 ---------- -->
+    <h3>📱 页面五：承德胜景（景区全览）</h3>
+    <div class="callout lake">
+      <strong>设计重点：</strong>以"皇家舆图"为概念，将承德所有景区呈现在一张古风地图上。列表视图仿造"宫廷折子"样式，景区详情页设计成"工笔册页"翻页效果。每个景区的图片占据卡片上方，营造"身临其境"的沉浸感。
+    </div>
+
+    <div class="phone-row">
+      <!-- 景区列表页 -->
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <div class="ph-status"><span>20:31</span><span>📶 🔋</span></div>
+            <div style="background:linear-gradient(180deg,#2C4A5A,#4A7A8C);color:#fff;padding:14px 18px;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;">
+              ← 🏯 承德胜景
+            </div>
+            <!-- 搜索条 -->
+            <div style="padding:10px 16px;position:relative;z-index:2;">
+              <div style="background:#fff;border-radius:20px;padding:8px 14px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+                <span style="font-size:14px;">🔍</span>
+                <span style="font-size:12px;color:#bbb;">搜索景区名称...</span>
+              </div>
+            </div>
+            <!-- 分类Tab -->
+            <div class="ph-tabs">
+              <div class="ph-tab active">全部胜景</div>
+              <div class="ph-tab">皇家园林</div>
+              <div class="ph-tab">外八庙</div>
+              <div class="ph-tab">奇峰异石</div>
+              <div class="ph-tab">古迹遗址</div>
+            </div>
+            <!-- 景区卡片列表 -->
+            <div style="padding:0 16px;">
+              <!-- 卡片1 -->
+              <div style="background:#fff;border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                <div style="height:140px;background:linear-gradient(135deg,#5B8C5A,#8AAF8A);position:relative;display:flex;align-items:center;justify-content:center;">
+                  <div style="text-align:center;color:#fff;">
+                    <div style="font-size:48px;">🏛️</div>
+                    <div style="font-size:9px;opacity:0.6;">📷 避暑山庄·烟雨楼</div>
+                  </div>
+                  <div style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.3);color:#fff;font-size:9px;padding:2px 8px;border-radius:10px;">📸 3图</div>
+                </div>
+                <div style="padding:12px 14px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:15px;font-weight:700;color:#2C4A5A;">避暑山庄</span>
+                    <span style="font-size:9px;background:#FDF0F0;color:var(--red);padding:2px 8px;border-radius:8px;">世界遗产</span>
+                    <span style="font-size:9px;background:#FDF6EC;color:var(--gold);padding:2px 8px;border-radius:8px;">5A</span>
+                  </div>
+                  <div style="font-size:10px;color:#888;margin-bottom:6px;">
+                    📍 承德市双桥区丽正门大街 · 距民宿3km
+                  </div>
+                  <div style="font-size:11px;color:#555;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                    始建于1703年，康熙至乾隆历时89年建成，是中国现存最大的皇家园林。占地564万平方米，分为宫殿区、湖泊区、平原区、山峦区四部分...
+                  </div>
+                  <div style="display:flex;gap:10px;margin-top:8px;font-size:9px;color:#999;">
+                    <span>🕐 08:00-17:30</span>
+                    <span>🎫 ¥130</span>
+                    <span>⏱ 建议3-4h</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 卡片2 -->
+              <div style="background:#fff;border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                <div style="height:140px;background:linear-gradient(135deg,#C9A96E,#E0C8A0);position:relative;display:flex;align-items:center;justify-content:center;">
+                  <div style="text-align:center;color:#fff;">
+                    <div style="font-size:48px;">🛕</div>
+                    <div style="font-size:9px;opacity:0.6;">📷 普陀宗乘之庙·大红台</div>
+                  </div>
+                  <div style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.3);color:#fff;font-size:9px;padding:2px 8px;border-radius:10px;">📸 5图</div>
+                </div>
+                <div style="padding:12px 14px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:15px;font-weight:700;color:#2C4A5A;">普陀宗乘之庙</span>
+                    <span style="font-size:9px;background:#FDF0F0;color:var(--red);padding:2px 8px;border-radius:8px;">世界遗产</span>
+                  </div>
+                  <div style="font-size:10px;color:#888;margin-bottom:6px;">
+                    📍 承德市双桥区狮子沟镇 · 距民宿4km
+                  </div>
+                  <div style="font-size:11px;color:#555;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                    又称"小布达拉宫"，建于1767年，是外八庙中规模最大的一座。仿西藏布达拉宫而建，气势宏伟，大红台是标志性建筑...
+                  </div>
+                  <div style="display:flex;gap:10px;margin-top:8px;font-size:9px;color:#999;">
+                    <span>🕐 08:00-17:30</span>
+                    <span>🎫 ¥80</span>
+                    <span>⏱ 建议2h</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 卡片3 -->
+              <div style="background:#fff;border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                <div style="height:140px;background:linear-gradient(135deg,#8B6B4A,#A08060);position:relative;display:flex;align-items:center;justify-content:center;">
+                  <div style="text-align:center;color:#fff;">
+                    <div style="font-size:48px;">⛰️</div>
+                    <div style="font-size:9px;opacity:0.6;">📷 磬锤峰·夕阳剪影</div>
+                  </div>
+                  <div style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.3);color:#fff;font-size:9px;padding:2px 8px;border-radius:10px;">📸 4图</div>
+                </div>
+                <div style="padding:12px 14px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:15px;font-weight:700;color:#2C4A5A;">磬锤峰</span>
+                    <span style="font-size:9px;background:#EDF5ED;color:var(--jade);padding:2px 8px;border-radius:8px;">国家森林公园</span>
+                  </div>
+                  <div style="font-size:10px;color:#888;margin-bottom:6px;">
+                    📍 承德市双桥区 · 距民宿2.5km
+                  </div>
+                  <div style="font-size:11px;color:#555;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                    俗称"棒槌山"，上粗下细形似棒槌，高38米。康熙赐名"磬锤峰"，是承德标志性自然景观。推荐乘缆车上山，俯瞰承德全景...
+                  </div>
+                  <div style="display:flex;gap:10px;margin-top:8px;font-size:9px;color:#999;">
+                    <span>🕐 08:00-17:30</span>
+                    <span>🎫 ¥50</span>
+                    <span>⏱ 建议2h</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">承德胜景 · 景区列表</div>
+      </div>
+
+      <!-- 景区详情页 -->
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen scrollable">
+            <div class="ph-status"><span>20:32</span><span>📶 🔋</span></div>
+            <!-- 顶部大图 -->
+            <div style="height:200px;background:linear-gradient(180deg,#3D6B3C 0%,#5B8C5A 40%,#8AAF8A 100%);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              <div style="position:absolute;top:10px;left:14px;background:rgba(0,0,0,0.35);color:#fff;font-size:11px;padding:4px 12px;border-radius:14px;">← 返回</div>
+              <div style="text-align:center;color:#fff;">
+                <div style="font-size:56px;">🏛️</div>
+                <div style="font-size:10px;opacity:0.6;">左右滑动查看图片</div>
+              </div>
+              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:4px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#fff;"></div>
+                <div style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);"></div>
+                <div style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);"></div>
+              </div>
+            </div>
+            <!-- 详情内容 -->
+            <div style="margin-top:-16px;position:relative;z-index:3;background:#FDFAF5;border-radius:18px 18px 0 0;padding:20px 16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <span style="font-size:20px;font-weight:900;color:#2C4A5A;">避暑山庄</span>
+                <span style="font-size:10px;background:#FDF0F0;color:var(--red);padding:2px 8px;border-radius:8px;">世界遗产</span>
+                <span style="font-size:10px;background:#FDF6EC;color:var(--gold);padding:2px 8px;border-radius:8px;">5A</span>
+              </div>
+              <div style="font-size:10px;color:var(--gold);margin-bottom:12px;">★ 4.7 · 3.2万条评价 · 承德必游TOP1</div>
+
+              <!-- 信息标签行 -->
+              <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+                <div style="flex:1;text-align:center;background:#F0F5F8;border-radius:10px;padding:10px 6px;">
+                  <div style="font-size:10px;color:#888;">🕐 开放时间</div>
+                  <div style="font-size:11px;font-weight:700;color:#2C4A5A;">08:00-17:30</div>
+                </div>
+                <div style="flex:1;text-align:center;background:#F0F5F8;border-radius:10px;padding:10px 6px;">
+                  <div style="font-size:10px;color:#888;">🎫 门票</div>
+                  <div style="font-size:11px;font-weight:700;color:#2C4A5A;">¥130/人</div>
+                </div>
+                <div style="flex:1;text-align:center;background:#F0F5F8;border-radius:10px;padding:10px 6px;">
+                  <div style="font-size:10px;color:#888;">⏱ 建议游玩</div>
+                  <div style="font-size:11px;font-weight:700;color:#2C4A5A;">3-4小时</div>
+                </div>
+              </div>
+
+              <!-- 位置 -->
+              <div style="background:#FDF6EC;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                <span style="font-size:18px;">📍</span>
+                <div style="flex:1;">
+                  <div style="font-size:12px;font-weight:700;">承德市双桥区丽正门大街</div>
+                  <div style="font-size:10px;color:#888;">距水泉沟·山居约3公里 · 驾车约10分钟</div>
+                </div>
+                <div style="font-size:10px;background:var(--lake);color:#fff;padding:4px 10px;border-radius:10px;">🧭 导航</div>
+              </div>
+
+              <!-- 历史介绍 -->
+              <div style="margin-bottom:12px;">
+                <div style="font-size:14px;font-weight:700;color:#2C4A5A;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+                  📜 历史渊源
+                </div>
+                <div style="font-size:11px;color:#555;line-height:1.8;">
+                  避暑山庄始建于康熙四十二年（1703年），历经康熙、雍正、乾隆三朝，耗时89年建成。它是中国现存最大的皇家园林，占地564万平方米，相当于颐和园的两倍，北海公园的八倍。<br><br>
+                  康熙帝每年在此居住近半年，在此处理朝政、接见少数民族首领和外国使节。乾隆帝更是在此度过了大量时光，山庄内的"康乾七十二景"由此得名。<br><br>
+                  1994年，避暑山庄及周围寺庙被联合国教科文组织列入<b>世界文化遗产名录</b>。
+                </div>
+              </div>
+
+              <!-- 必看亮点 -->
+              <div style="margin-bottom:12px;">
+                <div style="font-size:14px;font-weight:700;color:#2C4A5A;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+                  ✨ 必看亮点
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div style="font-size:10px;color:#555;padding:6px 10px;background:#F8F8F6;border-radius:8px;">🏛 <b>丽正门</b> — 山庄正门，乾隆题"丽正门"石匾</div>
+                  <div style="font-size:10px;color:#555;padding:6px 10px;background:#F8F8F6;border-radius:8px;">🏯 <b>澹泊敬诚殿</b> — 全部用楠木建成的主殿</div>
+                  <div style="font-size:10px;color:#555;padding:6px 10px;background:#F8F8F6;border-radius:8px;">🏞️ <b>烟雨楼</b> — 湖区最美建筑，《还珠格格》取景地</div>
+                  <div style="font-size:10px;color:#555;padding:6px 10px;background:#F8F8F6;border-radius:8px;">🌊 <b>热河泉</b> — 世界最短的河，冬日不冻</div>
+                </div>
+              </div>
+
+              <!-- 房东Tips -->
+              <div style="background:#FDF8F0;border-radius:10px;padding:10px 12px;border-left:3px solid var(--gold);">
+                <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px;">💡 房东游园Tips</div>
+                <div style="font-size:10px;color:#8B6914;line-height:1.6;">
+                  建议早上8点开门就入园，先去博物馆区（人少），然后乘船游湖，最后坐电瓶车上山。山庄内没有餐厅，建议自带干粮和水~
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label">承德胜景 · 景区详情</div>
+      </div>
+    </div>
+
+    <!-- Page Flow -->
+    <h3>📊 客户端页面结构总览</h3>
+    <div class="callout jade">
+      <div style="text-align:center;font-family:monospace;font-size:12px;line-height:2.4;">
+        <div style="display:inline-block;background:var(--red);color:#fff;padding:4px 16px;border-radius:14px;margin:4px;">🏛 首页</div> ───
+        <div style="display:inline-block;background:var(--jade);color:#fff;padding:4px 16px;border-radius:14px;margin:4px;">🗺 皇家游线</div> ───
+        <div style="display:inline-block;background:var(--gold);color:#5C2828;padding:4px 16px;border-radius:14px;margin:4px;">🍜 御膳小馆</div> ───
+        <div style="display:inline-block;background:#6B4C8A;color:#fff;padding:4px 16px;border-radius:14px;margin:4px;">🏯 承德胜景</div> ───
+        <div style="display:inline-block;background:var(--lake);color:#fff;padding:4px 16px;border-radius:14px;margin:4px;">🏛 我的行宫</div>
+        <br><br>
+        <div style="font-size:11px;color:#888;">
+          底部Tab栏：🏛首页 | 🗺游线 | 🍜御膳 | 🏯胜景 | 🏛行宫<br>
+          Tab栏设计成山庄汉白玉栏杆样式
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. 管理端设计 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num admin-num">肆</span>管理端 — 后台设计</h2>
+
+    <p style="color:var(--ink-light);margin-bottom:20px;">管理端为Web后台（PC端），房东通过浏览器登录，实时配置小程序中的所有内容。设计风格延续避暑山庄主题，采用深色侧边栏 + 白色内容区，灵感来源于<b>"皇家藏书阁"</b>。</p>
+
+    <h3>🖥️ 管理端整体布局</h3>
+    <div class="admin-shell">
+      <div class="admin-topbar">
+        <span class="dot" style="background:#E06060;"></span>
+        <span class="dot" style="background:#F0C060;"></span>
+        <span class="dot" style="background:#60C060;"></span>
+        <span style="flex:1;text-align:center;">水泉沟·山居 — 总管后台</span>
+        <span style="font-size:11px;opacity:0.7;">🏛 总管大人 | 退出</span>
+      </div>
+      <div class="admin-body">
+        <div class="admin-sidebar">
+          <div class="menu-group">🏛 内容管理</div>
+          <div class="menu-item active">📜 游玩路线</div>
+          <div class="menu-item">🍜 美食推荐</div>
+          <div class="menu-item">🏯 景区管理</div>
+          <div class="menu-item">💡 每日贴士</div>
+          <div class="menu-group">⚙️ 系统配置</div>
+          <div class="menu-item">🔐 门锁密码</div>
+          <div class="menu-item">📶 WiFi设置</div>
+          <div class="menu-item">🏠 房源信息</div>
+          <div class="menu-group">📊 数据看板</div>
+          <div class="menu-item">📈 扫码统计</div>
+          <div class="menu-item">💬 住客反馈</div>
+        </div>
+        <div class="admin-main">
+          <!-- 路线编辑卡片 -->
+          <div class="admin-card">
+            <h4>📜 游玩路线管理</h4>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <span class="admin-tag on">一日精华</span>
+              <span class="admin-tag off">两日深度</span>
+              <span class="admin-tag off">三日全览</span>
+              <span class="admin-tag off">亲子御游</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--lake);cursor:pointer;">+ 新建路线</span>
+            </div>
+            <div style="font-size:12px;color:#888;margin-bottom:10px;">当前编辑：<b>一日精华游</b></div>
+            <div class="admin-form-row">
+              <label>路线名称</label>
+              <input class="admin-input" value="一日精华游" />
+            </div>
+            <div class="admin-form-row">
+              <label>路线简介</label>
+              <input class="admin-input" value="仿帝王巡游路线，一日看尽承德精华" />
+            </div>
+            <div style="font-size:11px;color:#888;margin:8px 0 8px 92px;">📍 行程节点</div>
+            <table class="admin-table" style="margin-left:92px;width:calc(100% - 92px);">
+              <tr><th>时间</th><th>地点</th><th>说明</th><th>操作</th></tr>
+              <tr>
+                <td>07:30</td><td>老三羊汤</td><td>早餐·步行8分钟</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>08:30</td><td>避暑山庄</td><td>丽正门入·3-4小时</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>12:30</td><td>乔家八大碗</td><td>午餐·满族风味</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr><td colspan="4" style="text-align:center;color:var(--lake);cursor:pointer;">+ 添加行程节点</td></tr>
+            </table>
+            <div style="text-align:right;margin-top:12px;">
+              <span class="admin-btn" style="background:#eee;margin-right:8px;">预览</span>
+              <span class="admin-btn primary">保存路线</span>
+            </div>
+          </div>
+
+          <!-- 密码管理卡片 -->
+          <div class="admin-card">
+            <h4>🔐 门锁密码管理</h4>
+            <div style="font-size:12px;color:#888;margin-bottom:10px;">
+              💡 支持手动设置密码或自动生成随机6位密码。密码在住客退房日24:00自动失效。
+            </div>
+            <div class="admin-form-row">
+              <label>当前密码</label>
+              <input class="admin-input" value="482916" readonly style="background:#F8F8F8;font-family:monospace;font-size:18px;letter-spacing:4px;" />
+              <span class="admin-btn primary" style="white-space:nowrap;">🔄 生成新密码</span>
+            </div>
+            <div class="admin-form-row">
+              <label>有效期</label>
+              <input class="admin-input" value="2024-08-03 至 2024-08-05" readonly style="background:#F8F8F8;" />
+            </div>
+            <div style="font-size:10px;color:#999;margin-left:92px;">
+              ⚠️ 密码变更后小程序实时同步，无需住客手动刷新
+            </div>
+          </div>
+
+          <!-- 景区管理卡片 -->
+          <div class="admin-card">
+            <h4>🏯 承德胜景 — 景区信息管理</h4>
+            <div style="font-size:12px;color:#888;margin-bottom:10px;">
+              💡 管理小程序"承德胜景"页面中展示的所有景区信息，包括图片、介绍、位置等。
+            </div>
+            <table class="admin-table">
+              <tr><th>景区名称</th><th>分类</th><th>图片数</th><th>门票</th><th>状态</th><th>排序</th><th>操作</th></tr>
+              <tr>
+                <td>🏛 避暑山庄</td><td>皇家园林</td><td>3</td><td>¥130</td><td><span class="admin-tag on">显示中</span></td><td>1</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>🛕 普陀宗乘之庙</td><td>外八庙</td><td>5</td><td>¥80</td><td><span class="admin-tag on">显示中</span></td><td>2</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>⛰️ 磬锤峰</td><td>奇峰异石</td><td>4</td><td>¥50</td><td><span class="admin-tag on">显示中</span></td><td>3</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>🛕 普宁寺</td><td>外八庙</td><td>2</td><td>¥80</td><td><span class="admin-tag on">显示中</span></td><td>4</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr>
+                <td>⛰️ 双塔山</td><td>奇峰异石</td><td>1</td><td>¥50</td><td><span class="admin-tag off">已隐藏</span></td><td>5</td>
+                <td><span class="admin-btn small">✏️</span> <span class="admin-btn danger small">🗑</span></td>
+              </tr>
+              <tr><td colspan="7" style="text-align:center;color:var(--lake);cursor:pointer;padding:8px;">+ 添加新景区</td></tr>
+            </table>
+            <div style="margin-top:14px;padding:14px;background:#F8F9FA;border-radius:8px;border:1px dashed #DDD;">
+              <div style="font-size:12px;font-weight:700;margin-bottom:8px;">📝 编辑景区 — 避暑山庄</div>
+              <div class="admin-form-row">
+                <label>景区名称</label>
+                <input class="admin-input" value="避暑山庄" />
+              </div>
+              <div class="admin-form-row">
+                <label>分类</label>
+                <input class="admin-input" value="皇家园林" />
+              </div>
+              <div class="admin-form-row">
+                <label>位置</label>
+                <input class="admin-input" value="承德市双桥区丽正门大街" />
+              </div>
+              <div class="admin-form-row">
+                <label>距民宿</label>
+                <input class="admin-input" value="3km · 驾车约10分钟" style="width:120px;" />
+              </div>
+              <div class="admin-form-row">
+                <label>开放时间</label>
+                <input class="admin-input" value="08:00-17:30" style="width:120px;" />
+              </div>
+              <div class="admin-form-row">
+                <label>门票</label>
+                <input class="admin-input" value="¥130/人" style="width:100px;" />
+              </div>
+              <div class="admin-form-row">
+                <label>建议游玩</label>
+                <input class="admin-input" value="3-4小时" style="width:100px;" />
+              </div>
+              <div class="admin-form-row">
+                <label>标签</label>
+                <input class="admin-input" value="世界遗产,5A,必游TOP1" />
+              </div>
+              <div class="admin-form-row">
+                <label>历史介绍</label>
+                <textarea class="admin-textarea" style="min-height:80px;">避暑山庄始建于康熙四十二年（1703年），历经康熙、雍正、乾隆三朝，耗时89年建成。是中国现存最大的皇家园林，占地564万平方米...</textarea>
+              </div>
+              <div class="admin-form-row">
+                <label>必看亮点</label>
+                <textarea class="admin-textarea" style="min-height:60px;">丽正门 — 山庄正门
+澹泊敬诚殿 — 楠木主殿
+烟雨楼 — 《还珠格格》取景地
+热河泉 — 世界最短的河</textarea>
+              </div>
+              <div class="admin-form-row">
+                <label>房东Tips</label>
+                <textarea class="admin-textarea" style="min-height:50px;">建议早上8点开门就入园，先去博物馆区（人少），然后乘船游湖，最后坐电瓶车上山。山庄内没有餐厅，建议自带干粮和水~</textarea>
+              </div>
+              <div class="admin-form-row">
+                <label>景区图片</label>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <div style="width:70px;height:70px;background:#E8F5E8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px dashed #ccc;">🏛️</div>
+                  <div style="width:70px;height:70px;background:#F0EDE5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px dashed #ccc;">🏞️</div>
+                  <div style="width:70px;height:70px;background:#F0EDE5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px dashed #ccc;">🌊</div>
+                  <div style="width:70px;height:70px;background:#F0EDE5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#ccc;border:1px dashed #ccc;">+ 上传</div>
+                </div>
+              </div>
+              <div style="text-align:right;margin-top:12px;">
+                <span class="admin-btn" style="background:#eee;margin-right:8px;">取消</span>
+                <span class="admin-btn primary">💾 保存景区信息</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 数据统计卡片 -->
+          <div class="admin-card">
+            <h4>📈 扫码数据概览（近7天）</h4>
+            <div style="display:flex;gap:20px;">
+              <div style="flex:1;text-align:center;padding:14px;background:#FDF0F0;border-radius:8px;">
+                <div style="font-size:24px;font-weight:900;color:var(--red);">127</div>
+                <div style="font-size:11px;color:#888;">扫码次数</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:14px;background:#FDF6EC;border-radius:8px;">
+                <div style="font-size:24px;font-weight:900;color:var(--gold);">89</div>
+                <div style="font-size:11px;color:#888;">攻略查看</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:14px;background:#EDF5ED;border-radius:8px;">
+                <div style="font-size:24px;font-weight:900;color:var(--jade);">42</div>
+                <div style="font-size:11px;color:#888;">导航点击</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:14px;background:#F0F5F8;border-radius:8px;">
+                <div style="font-size:24px;font-weight:900;color:var(--lake);">3</div>
+                <div style="font-size:11px;color:#888;">当前入住</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>📋 管理端功能清单</h3>
+    <table class="doc-table" style="margin-top:16px;">
+      <tr><th>模块</th><th>功能点</th><th>说明</th></tr>
+      <tr><td>📜 游玩路线</td><td>增删改路线、编辑时间节点、添加备注Tips</td><td>支持多条路线（1日/2日/3日/亲子/自定义），实时同步小程序</td></tr>
+      <tr><td>🏯 景区管理</td><td>管理景区列表、图片上传、历史介绍、亮点、Tips</td><td>支持分类（皇家园林/外八庙/奇峰异石/古迹遗址）、排序、显示/隐藏、搜索</td></tr>
+      <tr><td>🍜 美食推荐</td><td>管理餐厅列表、分类、评分、推荐语</td><td>支持添加/下架/排序，可设"今日特别推荐"</td></tr>
+      <tr><td>💡 每日贴士</td><td>编辑每日天气+出行建议</td><td>支持定时发布，可预设多天内容</td></tr>
+      <tr><td>🔐 门锁密码</td><td>查看/生成/手动设置临时密码</td><td>密码自动关联入住订单，退房后24:00自动失效</td></tr>
+      <tr><td>📶 WiFi设置</td><td>修改WiFi名称和密码</td><td>修改后小程序实时更新</td></tr>
+      <tr><td>🏠 房源信息</td><td>编辑民宿名称、介绍、联系方式</td><td>同步更新小程序头部和关于页面</td></tr>
+      <tr><td>📈 扫码统计</td><td>查看扫码次数、攻略查看、导航点击</td><td>按天/周/月统计，了解住客行为</td></tr>
+      <tr><td>💬 住客反馈</td><td>查看住客通过小程序提交的反馈</td><td>支持回复和标记已处理</td></tr>
+      <tr><td>📸 Banner管理</td><td>更换首页轮播图/欢迎图</td><td>支持季节主题切换（春夏秋冬）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ====== 5. 技术架构 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num admin-num">伍</span>技术架构方案</h2>
+
+    <h3>🏗️ 整体架构图</h3>
+    <div class="callout lake">
+      <pre style="font-size:11px;line-height:1.8;overflow-x:auto;font-family:monospace;">
+┌─────────────────────────────────────────────────────────────┐
+│                      微信小程序（客户端）                      │
+│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐            │
+│  │ 首页  │ │ 游线  │ │ 美食  │ │ 胜景  │ │ 行宫  │ │ 关于  │            │
+│  └──┬───┘ └──┬───┘ └──┬───┘ └──┬───┘ └──┬───┘ └──┬───┘            │
+│     └────────┴────────┴────────┴────────┘                  │
+│                        │  HTTPS API                          │
+└────────────────────────┼────────────────────────────────────┘
+                         │
+┌────────────────────────┼────────────────────────────────────┐
+│              微信云开发 / 自建服务器                           │
+│  ┌─────────────────────┴──────────────────────┐             │
+│  │              RESTful API 网关                │             │
+│  └────────┬──────────────────┬────────────────┘             │
+│           │                  │                               │
+│  ┌────────▼────────┐ ┌──────▼───────┐                      │
+│  │   云函数层       │ │  云数据库     │                      │
+│  │  · 路线CRUD     │ │  · routes    │                      │
+│  │  · 密码管理      │ │  · foods     │                      │
+│  │  · 天气获取      │ │  · passwords │                      │
+│  │  · 扫码统计      │ │  · guests    │                      │
+│  │  · 数据聚合      │ │  · stats     │                      │
+│  └─────────────────┘ └──────────────┘                      │
+│                                                              │
+│  外部API: 和风天气 · 高德地图 · 智能门锁SDK                  │
+└─────────────────────────────────────────────────────────────┘
+                         │
+┌────────────────────────┼────────────────────────────────────┐
+│                  Web 管理后台（PC端）                          │
+│  ┌─────────────┐ ┌──────────┐ ┌────────────┐               │
+│  │ 路线编辑器   │ │ 美食管理  │ │ 数据看板    │               │
+│  └─────────────┘ └──────────┘ └────────────┘               │
+│  技术栈: React/Vue + 云函数API                               │
+└─────────────────────────────────────────────────────────────┘
+      </pre>
+    </div>
+
+    <h3>📦 推荐技术选型</h3>
+    <table class="doc-table">
+      <tr><th>层级</th><th>方案A（推荐·轻量）</th><th>方案B（进阶·功能强）</th></tr>
+      <tr><td>小程序框架</td><td>原生微信小程序</td><td>Taro / uni-app（跨端）</td></tr>
+      <tr><td>后端服务</td><td>微信云开发（云函数+云数据库）</td><td>Node.js / Go + MySQL</td></tr>
+      <tr><td>管理后台</td><td>微信云开发·云后台</td><td>Vue3 + Element Plus 自建</td></tr>
+      <tr><td>天气API</td><td>和风天气（免费1000次/天）</td><td>同左</td></tr>
+      <tr><td>地图API</td><td>腾讯地图（小程序原生支持）</td><td>同左</td></tr>
+      <tr><td>图片存储</td><td>微信云存储</td><td>腾讯云COS</td></tr>
+      <tr><td>门锁对接</td><td>手动输入（管理端配密码 → 小程序展示）</td><td>小米/鹿客IoT API自动生成</td></tr>
+      <tr><td>月成本</td><td><b>¥0-30</b>（云开发基础版）</td><td>¥50-200（服务器+域名）</td></tr>
+    </table>
+
+    <div class="callout gold">
+      <strong>💡 建议：</strong>起步阶段用<b>方案A（微信云开发）</b>，零服务器成本，开发速度快。后续入住率高、功能需求多时再迁移到方案B。云开发的云函数和云数据库对民宿规模完全够用。
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. 数据库设计 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num admin-num">陆</span>数据库设计</h2>
+
+    <h3>云数据库集合设计（微信云开发）</h3>
+    <table class="doc-table">
+      <tr><th>集合名</th><th>说明</th><th>核心字段</th></tr>
+      <tr>
+        <td><code>routes</code></td>
+        <td>游玩路线</td>
+        <td style="font-size:11px;">_id, name, type(1日/2日/3日/亲子), intro, days:[{label, items:[{time, place, desc, tips}]}], sort, status</td>
+      </tr>
+      <tr>
+        <td><code>foods</code></td>
+        <td>美食推荐</td>
+        <td style="font-size:11px;">_id, name, category(早餐/正餐/小吃), stars, distance, price, tag, desc, lat, lng, sort, status</td>
+      </tr>
+      <tr>
+        <td><code>scenic_spots</code></td>
+        <td>景区信息</td>
+        <td style="font-size:11px;">_id, name, category(皇家园林/外八庙/奇峰异石/古迹遗址), location, distance, openTime, ticket, duration, tags:[], history, highlights:[], tips, images:[url], lat, lng, rating, reviewCount, sort, status</td>
+      </tr>
+      <tr>
+        <td><code>passwords</code></td>
+        <td>门锁密码</td>
+        <td style="font-size:11px;">_id, code, guestName, checkInDate, checkOutDate, status(active/expired), createdAt</td>
+      </tr>
+      <tr>
+        <td><code>daily_tips</code></td>
+        <td>每日贴士</td>
+        <td style="font-size:11px;">_id, date, content, weather, temperature, publishTime</td>
+      </tr>
+      <tr>
+        <td><code>config</code></td>
+        <td>全局配置</td>
+        <td style="font-size:11px;">_id, key(wifi_name/wifi_pwd/host_phone/host_wechat), value, updatedAt</td>
+      </tr>
+      <tr>
+        <td><code>scan_logs</code></td>
+        <td>扫码日志</td>
+        <td style="font-size:11px;">_id, openid, action(page_view/route_view/food_nav/call_host), timestamp</td>
+      </tr>
+      <tr>
+        <td><code>feedbacks</code></td>
+        <td>住客反馈</td>
+        <td style="font-size:11px;">_id, openid, content, reply, status(pending/replied), createdAt</td>
+      </tr>
+    </table>
+
+    <h3>云函数设计</h3>
+    <table class="doc-table">
+      <tr><th>云函数</th><th>触发方式</th><th>功能</th></tr>
+      <tr><td><code>getHomeData</code></td><td>小程序端调用</td><td>聚合返回首页数据（密码+天气+今日贴士+配置）</td></tr>
+      <tr><td><code>getRoutes</code></td><td>小程序端调用</td><td>返回所有启用的游玩路线</td></tr>
+      <tr><td><code>getFoods</code></td><td>小程序端调用</td><td>按分类返回美食列表</td></tr>
+      <tr><td><code>getScenicSpots</code></td><td>小程序端调用</td><td>按分类返回景区列表，支持搜索</td></tr>
+      <tr><td><code>adminCRUD</code></td><td>管理端调用（需鉴权）</td><td>通用CRUD操作，通过action参数区分</td></tr>
+      <tr><td><code>generatePassword</code></td><td>管理端/定时触发</td><td>生成随机6位密码，自动关联当前订单</td></tr>
+      <tr><td><code>logScan</code></td><td>小程序端调用</td><td>记录扫码行为用于数据统计</td></tr>
+      <tr><td><code>getWeather</code></td><td>定时触发（每天6:00）</td><td>调取和风天气API，缓存到数据库</td></tr>
+      <tr><td><code>expirePasswords</code></td><td>定时触发（每天0:00）</td><td>将已过退房日期的密码标记为失效</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ====== 7. 主题设计细节 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num">柒</span>避暑山庄主题 — 设计落地细节</h2>
+
+    <h3>🏛️ 各页面主题元素分配</h3>
+    <table class="doc-table">
+      <tr><th>页面</th><th>主题配色</th><th>装饰元素</th><th>字体风格</th></tr>
+      <tr>
+        <td>启动页</td>
+        <td>朱砂红底+金色Logo</td>
+        <td>丽正门剪影+门钉排列动画</td>
+        <td>大号宋体"水泉沟·山居"</td>
+      </tr>
+      <tr>
+        <td>首页</td>
+        <td>红色渐变头部+米白底色</td>
+        <td>烟雨楼飞檐装饰线、水纹背景纹理</td>
+        <td>PingFang正文+Serif标题</td>
+      </tr>
+      <tr>
+        <td>皇家游线</td>
+        <td>墨绿点缀+金色时间节点</td>
+        <td>磬锤峰剪影节点、卷轴展开动效</td>
+        <td>路线标题用宋体</td>
+      </tr>
+      <tr>
+        <td>御膳小馆</td>
+        <td>暖金色+米白色卡片</td>
+        <td>蒸笼热气动画、龙纹徽章数字</td>
+        <td>店名用毛笔字体</td>
+      </tr>
+      <tr>
+        <td>承德胜景</td>
+        <td>湖水蓝+宣纸色背景</td>
+        <td>古风舆图纹理、工笔册页翻页、景区实景大图</td>
+        <td>景区名用宋体</td>
+      </tr>
+      <tr>
+        <td>我的行宫</td>
+        <td>深红+鎏金点缀</td>
+        <td>宫牌卡片、圣旨展开动效</td>
+        <td>密码用等宽字体</td>
+      </tr>
+      <tr>
+        <td>管理后台</td>
+        <td>深蓝侧边栏+白色内容</td>
+        <td>藏书阁书架纹理、古籍翻开动效</td>
+        <td>统一PingFang</td>
+      </tr>
+    </table>
+
+    <h3>🎬 关键动效设计</h3>
+    <div class="callout jade">
+      <strong>① 启动页 → 首页过渡：</strong>丽正门从中间向两侧"推开"的开门动画，模拟进入山庄<br>
+      <strong>② 密码展示：</strong>数字逐个"落下"的动画，模拟古代铜锁转盘<br>
+      <strong>③ 路线切换：</strong>Tab切换时，路线内容从右向左"卷轴展开"<br>
+      <strong>④ 天气图标：</strong>晴天用太阳+山庄剪影，雨天用烟雨楼+涟漪，雪天用热河泉+雾气<br>
+      <strong>⑤ 加载状态：</strong>普宁寺千手观音莲花座旋转，花瓣逐个亮起<br>
+      <strong>⑥ 底部Tab切换：</strong>选中态带"鎏金描边"高亮动画
+    </div>
+
+    <h3>📱 小程序启动页设计</h3>
+    <div style="background:linear-gradient(180deg,#3D1C1C,#8B3A3A);border-radius:20px;padding:40px;text-align:center;color:#fff;max-width:320px;margin:16px auto;">
+      <div style="font-size:60px;margin-bottom:12px;">🏛️</div>
+      <div style="font-size:24px;font-weight:900;letter-spacing:6px;margin-bottom:8px;">水泉沟·山居</div>
+      <div style="font-size:12px;opacity:0.7;letter-spacing:3px;margin-bottom:20px;">扫码入住 · 避暑山庄皇家游线</div>
+      <div style="border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px;display:inline-block;font-size:10px;opacity:0.5;">
+        🚪 丽正门开 · 迎客入园
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. 开发路线图 ====== -->
+<section>
+  <div class="section-card">
+    <h2><span class="num admin-num">捌</span>开发路线图 & 成本估算</h2>
+
+    <h3>📅 分阶段开发计划</h3>
+    <table class="doc-table">
+      <tr><th>阶段</th><th>内容</th><th>时间</th><th>交付物</th></tr>
+      <tr>
+        <td><b>Phase 1</b><br>MVP</td>
+        <td>
+          · 小程序首页（天气+密码+WiFi）<br>
+          · 游玩路线展示（静态数据）<br>
+          · 管理端·密码管理<br>
+          · 管理端·路线编辑
+        </td>
+        <td>2-3周</td>
+        <td>可用小程序+简易管理后台</td>
+      </tr>
+      <tr>
+        <td><b>Phase 2</b><br>完善</td>
+        <td>
+          · 美食地图模块<br>
+          · 承德胜景（景区全览）模块<br>
+          · 每日贴士管理<br>
+          · 扫码数据统计<br>
+          · 避暑山庄主题视觉完善
+        </td>
+        <td>2周</td>
+        <td>功能完整的小程序</td>
+      </tr>
+      <tr>
+        <td><b>Phase 3</b><br>增强</td>
+        <td>
+          · 智能门锁API对接<br>
+          · 拍照打卡+水印<br>
+          · 住客反馈系统<br>
+          · 季节主题自动切换
+        </td>
+        <td>2周</td>
+        <td>完整商业版</td>
+      </tr>
+    </table>
+
+    <h3>💰 开发成本估算</h3>
+    <table class="doc-table">
+      <tr><th>项目</th><th>自研（推荐）</th><th>外包开发</th></tr>
+      <tr><td>小程序注册认证</td><td>¥300（微信认证费）</td><td>¥300</td></tr>
+      <tr><td>小程序开发（Phase 1+2）</td><td>¥0（使用云开发模板）</td><td>¥8,000-15,000</td></tr>
+      <tr><td>管理后台开发</td><td>¥0</td><td>¥5,000-10,000</td></tr>
+      <tr><td>云开发资源</td><td>¥0-30/月</td><td>同左</td></tr>
+      <tr><td>域名（可选）</td><td>¥30/年</td><td>¥30/年</td></tr>
+      <tr><td>智能门锁</td><td>¥1,000-1,500</td><td>同左</td></tr>
+      <tr><td><b>合计首年</b></td><td><b>¥1,500-2,000</b></td><td><b>¥15,000-27,000</b></td></tr>
+    </table>
+
+    <div class="callout gold">
+      <strong>💡 建议：</strong>推荐先用现有的 <code>扫码入住系统.html</code>（H5版本）跑通流程，验证需求。同时找开发者按此设计方案开发小程序版本，两不耽误。<br><br>
+      H5版本优势：零成本、今天就能用、微信扫码直接打开<br>
+      小程序版本优势：体验更好、有离线缓存、可发模板消息、数据统计完善
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<div class="footer">
+  <p>水泉沟·山居 — 微信小程序设计方案</p>
+  <p style="margin-top:4px;">客户端 · 管理端 · 避暑山庄主题</p>
+  <p style="margin-top:8px;color:#ddd;">配套文件：<code>扫码入住系统.html</code>（H5版） · <code>民宿经营方案.html</code>（经营全案）</p>
+</div>
+
+</body>
+</html>

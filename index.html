@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>水泉沟·山居 - 扫码入住</title>
+<!-- WeChat browser optimizations -->
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="水泉沟·山居">
+<!-- Open Graph for WeChat sharing -->
+<meta property="og:title" content="水泉沟·山居 — 扫码入住">
+<meta property="og:description" content="避暑山庄旁·本地人帮你规划好了一日游路线·扫码入住不等人">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="水泉沟·山居">
+<!-- Web App Manifest for Add to Home Screen -->
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;水泉沟·山居&quot;,&quot;short_name&quot;:&quot;山居&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#5C2828&quot;,&quot;theme_color&quot;:&quot;#8B3A3A&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🏛️</text></svg>&quot;,&quot;sizes&quot;:&quot;100x100&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+<!-- Remote data URL — 部署后替换为实际地址 -->
+<script>
+const REMOTE_DATA_URL = 'https://afei-chi.github.io/shuiquangou/data.json';
+const APP_VERSION = '2.0.0';
+</script>
+<style>
+:root {
+  --red: #8B3A3A; --red-light: #A05252; --red-dark: #5C2828;
+  --gold: #C9A96E; --gold-light: #E0D0A8;
+  --jade: #5B8C5A; --jade-light: #A8C8A0;
+  --lake: #4A7A8C; --lake-light: #B0D0D8;
+  --ink: #2C2C2C; --ink-light: #666;
+  --paper: #FDFAF5; --border: #E8E0D5;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #F0ECE4; color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  display: flex; justify-content: center;
+}
+.app {
+  width: 100%; max-width: 430px; min-height: 100vh;
+  background: var(--paper); position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== TOP HERO ===== */
+.hero {
+  background: linear-gradient(180deg, var(--red-dark) 0%, var(--red) 50%, var(--red-light) 100%);
+  color: #fff; padding: 20px 18px 30px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+  width: 130%; height: 50px; background: var(--paper); border-radius: 50%;
+}
+.hero-top { display:flex; justify-content:space-between; font-size:11px; opacity:0.7; position:relative; z-index:1; }
+.hero-name { font-size:22px; font-weight:800; letter-spacing:2px; margin:4px 0; position:relative; z-index:1; text-align:center; }
+.hero-sub { font-size:11px; opacity:0.7; text-align:center; position:relative; z-index:1; letter-spacing:1px; }
+.weather-strip {
+  display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.13);
+  border-radius:12px; padding:10px 14px; margin-top:12px; position:relative; z-index:1;
+  backdrop-filter:blur(8px);
+}
+.weather-strip .w-icon { font-size:30px; }
+.weather-strip .w-temp { font-size:24px; font-weight:700; }
+.weather-strip .w-desc { font-size:10px; opacity:0.85; flex:1; }
+.weather-strip .w-extra { font-size:9px; opacity:0.7; text-align:right; }
+
+/* ===== MAIN CONTENT ===== */
+.main { padding: 0 14px 100px; position:relative; z-index:3; margin-top:-10px; }
+
+/* Cards */
+.card {
+  background:#fff; border-radius:14px; padding:16px; margin-bottom:12px;
+  box-shadow: var(--shadow);
+}
+.card.unlock-card { border:2px dashed var(--gold); text-align:center; padding:20px; }
+.unlock-icon { font-size:42px; margin-bottom:4px; }
+.unlock-pwd {
+  display:inline-block; background:#FDF6EC; border:2px dashed var(--gold);
+  border-radius:10px; padding:10px 24px; font-size:26px; font-weight:900;
+  letter-spacing:5px; color:var(--red); font-family:"SF Mono",Menlo,Consolas,monospace;
+  margin:8px 0; cursor:pointer;
+}
+.unlock-hint { font-size:10px; color:#aaa; }
+
+/* Grid */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.grid-item {
+  background:#fff; border-radius:12px; padding:14px; text-align:center;
+  box-shadow: var(--shadow); cursor:pointer; transition:transform 0.15s;
+}
+.grid-item:active { transform:scale(0.96); }
+.grid-item .gi-icon { font-size:28px; margin-bottom:4px; }
+.grid-item .gi-title { font-size:13px; font-weight:600; }
+.grid-item .gi-sub { font-size:10px; color:var(--ink-light); }
+
+/* Tips */
+.tip-bar {
+  background:#FFF9F0; border-left:3px solid var(--gold); padding:10px 14px;
+  border-radius:0 10px 10px 0; font-size:12px; color:#8B6914; line-height:1.6;
+}
+
+/* Tabs */
+.tabs {
+  display:flex; gap:6px; margin-bottom:10px; overflow-x:auto;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.tabs::-webkit-scrollbar { display:none; }
+.tab {
+  flex-shrink:0; padding:6px 14px; border-radius:16px; font-size:11px;
+  background:#F0EDE5; color:#888; cursor:pointer; font-weight:500; border:none;
+}
+.tab.active { background:var(--red); color:#fff; }
+
+/* Timeline */
+.timeline { position:relative; padding-left:20px; }
+.timeline::before {
+  content:''; position:absolute; left:6px; top:4px; bottom:4px;
+  width:2px; background:var(--border); border-radius:1px;
+}
+.tl-item { position:relative; margin-bottom:12px; padding-left:14px; }
+.tl-dot {
+  position:absolute; left:-18px; top:3px; width:10px; height:10px;
+  border-radius:50%; background:var(--gold); border:2px solid #fff;
+  box-shadow:0 0 0 2px var(--gold);
+}
+.tl-time { font-size:10px; color:var(--gold); font-weight:600; margin-bottom:1px; }
+.tl-text { font-size:12px; line-height:1.5; }
+.tl-note { font-size:10px; color:var(--ink-light); }
+.day-label {
+  font-size:13px; font-weight:700; color:var(--jade); margin:14px 0 8px;
+  padding-bottom:4px; border-bottom:1px solid var(--border);
+}
+
+/* Food */
+.food-item {
+  display:flex; align-items:center; gap:10px; padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.food-rank {
+  width:26px; height:26px; border-radius:50%; background:var(--gold);
+  color:#fff; font-size:11px; font-weight:700; display:flex;
+  align-items:center; justify-content:center; flex-shrink:0;
+}
+.food-info { flex:1; }
+.food-name { font-size:13px; font-weight:600; }
+.food-stars { color:#F4A460; font-size:10px; }
+.food-meta { font-size:10px; color:var(--ink-light); }
+.food-tag { font-size:9px; padding:2px 6px; border-radius:8px; background:#FFF3E8; color:var(--gold); margin-left:4px; }
+.food-nav-btn {
+  font-size:10px; padding:4px 10px; border-radius:10px; background:var(--lake);
+  color:#fff; border:none; cursor:pointer; flex-shrink:0;
+}
+
+/* Scenic cards */
+.scenic-card {
+  background:#fff; border-radius:14px; overflow:hidden; margin-bottom:12px;
+  box-shadow: var(--shadow); cursor:pointer; transition:transform 0.15s;
+}
+.scenic-card:active { transform:scale(0.98); }
+.scenic-img {
+  height:130px; display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.scenic-img .img-count {
+  position:absolute; top:8px; right:10px; background:rgba(0,0,0,0.35);
+  color:#fff; font-size:9px; padding:2px 8px; border-radius:10px;
+}
+.scenic-body { padding:12px 14px; }
+.scenic-title {
+  display:flex; align-items:center; gap:6px; margin-bottom:4px;
+}
+.scenic-name { font-size:14px; font-weight:700; color:#2C4A5A; }
+.scenic-tag {
+  font-size:8px; padding:2px 6px; border-radius:6px; font-weight:600;
+}
+.scenic-tag.world { background:#FDF0F0; color:var(--red); }
+.scenic-tag.grade { background:#FDF6EC; color:var(--gold); }
+.scenic-tag.nature { background:#EDF5ED; color:var(--jade); }
+.scenic-location { font-size:10px; color:var(--ink-light); margin-bottom:4px; }
+.scenic-desc {
+  font-size:10px; color:#555; line-height:1.5;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.scenic-meta { display:flex; gap:10px; margin-top:6px; font-size:9px; color:#999; }
+
+/* Detail page */
+.detail-header {
+  height:180px; display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.detail-back {
+  position:absolute; top:10px; left:12px; background:rgba(0,0,0,0.35);
+  color:#fff; font-size:11px; padding:4px 12px; border-radius:12px;
+  cursor:pointer; z-index:2;
+}
+.detail-img-dots {
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  display:flex; gap:4px; z-index:2;
+}
+.detail-img-dot {
+  width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.4);
+}
+.detail-img-dot.active { background:#fff; }
+.detail-body {
+  margin-top:-16px; position:relative; z-index:3; background:var(--paper);
+  border-radius:18px 18px 0 0; padding:20px 16px 30px;
+}
+.detail-info-row {
+  display:flex; gap:8px; margin:12px 0; flex-wrap:wrap;
+}
+.detail-info-item {
+  flex:1; text-align:center; background:#F0F5F8; border-radius:10px; padding:10px 6px;
+}
+.detail-info-item .di-label { font-size:9px; color:#888; }
+.detail-info-item .di-val { font-size:11px; font-weight:700; color:#2C4A5A; }
+.detail-location {
+  background:#FDF6EC; border-radius:10px; padding:10px 12px; margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.detail-section { margin-bottom:12px; }
+.detail-section h4 { font-size:13px; color:#2C4A5A; margin-bottom:6px; }
+.detail-section p { font-size:10px; color:#555; line-height:1.8; }
+.detail-highlight {
+  font-size:10px; color:#555; padding:5px 10px; background:#F8F8F6;
+  border-radius:8px; margin-bottom:4px;
+}
+.detail-tip {
+  background:#FDF8F0; border-radius:10px; padding:10px 12px;
+  border-left:3px solid var(--gold); font-size:10px; color:#8B6914; line-height:1.6;
+}
+
+/* My page */
+.my-card { text-align:center; padding:20px; }
+.my-avatar { font-size:48px; margin-bottom:6px; }
+.my-stay-info {
+  background:#FDF6EC; border-radius:10px; padding:12px; margin:10px 0;
+  text-align:center; border:1px solid var(--gold-light);
+}
+.my-pwd {
+  font-size:22px; font-weight:900; letter-spacing:5px; color:var(--red);
+  font-family:monospace; margin:6px 0;
+}
+.my-menu-item {
+  display:flex; justify-content:space-between; padding:12px 0;
+  border-bottom:1px solid var(--border); font-size:13px; cursor:pointer;
+}
+.my-menu-item .arrow { color:#ccc; }
+
+/* Bottom Nav */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px; background:#fff; display:flex;
+  padding:6px 0 env(safe-area-inset-bottom,6px);
+  box-shadow:0 -2px 12px rgba(0,0,0,0.05); z-index:100;
+}
+.nav-item {
+  flex:1; text-align:center; font-size:9px; color:#aaa; cursor:pointer;
+  padding:4px 0; display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.nav-item .ni-icon { font-size:20px; }
+.nav-item.active { color:var(--red); font-weight:600; }
+
+/* Toast */
+.toast {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8);
+  background:rgba(0,0,0,0.78); color:#fff; padding:10px 22px;
+  border-radius:20px; font-size:13px; z-index:9999; pointer-events:none;
+  opacity:0; transition:all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+/* Loading overlay */
+.loading-overlay {
+  position:fixed; inset:0; background:var(--paper); z-index:9998;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.loading-overlay.hidden { display:none; }
+.loading-spinner {
+  width:44px; height:44px; border:3px solid var(--border);
+  border-top-color:var(--red); border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { margin-top:12px; font-size:12px; color:var(--ink-light); }
+
+/* Data footer */
+.data-footer {
+  text-align:center; padding:8px 14px; font-size:9px; color:#bbb;
+  background:transparent; margin-top:4px;
+}
+.data-footer .sync-status { display:inline-flex; align-items:center; gap:4px; }
+.data-footer .dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+.data-footer .dot.online { background:var(--jade); }
+.data-footer .dot.offline { background:#E0C080; }
+.data-footer .dot.local { background:#ddd; }
+
+/* Search */
+.search-bar {
+  padding:8px 14px; position:relative; z-index:2;
+}
+.search-inner {
+  background:#fff; border-radius:20px; padding:8px 14px;
+  display:flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+.search-inner input {
+  flex:1; border:none; outline:none; font-size:12px; background:transparent;
+}
+
+/* Section switching */
+.section { display:none; }
+.section.active { display:block; }
+
+@media (min-width:430px) {
+  .bottom-nav { border-radius:0; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">🏛️ 加载中...</div>
+</div>
+
+<!-- ====== HOME SECTION ====== -->
+<div class="section active" id="sec-home">
+  <div class="hero">
+    <div class="hero-top"><span>🏛️ 水泉沟·山居</span><span id="heroDate"></span></div>
+    <div class="hero-name">丽正门开 · 迎客入园</div>
+    <div class="hero-sub">扫码入住 · 避暑山庄皇家游线</div>
+    <div class="weather-strip" id="weatherStrip">
+      <div class="w-icon" id="wIcon">☀️</div>
+      <div>
+        <div class="w-temp" id="wTemp">26°C</div>
+        <div class="w-desc" id="wDesc">晴 · 宜出游</div>
+      </div>
+      <div class="w-extra">
+        <div>🌅 日出 <span id="wSunrise">05:12</span></div>
+        <div>🏛 开园 <span id="wOpenTime">08:00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="card unlock-card" onclick="copyPassword()">
+      <div class="unlock-icon">🔐</div>
+      <div style="font-size:14px;font-weight:700;color:var(--red-dark);">铜锁开启</div>
+      <div class="unlock-pwd" id="doorPwd">482916</div>
+      <div class="unlock-hint">点击复制 · 6位临时密码 · 退房后失效</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="grid-item" onclick="switchTab(1)">
+        <div class="gi-icon">🗺️</div><div class="gi-title">皇家游线</div><div class="gi-sub">山庄七十二景</div>
+      </div>
+      <div class="grid-item" onclick="switchTab(2)">
+        <div class="gi-icon">🍜</div><div class="gi-title">御膳小馆</div><div class="gi-sub">满汉全席·本地味</div>
+      </div>
+      <div class="grid-item" onclick="switchTab(3)">
+        <div class="gi-icon">🏯</div><div class="gi-title">承德胜景</div><div class="gi-sub">景区全览·深度游</div>
+      </div>
+      <div class="grid-item" onclick="switchTab(4)">
+        <div class="gi-icon">🏛️</div><div class="gi-title">我的行宫</div><div class="gi-sub">入住信息·设置</div>
+      </div>
+    </div>
+
+    <div class="card" style="cursor:pointer" onclick="copyWiFi()">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:24px;">📶</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">园内WiFi</div>
+          <div style="font-size:10px;color:var(--ink-light);">点击复制密码一键连网</div>
+        </div>
+        <span style="font-size:18px;color:#ccc;">›</span>
+      </div>
+    </div>
+
+    <div class="tip-bar" id="dailyTip"></div>
+  </div>
+</div>
+
+<!-- ====== ROUTES SECTION ====== -->
+<div class="section" id="sec-routes">
+  <div style="background:linear-gradient(180deg,var(--red-dark),var(--red));color:#fff;padding:16px 18px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;">
+    🗺️ 皇家游线
+  </div>
+  <div class="main" style="margin-top:0;padding-top:12px;">
+    <div class="card">
+      <div class="tabs" id="routeTabs"></div>
+      <div id="routeContent"></div>
+      <div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;">
+        💡 以上路线由房东实地踩点，可根据实际情况调整
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== FOOD SECTION ====== -->
+<div class="section" id="sec-foods">
+  <div style="background:linear-gradient(180deg,var(--red-dark),var(--red));color:#fff;padding:16px 18px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;">
+    🍜 御膳小馆
+  </div>
+  <div class="main" style="margin-top:0;padding-top:12px;">
+    <div class="card">
+      <div class="tabs" id="foodTabs"></div>
+      <div id="foodList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SCENIC SECTION ====== -->
+<div class="section" id="sec-scenic">
+  <div id="scenicList">
+    <div style="background:linear-gradient(180deg,#2C4A5A,var(--lake));color:#fff;padding:16px 18px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;">
+      🏯 承德胜景
+    </div>
+    <div class="search-bar">
+      <div class="search-inner">
+        <span>🔍</span>
+        <input type="text" placeholder="搜索景区名称..." id="scenicSearch" oninput="renderScenicList()" />
+      </div>
+    </div>
+    <div class="main" style="margin-top:0;padding-top:4px;">
+      <div class="tabs" id="scenicTabs"></div>
+      <div id="scenicCards"></div>
+    </div>
+  </div>
+  <div id="scenicDetail" style="display:none;"></div>
+</div>
+
+<!-- ====== MY SECTION ====== -->
+<div class="section" id="sec-my">
+  <div style="background:linear-gradient(180deg,var(--red-dark),var(--red));color:#fff;padding:24px 18px;text-align:center;">
+    <div style="font-size:40px;">🏛️</div>
+    <div style="font-size:18px;font-weight:700;">我的行宫</div>
+    <div style="font-size:11px;opacity:0.7;">水泉沟·山居 欢迎回宫</div>
+  </div>
+  <div class="main" style="margin-top:-10px;">
+    <div class="card my-card">
+      <div style="font-size:11px;color:var(--gold);letter-spacing:2px;">━ 当前宫牌 ━</div>
+      <div style="font-size:14px;font-weight:700;color:var(--red-dark);margin:4px 0;">山景双卧 · 丽正阁</div>
+      <div style="font-size:10px;color:var(--ink-light);">入住 8月3日 → 退房 8月5日 · 共2晚</div>
+      <div class="my-stay-info">
+        <div style="font-size:10px;color:var(--ink-light);">宫门密码</div>
+        <div class="my-pwd" id="myPwd" onclick="copyPassword()">482916</div>
+        <div style="font-size:9px;color:#aaa;">点击复制 · 退房即废</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="my-menu-item" onclick="switchTab(1)"><span>📜 我的游线</span><span class="arrow">›</span></div>
+      <div class="my-menu-item" onclick="switchTab(2)"><span>🍜 美食收藏</span><span class="arrow">›</span></div>
+      <div class="my-menu-item" onclick="switchTab(3)"><span>🏯 浏览胜景</span><span class="arrow">›</span></div>
+      <div class="my-menu-item" onclick="copyWiFi()"><span>📶 WiFi信息</span><span class="arrow">›</span></div>
+      <div class="my-menu-item" onclick="callHost()"><span>📞 传唤总管</span><span style="color:var(--red);">›</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav0" onclick="switchTab(0)"><div class="ni-icon">🏛️</div><div>首页</div></div>
+  <div class="nav-item" id="nav1" onclick="switchTab(1)"><div class="ni-icon">🗺️</div><div>游线</div></div>
+  <div class="nav-item" id="nav2" onclick="switchTab(2)"><div class="ni-icon">🍜</div><div>御膳</div></div>
+  <div class="nav-item" id="nav3" onclick="switchTab(3)"><div class="ni-icon">🏯</div><div>胜景</div></div>
+  <div class="nav-item" id="nav4" onclick="switchTab(4)"><div class="ni-icon">🏛️</div><div>行宫</div></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Data freshness -->
+<div class="data-footer" id="dataFooter" style="display:none;">
+  <span class="sync-status"><span class="dot local" id="syncDot"></span> <span id="syncText">本地数据</span></span>
+  <span style="margin-left:8px;">v<span id="appVersion"></span></span>
+</div>
+
+</div>
+
+<script>
+// ==================== DATA STORE ====================
+const DB_KEY = 'shuiquangou_miniapp';
+const CACHE_KEY = 'shuiquangou_cache_ts';
+
+function getCacheTimestamp() {
+  return localStorage.getItem(CACHE_KEY) || '';
+}
+
+function setCacheTimestamp() {
+  localStorage.setItem(CACHE_KEY, new Date().toISOString());
+}
+
+async function loadDB() {
+  // 1. Try remote data first (if REMOTE_DATA_URL is configured)
+  if (REMOTE_DATA_URL && REMOTE_DATA_URL.startsWith('http')) {
+    try {
+      const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now());
+      if (resp.ok) {
+        const remoteData = await resp.json();
+        // Merge: remote data wins, but keep local cache for offline
+        if (remoteData && remoteData.config) {
+          saveDB(remoteData);
+          setCacheTimestamp();
+          window._dataSource = 'remote';
+          return remoteData;
+        }
+      }
+    } catch(e) {
+      console.warn('远程数据加载失败，使用本地缓存', e.message);
+    }
+  }
+
+  // 2. Fallback: localStorage cache
+  try {
+    const d = localStorage.getItem(DB_KEY);
+    if (d) {
+      window._dataSource = 'cache';
+      return JSON.parse(d);
+    }
+  } catch(e) { console.warn('数据读取失败', e); }
+
+  // 3. Last resort: default data
+  const def = getDefaultDB();
+  saveDB(def);
+  window._dataSource = 'default';
+  return def;
+}
+function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+function getDefaultDB() {
+  return {
+    config: {
+      wifiName: '水泉沟山居', wifiPassword: 'chengde2024',
+      hostPhone: '1380314XXXX', hostWechat: 'watervalley_host',
+    },
+    password: { code: String(Math.floor(100000 + Math.random() * 900000)), guestName: '住客', checkIn: '2024-08-03', checkOut: '2024-08-05' },
+    dailyTip: { date: new Date().toISOString().slice(0,10), content: '今日山庄游人稀少，建议辰时（早8点）入园，从丽正门进，先游博物馆区，再乘舟游湖~', weather: '晴', temp: 26, sunrise: '05:12', openTime: '08:00-17:30' },
+    routes: [
+      {
+        id: 'r1', name: '一日精华', type: 'day1', intro: '仿帝王巡游路线，一日看尽承德精华', active: true,
+        days: [{ label: '一日精华游', items: [
+          { time:'07:30', place:'老三羊汤', desc:'早餐·步行8分钟', tip:'必点：羊汤+烧饼，人均¥25' },
+          { time:'08:30', place:'避暑山庄', desc:'丽正门入·3-4小时', tip:'门票¥130，自带干粮和水' },
+          { time:'12:30', place:'乔家满族八大碗', desc:'午餐·满族风味', tip:'鹿肉、满族火锅必点' },
+          { time:'14:00', place:'普宁寺', desc:'世界最大木雕千手观音', tip:'门票¥80，约1.5小时' },
+          { time:'17:00', place:'磬锤峰', desc:'缆车观日落', tip:'缆车¥50单程' },
+          { time:'19:30', place:'水泉沟夜市', desc:'烧烤·步行回民宿', tip:'' }
+        ]}]
+      },
+      {
+        id: 'r2', name: '两日深度', type: 'day2', intro: '慢游承德，体验皇家与民间', active: true,
+        days: [
+          { label: 'Day 1 — 避暑山庄 + 外八庙', items: [
+            { time:'07:30', place:'老三羊汤', desc:'早餐', tip:'步行10分钟' },
+            { time:'08:30-12:00', place:'避暑山庄', desc:'丽正门进 → 博物馆 → 湖区 → 平原区', tip:'门票¥130' },
+            { time:'12:30', place:'大清花饺子', desc:'午餐·满族风味', tip:'' },
+            { time:'14:00-16:30', place:'普陀宗乘之庙+须弥福寿之庙', desc:'小布达拉宫', tip:'联票¥80' },
+            { time:'17:30', place:'磬锤峰', desc:'看日落', tip:'' },
+            { time:'19:00', place:'乔家满族八大碗', desc:'晚餐', tip:'' }
+          ]},
+          { label: 'Day 2 — 周边深度', items: [
+            { time:'08:00', place:'承德杏仁茶', desc:'特色早餐', tip:'' },
+            { time:'09:00-11:30', place:'双塔山', desc:'自然奇观', tip:'门票¥50' },
+            { time:'12:30', place:'满族火锅', desc:'午餐', tip:'' },
+            { time:'14:00', place:'承德特产街', desc:'杏仁·山楂糕·榛子', tip:'' },
+            { time:'16:00', place:'返程', desc:'带上一罐杏仁回家~', tip:'' }
+          ]}
+        ]
+      },
+      {
+        id: 'r3', name: '三日全览', type: 'day3', intro: '深度游承德，不留遗憾', active: true,
+        days: [
+          { label: 'Day 1 — 避暑山庄沉浸游', items: [
+            { time:'07:30', place:'老三羊汤', desc:'早餐', tip:'' },
+            { time:'08:30-15:00', place:'避暑山庄全天深度游', desc:'博物馆→湖区划船→平原区→山区电瓶车', tip:'带午餐干粮' },
+            { time:'15:30', place:'普宁寺', desc:'下午光线好，适合拍照', tip:'' },
+            { time:'18:00', place:'乔家满族八大碗', desc:'晚餐', tip:'' }
+          ]},
+          { label: 'Day 2 — 外八庙 + 磬锤峰', items: [
+            { time:'07:30', place:'杏仁茶+煎饼', desc:'早餐', tip:'' },
+            { time:'08:30', place:'普陀宗乘之庙', desc:'小布达拉宫，2小时', tip:'' },
+            { time:'10:30', place:'须弥福寿之庙', desc:'1小时', tip:'' },
+            { time:'12:30', place:'午餐', desc:'', tip:'' },
+            { time:'14:00', place:'磬锤峰国家森林公园', desc:'', tip:'' },
+            { time:'18:00', place:'水泉沟夜市', desc:'', tip:'' }
+          ]},
+          { label: 'Day 3 — 周边探秘', items: [
+            { time:'08:00', place:'早餐', desc:'', tip:'' },
+            { time:'09:00', place:'双塔山或棒槌山', desc:'二选一', tip:'' },
+            { time:'12:00', place:'农家乐午餐', desc:'体验承德农家菜', tip:'' },
+            { time:'14:00', place:'特产采购 → 返程', desc:'', tip:'' }
+          ]}
+        ]
+      },
+      {
+        id: 'r4', name: '亲子御游', type: 'family', intro: '带娃慢游，轻松愉快', active: true,
+        days: [{ label: '推荐行程（2天1晚）', items: [
+          { time:'09:00', place:'睡到自然醒', desc:'慢慢吃个早餐', tip:'' },
+          { time:'10:00-12:00', place:'避暑山庄博物馆+湖区划船', desc:'孩子对划船和喂鱼更感兴趣', tip:'' },
+          { time:'12:30', place:'午餐后回民宿午休', desc:'', tip:'' },
+          { time:'15:00', place:'普宁寺', desc:'1小时足够，孩子看大佛会震撼', tip:'' },
+          { time:'17:00', place:'武烈河边散步', desc:'', tip:'' },
+          { time:'18:30', place:'晚餐', desc:'推荐有包间的餐厅', tip:'' }
+        ]}]
+      }
+    ],
+    foods: [
+      { id:'f1', name:'老三羊汤', category:'breakfast', stars:4.8, distance:'步行8分钟', price:'¥25/人', tag:'30年老店', desc:'承德人从小吃到大的羊汤馆，汤白味浓，一定要配烧饼', rank:1, active:true },
+      { id:'f2', name:'乔家满族八大碗', category:'lunch', stars:4.6, distance:'3公里', price:'¥60/人', tag:'满族风味', desc:'鹿肉、野猪肉、满族火锅，体验正宗满族大餐', rank:2, active:true },
+      { id:'f3', name:'杏仁茶老店', category:'breakfast', stars:4.5, distance:'步行5分钟', price:'¥8/人', tag:'特色早餐', desc:'承德特产杏仁做的热饮，配煎饼果子一绝', rank:3, active:true },
+      { id:'f4', name:'大清花饺子', category:'lunch', stars:4.4, distance:'2.5公里', price:'¥40/人', tag:'满族饺子', desc:'满族传统饺子馆，酸菜猪肉馅必点，量大实惠', rank:4, active:true },
+      { id:'f5', name:'满族火锅城', category:'lunch', stars:4.3, distance:'3公里', price:'¥70/人', tag:'冬季首选', desc:'铜锅炭火，满族传统火锅，天冷时吃最舒服', rank:5, active:true },
+      { id:'f6', name:'水泉沟烧烤夜市', category:'snack', stars:4.2, distance:'步行3分钟', price:'¥35/人', tag:'夜宵', desc:'本地人晚上的聚集地，烤串+啤酒，烟火气十足', rank:6, active:true },
+      { id:'f7', name:'承德山楂糕', category:'snack', stars:4.7, distance:'特产店有售', price:'¥15/盒', tag:'必带特产', desc:'承德山楂是地理标志产品，酸甜可口', rank:7, active:true },
+      { id:'f8', name:'承德露露杏仁露', category:'snack', stars:4.5, distance:'超市有售', price:'¥5/罐', tag:'本地饮品', desc:'承德本土品牌，杏仁含量高，比外面的浓很多', rank:8, active:true },
+    ],
+    scenicSpots: [
+      {
+        id:'s1', name:'避暑山庄', category:'皇家园林', location:'承德市双桥区丽正门大街', distance:'距民宿3km · 驾车约10分钟',
+        openTime:'08:00-17:30', ticket:'¥130/人', duration:'3-4小时', tags:['世界遗产','5A'],
+        history:'避暑山庄始建于康熙四十二年（1703年），历经康熙、雍正、乾隆三朝，耗时89年建成。它是中国现存最大的皇家园林，占地564万平方米，相当于颐和园的两倍，北海公园的八倍。\n\n康熙帝每年在此居住近半年，在此处理朝政、接见少数民族首领和外国使节。乾隆帝更是在此度过了大量时光，山庄内的"康乾七十二景"由此得名。\n\n1994年，避暑山庄及周围寺庙被联合国教科文组织列入世界文化遗产名录。',
+        highlights:['丽正门 — 山庄正门，乾隆题"丽正门"石匾','澹泊敬诚殿 — 全部用楠木建成的主殿','烟雨楼 — 湖区最美建筑，《还珠格格》取景地','热河泉 — 世界最短的河，冬日不冻'],
+        tips:'建议早上8点开门就入园，先去博物馆区（人少），然后乘船游湖，最后坐电瓶车上山。山庄内没有餐厅，建议自带干粮和水~',
+        images:['🏛️','🏞️','🌊'], rating:4.7, reviewCount:'3.2万', sort:1, active:true
+      },
+      {
+        id:'s2', name:'普陀宗乘之庙', category:'外八庙', location:'承德市双桥区狮子沟镇', distance:'距民宿4km · 驾车约12分钟',
+        openTime:'08:00-17:30', ticket:'¥80/人', duration:'2小时', tags:['世界遗产'],
+        history:'又称"小布达拉宫"，建于乾隆三十二年（1767年），是为庆祝乾隆六十寿辰和皇太后八十寿辰而建。仿西藏布达拉宫而建，是外八庙中规模最大的一座。\n\n大红台是普陀宗乘之庙的主体建筑，高43米，气势宏伟。庙内还有万法归一殿、权衡三界殿等精美建筑。',
+        highlights:['大红台 — 43米高的主体建筑，雄伟壮观','万法归一殿 — 金顶辉煌','琉璃牌坊 — 精美绝伦','五塔门 — 藏式风格'],
+        tips:'建议上午去，光线好适合拍照。可以和须弥福寿之庙一起游览，两庙相距不远，联票更划算。',
+        images:['🛕','🏯','⛩️','🔔','📿'], rating:4.6, reviewCount:'1.8万', sort:2, active:true
+      },
+      {
+        id:'s3', name:'磬锤峰', category:'奇峰异石', location:'承德市双桥区', distance:'距民宿2.5km · 驾车约8分钟',
+        openTime:'08:00-17:30', ticket:'¥50/人', duration:'2小时', tags:['国家森林公园'],
+        history:'俗称"棒槌山"，上粗下细形似棒槌，高38.29米。康熙皇帝赐名"磬锤峰"，是承德标志性自然景观。\n\n磬锤峰形成于约300万年前，是丹霞地貌的典型代表。清代皇帝多次登临赋诗，现为国家森林公园。',
+        highlights:['磬锤峰主峰 — 38米高的奇石','缆车观光 — 俯瞰承德全景','蛤蟆石 — 形似蛤蟆的巨石','夕阳剪影 — 最佳拍摄时间'],
+        tips:'推荐下午去，乘缆车上山，在山顶等日落，夕阳下的磬锤峰剪影是承德最美画面之一。缆车¥50单程。',
+        images:['⛰️','🌅','🚡','🏔️'], rating:4.5, reviewCount:'1.2万', sort:3, active:true
+      },
+      {
+        id:'s4', name:'普宁寺', category:'外八庙', location:'承德市双桥区普宁路', distance:'距民宿3.5km · 驾车约10分钟',
+        openTime:'08:00-17:30', ticket:'¥80/人', duration:'1.5小时', tags:['世界遗产'],
+        history:'建于乾隆二十年（1755年），是为纪念平定准噶尔叛乱而建。寺内供奉世界最大的木雕千手千眼观音菩萨，高22.28米，用松、柏、榆、杉、椴五种木材拼雕而成，重约110吨。',
+        highlights:['千手观音 — 世界最大木雕佛像，22.28米','大乘之阁 — 汉藏结合建筑','天王殿 — 四大天王塑像','碑亭 — 满汉蒙藏四体文字'],
+        tips:'千手观音非常震撼，站在大乘之阁楼下仰望才能真正感受其宏伟。寺内禁止对佛像拍照，请注意遵守。',
+        images:['🛕','🙏','🏯'], rating:4.5, reviewCount:'1.5万', sort:4, active:true
+      },
+      {
+        id:'s5', name:'须弥福寿之庙', category:'外八庙', location:'承德市双桥区狮子沟镇', distance:'距民宿4.2km · 驾车约12分钟',
+        openTime:'08:00-17:30', ticket:'¥80/人（含普陀宗乘之庙联票）', duration:'1小时', tags:['世界遗产'],
+        history:'建于乾隆四十五年（1780年），是为迎接六世班禅来承德祝贺乾隆七十寿辰而建，仿西藏扎什伦布寺风格。"须弥福寿"意为像须弥山一样福寿绵长。',
+        highlights:['妙高庄严殿 — 鎏金铜瓦顶','琉璃万寿塔 — 八角七层','大红台 — 藏式红墙','金龙 — 殿顶八条鎏金铜龙'],
+        tips:'规模比普陀宗乘之庙小，但金顶非常精美。建议和普陀宗乘之庙一起买联票游览，性价比更高。',
+        images:['🛕','✨','🏯'], rating:4.4, reviewCount:'0.8万', sort:5, active:true
+      },
+      {
+        id:'s6', name:'双塔山', category:'奇峰异石', location:'承德市双滦区', distance:'距民宿8km · 驾车约20分钟',
+        openTime:'08:00-17:00', ticket:'¥50/人', duration:'2小时', tags:['自然奇观'],
+        history:'双塔山是两座巨大的岩柱南北排列，北峰高约35米，南峰高约30米，峰顶各有一座辽代砖塔。两座古塔如何建在绝顶之上，至今仍是未解之谜。',
+        highlights:['双塔奇观 — 峰顶辽代古塔','北峰塔 — 保存较完整','南峰塔 — 已部分坍塌','登山步道 — 森林氧吧'],
+        tips:'距离市区稍远，建议安排半天时间。登山步道修得很好，适合徒步。人比磬锤峰少很多，体验更清静。',
+        images:['⛰️','🗼'], rating:4.3, reviewCount:'0.5万', sort:6, active:true
+      },
+    ]
+  };
+}
+
+let DB = loadDB();
+
+// ==================== RENDER HELPERS ====================
+let currentTab = 0;
+let currentRouteType = 'day1';
+let currentFoodCat = 'all';
+let currentScenicCat = 'all';
+let currentScenicId = null;
+
+function switchTab(idx) {
+  currentTab = idx;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const secs = ['sec-home','sec-routes','sec-foods','sec-scenic','sec-my'];
+  document.getElementById(secs[idx]).classList.add('active');
+  document.getElementById('nav'+idx).classList.add('active');
+  if (idx === 1) renderRoutes();
+  if (idx === 2) renderFoods();
+  if (idx === 3) { currentScenicId = null; document.getElementById('scenicList').style.display='block'; document.getElementById('scenicDetail').style.display='none'; renderScenicList(); }
+  if (idx === 4) document.getElementById('myPwd').textContent = DB.password.code;
+  window.scrollTo(0,0);
+}
+
+// ===== HOME =====
+function updateWeather() {
+  const now = new Date();
+  const m = now.getMonth()+1;
+  const h = now.getHours();
+  let temp, desc, icon, sunrise, openTime;
+  if (m>=6 && m<=8) { temp=24+Math.floor(Math.random()*10); desc=h>18?'晴转凉·适合散步':'晴·适合出游'; icon=h>18?'🌤️':'☀️'; sunrise='05:12'; openTime='08:00-17:30'; }
+  else if (m>=3 && m<=5) { temp=12+Math.floor(Math.random()*12); desc='春意渐浓·适合出游'; icon='🌤️'; sunrise='06:15'; openTime='08:00-17:30'; }
+  else if (m>=9 && m<=11) { temp=10+Math.floor(Math.random()*12); desc='秋高气爽·最佳旅游季'; icon='🍂'; sunrise='06:30'; openTime='08:00-17:00'; }
+  else { temp=-8+Math.floor(Math.random()*10); desc='冬日暖阳·适合温泉'; icon='❄️'; sunrise='07:20'; openTime='08:30-16:30'; }
+  // Use stored weather if available
+  const tip = DB.dailyTip || {};
+  const displayTemp = (typeof tip.temp === 'number' && !isNaN(tip.temp)) ? tip.temp : temp;
+  document.getElementById('wIcon').textContent = icon;
+  document.getElementById('wTemp').textContent = displayTemp + '°C';
+  document.getElementById('wDesc').textContent = tip.weather || desc;
+  document.getElementById('wSunrise').textContent = tip.sunrise || sunrise;
+  document.getElementById('wOpenTime').textContent = tip.openTime || openTime;
+  const days = ['日','一','二','三','四','五','六'];
+  document.getElementById('heroDate').textContent = `${m}月${now.getDate()}日 周${days[now.getDay()]}`;
+  document.getElementById('dailyTip').innerHTML = '<strong>💡 总管今日提醒：</strong>' + (tip.content || '今日山庄游人稀少，建议辰时入园~');
+}
+
+function copyToClipboard(text, successMsg, fallbackMsg) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(successMsg);
+      }).catch(() => {
+        showToast(fallbackMsg || text);
+      });
+    } else {
+      // Fallback for HTTP/non-secure contexts
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showToast(successMsg); }
+      catch(e) { showToast(fallbackMsg || '📋 请手动记录: ' + text); }
+      document.body.removeChild(ta);
+    }
+  } catch(e) {
+    showToast(fallbackMsg || '📋 请手动记录: ' + text);
+  }
+}
+
+function copyPassword() {
+  const pwd = DB.password.code;
+  copyToClipboard(pwd, '✅ 密码已复制: ' + pwd, '📋 密码: ' + pwd);
+}
+
+function copyWiFi() {
+  const c = DB.config;
+  const t = `WiFi: ${c.wifiName}\n密码: ${c.wifiPassword}`;
+  copyToClipboard(t, '✅ WiFi信息已复制', '📋 ' + t);
+}
+
+function callHost() {
+  window.location.href = 'tel:' + DB.config.hostPhone;
+}
+
+// ===== ROUTES =====
+function renderRoutes() {
+  const routes = DB.routes.filter(r => r.active);
+  document.getElementById('routeTabs').innerHTML = routes.map(r =>
+    `<button class="tab${r.type === currentRouteType ? ' active' : ''}" onclick="selectRoute('${r.type}')">${r.name}</button>`
+  ).join('');
+  selectRoute(currentRouteType);
+}
+
+function selectRoute(type) {
+  const routes = DB.routes.filter(r => r.active);
+  // BUG-003 fix: handle empty routes and missing type gracefully
+  if (routes.length === 0) {
+    document.getElementById('routeContent').innerHTML = '<div style="text-align:center;padding:30px;color:#999;font-size:13px;">📜 暂无可用路线<br><span style="font-size:10px;">请联系房东添加游玩路线</span></div>';
+    return;
+  }
+  let route = routes.find(r => r.type === type);
+  if (!route) {
+    route = routes[0];
+    type = route.type;
+  }
+  currentRouteType = type;
+  document.querySelectorAll('#routeTabs .tab').forEach(t => t.classList.remove('active'));
+  const btns = document.querySelectorAll('#routeTabs .tab');
+  const idx = routes.findIndex(r => r.type === type);
+  if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+  let html = '';
+  route.days.forEach(day => {
+    html += `<div class="day-label">📌 ${day.label}</div><div class="timeline">`;
+    day.items.forEach(item => {
+      html += `<div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-time">⏰ ${item.time}</div>
+        <div class="tl-text"><b>${item.place}</b> ${item.desc ? '— '+item.desc : ''}</div>
+        ${item.tip ? `<div class="tl-note">${item.tip}</div>` : ''}
+      </div>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('routeContent').innerHTML = html;
+}
+
+// ===== FOODS =====
+function renderFoods() {
+  const cats = [
+    {key:'all', label:'全部推荐'},
+    {key:'breakfast', label:'晨膳'},
+    {key:'lunch', label:'正宴'},
+    {key:'snack', label:'点心'}
+  ];
+  document.getElementById('foodTabs').innerHTML = cats.map(c =>
+    `<button class="tab${currentFoodCat === c.key ? ' active' : ''}" onclick="selectFoodCat('${c.key}')">${c.label}</button>`
+  ).join('');
+  selectFoodCat(currentFoodCat);
+}
+
+function selectFoodCat(cat) {
+  currentFoodCat = cat;
+  document.querySelectorAll('#foodTabs .tab').forEach(t => t.classList.remove('active'));
+  const btns = document.querySelectorAll('#foodTabs .tab');
+  const cats = ['all','breakfast','lunch','snack'];
+  const idx = cats.indexOf(cat);
+  if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+  const foods = DB.foods.filter(f => f.active && (cat === 'all' || f.category === cat));
+  foods.sort((a,b) => a.rank - b.rank);
+  const rc = (r) => r===1?'':r===2?' style="background:#C0A080"':' style="background:#A0A0A0"';
+  document.getElementById('foodList').innerHTML = foods.map(f => `
+    <div class="food-item">
+      <div class="food-rank"${rc(f.rank)}>${f.rank}</div>
+      <div class="food-info">
+        <div class="food-name">${f.name} <span class="food-stars">★ ${f.stars}</span><span class="food-tag">${f.tag}</span></div>
+        <div class="food-meta">${f.distance} · ${f.price}</div>
+        <div style="font-size:10px;color:#999;">${f.desc}</div>
+      </div>
+      <button class="food-nav-btn" onclick="event.stopPropagation();showToast('🗺️ 即将导航到: ${f.name}')">🧭导航</button>
+    </div>
+  `).join('');
+}
+
+// ===== SCENIC =====
+function renderScenicList() {
+  const cats = ['all','皇家园林','外八庙','奇峰异石','古迹遗址'];
+  const labels = ['全部胜景','皇家园林','外八庙','奇峰异石','古迹遗址'];
+  document.getElementById('scenicTabs').innerHTML = cats.map((c,i) =>
+    `<button class="tab${currentScenicCat === c ? ' active' : ''}" onclick="selectScenicCat('${c}')">${labels[i]}</button>`
+  ).join('');
+  const search = (document.getElementById('scenicSearch')?.value || '').toLowerCase();
+  let spots = DB.scenicSpots.filter(s => s.active && (currentScenicCat === 'all' || s.category === currentScenicCat));
+  if (search) spots = spots.filter(s => s.name.includes(search) || s.history.includes(search) || s.location.includes(search));
+  spots.sort((a,b) => a.sort - b.sort);
+
+  const gradients = {
+    '皇家园林': 'linear-gradient(135deg,#3D6B3C,#5B8C5A,#8AAF8A)',
+    '外八庙': 'linear-gradient(135deg,#C9A96E,#D4B896,#E0C8A0)',
+    '奇峰异石': 'linear-gradient(135deg,#6B5B4A,#8B7B6A,#A09080)',
+    '古迹遗址': 'linear-gradient(135deg,#5C4A3A,#7B6B5A,#9A8A7A)'
+  };
+  const tagCls = (t) => t==='世界遗产'?'world':t==='5A'?'grade':'nature';
+
+  document.getElementById('scenicCards').innerHTML = spots.map(s => `
+    <div class="scenic-card" onclick="showScenicDetail('${s.id}')">
+      <div class="scenic-img" style="background:${gradients[s.category] || 'linear-gradient(135deg,#4A7A8C,#6A9AAC)'};">
+        <div style="text-align:center;color:#fff;">
+          <div style="font-size:42px;">${s.images[0] || '🏛️'}</div>
+          <div style="font-size:9px;opacity:0.6;">📷 ${s.images.length}图 · ${s.name}</div>
+        </div>
+        <span class="img-count">📸 ${s.images.length}图</span>
+      </div>
+      <div class="scenic-body">
+        <div class="scenic-title">
+          <span class="scenic-name">${s.name}</span>
+          ${s.tags.map(t => `<span class="scenic-tag ${tagCls(t)}">${t}</span>`).join('')}
+        </div>
+        <div class="scenic-location">📍 ${s.location} · ${s.distance}</div>
+        <div class="scenic-desc">${s.history.replace(/\n/g,' ').slice(0,100)}...</div>
+        <div class="scenic-meta">
+          <span>🕐 ${s.openTime}</span><span>🎫 ${s.ticket}</span><span>⏱ ${s.duration}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectScenicCat(cat) {
+  currentScenicCat = cat;
+  renderScenicList();
+}
+
+function showScenicDetail(id) {
+  currentScenicId = id;
+  const s = DB.scenicSpots.find(sp => sp.id === id);
+  if (!s) return;
+  document.getElementById('scenicList').style.display = 'none';
+  const gradients = {
+    '皇家园林': 'linear-gradient(180deg,#3D6B3C,#5B8C5A,#8AAF8A)',
+    '外八庙': 'linear-gradient(180deg,#C9A96E,#D4B896,#E0C8A0)',
+    '奇峰异石': 'linear-gradient(180deg,#6B5B4A,#8B7B6A,#A09080)',
+    '古迹遗址': 'linear-gradient(180deg,#5C4A3A,#7B6B5A,#9A8A7A)'
+  };
+  document.getElementById('scenicDetail').style.display = 'block';
+  document.getElementById('scenicDetail').innerHTML = `
+    <div class="detail-header" style="background:${gradients[s.category] || 'linear-gradient(180deg,#4A7A8C,#6A9AAC)'};">
+      <div class="detail-back" onclick="closeScenicDetail()">← 返回</div>
+      <div style="text-align:center;color:#fff;">
+        <div style="font-size:50px;">${s.images[0] || '🏛️'}</div>
+        <div style="font-size:10px;opacity:0.6;">左右滑动查看图片</div>
+      </div>
+      <div class="detail-img-dots">
+        ${s.images.map((_,i) => `<div class="detail-img-dot${i===0?' active':''}"></div>`).join('')}
+      </div>
+    </div>
+    <div class="detail-body">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+        <span style="font-size:18px;font-weight:900;color:#2C4A5A;">${s.name}</span>
+        ${s.tags.map(t => `<span class="scenic-tag ${t==='世界遗产'?'world':t==='5A'?'grade':'nature'}">${t}</span>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--gold);margin-bottom:10px;">★ ${s.rating} · ${s.reviewCount}条评价</div>
+      <div class="detail-info-row">
+        <div class="detail-info-item"><div class="di-label">🕐 开放时间</div><div class="di-val">${s.openTime}</div></div>
+        <div class="detail-info-item"><div class="di-label">🎫 门票</div><div class="di-val">${s.ticket}</div></div>
+        <div class="detail-info-item"><div class="di-label">⏱ 建议游玩</div><div class="di-val">${s.duration}</div></div>
+      </div>
+      <div class="detail-location">
+        <span>📍</span>
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;">${s.location}</div><div style="font-size:9px;color:#888;">${s.distance}</div></div>
+        <div style="font-size:9px;background:var(--lake);color:#fff;padding:4px 10px;border-radius:10px;cursor:pointer;" onclick="showToast('🗺️ 即将导航到: ${s.name}')">🧭 导航</div>
+      </div>
+      <div class="detail-section">
+        <h4>📜 历史渊源</h4>
+        <p>${s.history.replace(/\n/g,'<br>')}</p>
+      </div>
+      <div class="detail-section">
+        <h4>✨ 必看亮点</h4>
+        ${s.highlights.map(h => `<div class="detail-highlight">${h}</div>`).join('')}
+      </div>
+      <div class="detail-tip"><strong>💡 房东游园Tips：</strong>${s.tips}</div>
+    </div>
+  `;
+  window.scrollTo(0,0);
+}
+
+function closeScenicDetail() {
+  currentScenicId = null;
+  document.getElementById('scenicList').style.display = 'block';
+  document.getElementById('scenicDetail').style.display = 'none';
+  // BUG-006 fix: preserve search state, don't clear search box
+  renderScenicList();
+  window.scrollTo(0,0);
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ===== INIT =====
+async function init() {
+  // Show loading state
+  const overlay = document.getElementById('loadingOverlay');
+
+  // Load data (may fetch from remote)
+  DB = await loadDB();
+
+  // Hide loading
+  if (overlay) overlay.classList.add('hidden');
+
+  // Update data source indicator
+  const ft = document.getElementById('dataFooter');
+  if (ft) ft.style.display = 'block';
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  if (window._dataSource === 'remote') {
+    dot.className = 'dot online';
+    txt.textContent = '云端数据 · ' + (getCacheTimestamp() ? new Date(getCacheTimestamp()).toLocaleString('zh-CN') : '');
+  } else if (window._dataSource === 'cache') {
+    dot.className = 'dot offline';
+    txt.textContent = '本地缓存 · ' + (getCacheTimestamp() ? new Date(getCacheTimestamp()).toLocaleString('zh-CN') : '');
+  } else {
+    dot.className = 'dot local';
+    txt.textContent = '默认数据 · 请连接网络';
+  }
+  document.getElementById('appVersion').textContent = APP_VERSION;
+
+  // Render UI
+  document.getElementById('doorPwd').textContent = DB.password.code;
+  updateWeather();
+  renderRoutes();
+  renderFoods();
+  renderScenicList();
+
+  // Periodically check for remote updates (every 5 minutes)
+  if (REMOTE_DATA_URL && REMOTE_DATA_URL.startsWith('http')) {
+    setInterval(async () => {
+      try {
+        const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now());
+        if (resp.ok) {
+          const fresh = await resp.json();
+          if (fresh && fresh.config) {
+            const oldCode = DB.password.code;
+            saveDB(fresh);
+            setCacheTimestamp();
+            DB = fresh;
+            // Update visible password if changed
+            if (fresh.password.code !== oldCode) {
+              document.getElementById('doorPwd').textContent = fresh.password.code;
+              const myPwd = document.getElementById('myPwd');
+              if (myPwd) myPwd.textContent = fresh.password.code;
+            }
+            window._dataSource = 'remote';
+            const dot = document.getElementById('syncDot');
+            const txt = document.getElementById('syncText');
+            if (dot) dot.className = 'dot online';
+            if (txt) txt.textContent = '云端数据 · ' + new Date().toLocaleString('zh-CN');
+          }
+        }
+      } catch(e) { /* silent refresh fail */ }
+    }, 300000); // 5 min
+  }
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

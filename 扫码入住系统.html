@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>水泉沟·山居 - 扫码入住</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --green: #5B8C5A;
+    --green-dark: #3D6B3C;
+    --warm: #E8A87C;
+    --warm-light: #F5E6D8;
+    --bg: #F5F0E8;
+    --card: #FFFFFF;
+    --text: #2C3E2D;
+    --text-light: #6B7B6C;
+    --border: #E8E0D5;
+    --shadow: 0 2px 12px rgba(44,62,45,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== 顶部天气横幅 ===== */
+  .hero {
+    background: linear-gradient(135deg, #3D6B3C 0%, #5B8C5A 40%, #7BAF7A 100%);
+    color: #fff;
+    padding: 28px 20px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -30px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: -50px; left: -20px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .hero-greeting {
+    font-size: 15px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 4px 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-weather {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+    backdrop-filter: blur(10px);
+  }
+  .weather-icon {
+    font-size: 42px;
+    line-height: 1;
+  }
+  .weather-info {
+    flex: 1;
+  }
+  .weather-temp {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .weather-desc {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .weather-extra {
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  /* ===== 主内容区 ===== */
+  .main {
+    padding: 0 16px 100px;
+    margin-top: -12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 开门大卡片 */
+  .card-unlock {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-bottom: 14px;
+    border: 2px solid var(--green);
+  }
+  .unlock-icon {
+    font-size: 56px;
+    margin-bottom: 8px;
+  }
+  .unlock-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .unlock-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+  .unlock-password {
+    display: inline-block;
+    background: #F0F7F0;
+    border: 2px dashed var(--green);
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: var(--green-dark);
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    margin-bottom: 6px;
+  }
+  .unlock-hint {
+    font-size: 11px;
+    color: #999;
+  }
+
+  /* 通用卡片 */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .card-icon.green { background: #E8F5E8; }
+  .card-icon.warm { background: var(--warm-light); }
+  .card-icon.blue { background: #E3F0FA; }
+  .card-icon.red { background: #FDE8E8; }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .card-sub {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  /* 网格菜单 */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .grid-item {
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    padding: 16px 14px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+  }
+  .grid-item:active {
+    transform: scale(0.96);
+  }
+  .grid-item .gi-icon {
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+  .grid-item .gi-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .grid-item .gi-sub {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* Tab 切换 */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #F0EDE5;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    white-space: nowrap;
+  }
+  .tab.active {
+    background: var(--green);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* 路线时间线 */
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 14px;
+    padding-left: 14px;
+  }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -20px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--warm);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--warm);
+  }
+  .tl-time {
+    font-size: 11px;
+    color: var(--warm);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .tl-text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .tl-note {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .day-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin: 16px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-label:first-child { margin-top: 0; }
+
+  /* 美食列表 */
+  .food-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .food-item:last-child { border-bottom: none; }
+  .food-rank {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--warm);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .food-rank.r2 { background: #C0A080; }
+  .food-rank.r3 { background: #A0A0A0; }
+  .food-info { flex: 1; }
+  .food-name {
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .food-stars { color: #F4A460; font-size: 12px; }
+  .food-meta {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .food-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #FFF3E8;
+    color: var(--warm);
+    margin-left: 6px;
+  }
+  .food-nav {
+    width: 56px;
+    height: 30px;
+    border-radius: 15px;
+    background: var(--green);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .food-nav:active { opacity: 0.8; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(0,0,0,0.78);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-sheet {
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px 20px 36px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .modal-overlay.show .modal-sheet {
+    transform: translateY(0);
+  }
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #DDD;
+    border-radius: 2px;
+    margin: 0 auto 18px;
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  /* 底部导航 */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    display: flex;
+    padding: 8px 0 env(safe-area-inset-bottom, 8px);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+    z-index: 100;
+  }
+  .bottom-bar .nav-item {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 4px 0;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .bottom-bar .nav-item .ni-icon { font-size: 22px; }
+  .bottom-bar .nav-item.active { color: var(--green); font-weight: 600; }
+
+  /* 分区显示 */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* 小提示条 */
+  .tip-bar {
+    background: #FFF9F0;
+    border-left: 3px solid var(--warm);
+    padding: 10px 14px;
+    border-radius: 0 10px 10px 0;
+    font-size: 13px;
+    color: #8B6914;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .tip-bar strong { color: #C07830; }
+
+  /* 按钮 */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--green);
+    color: #fff;
+  }
+  .btn-outline {
+    background: #fff;
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+
+  /* Admin QR Section */
+  .admin-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .admin-section h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #999;
+  }
+  .admin-section .hint {
+    font-size: 12px;
+    color: #bbb;
+    margin-bottom: 16px;
+  }
+  #qrcode {
+    display: inline-block;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+  }
+  .url-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .url-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+  }
+  .url-input-row input:focus {
+    border-color: var(--green);
+  }
+  .url-input-row button {
+    padding: 10px 16px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  @media (min-width: 500px) {
+    .main {
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-inner {
+      max-width: 450px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .bottom-bar {
+      max-width: 450px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== 顶部天气横幅 ====== -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-greeting">🏠 水泉沟·山居</div>
+    <div class="hero-name" id="guestName">欢迎入住</div>
+    <div class="hero-weather" id="weatherBox">
+      <div class="weather-icon" id="weatherIcon">☀️</div>
+      <div class="weather-info">
+        <div class="weather-temp" id="weatherTemp">26°C</div>
+        <div class="weather-desc" id="weatherDesc">晴 · 适合出游</div>
+      </div>
+      <div class="weather-extra">
+        <div>🌅 日出 <span id="sunrise">05:12</span></div>
+        <div>🏛 避暑山庄 <span id="bishuTime">08:00-17:30</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 主体内容 ====== -->
+<div class="main">
+
+  <!-- ===== 首页 ===== -->
+  <div class="section active" id="sec-home">
+
+    <!-- 开门卡片 -->
+    <div class="card-unlock" id="unlockCard">
+      <div class="unlock-icon">🔑</div>
+      <div class="unlock-title">一键开门</div>
+      <div class="unlock-sub">本次入住临时密码（退房后失效）</div>
+      <div class="unlock-password" id="doorPassword">482916</div>
+      <div class="unlock-hint">点击密码复制 · 也可在智能门锁上输入</div>
+    </div>
+
+    <!-- 快捷功能 -->
+    <div class="grid-2">
+      <div class="grid-item" onclick="navigateTo('route')">
+        <div class="gi-icon">🗺️</div>
+        <div class="gi-title">游玩攻略</div>
+        <div class="gi-sub">1日/2日/3日路线</div>
+      </div>
+      <div class="grid-item" onclick="navigateTo('food')">
+        <div class="gi-icon">🍜</div>
+        <div class="gi-title">美食地图</div>
+        <div class="gi-sub">本地人推荐</div>
+      </div>
+      <div class="grid-item" onclick="copyWiFi()">
+        <div class="gi-icon">📶</div>
+        <div class="gi-title">一键连WiFi</div>
+        <div class="gi-sub">点击复制密码</div>
+      </div>
+      <div class="grid-item" onclick="callHost()">
+        <div class="gi-icon">📞</div>
+        <div class="gi-title">联系房东</div>
+        <div class="gi-sub">随时在线</div>
+      </div>
+    </div>
+
+    <!-- 今日贴士 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon warm">💡</div>
+        <div>
+          <div class="card-title">房东今日提醒</div>
+          <div class="card-sub" id="todayDate">8月3日 周六</div>
+        </div>
+      </div>
+      <div class="tip-bar" id="dailyTip">
+        <strong>出行建议：</strong>今天天气晴好，建议上午9点前到达避暑山庄，人少凉快。山庄内没有餐厅，可在门口买些干粮和水带进去。下午可以顺路去普宁寺，傍晚回水泉沟路边有烧烤摊~
+      </div>
+    </div>
+
+    <!-- 拍照打卡 -->
+    <div class="card" style="text-align:center">
+      <div style="font-size:40px;margin-bottom:8px;">📸</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">记录你的承德之旅</div>
+      <div style="font-size:12px;color:var(--text-light);margin-bottom:12px;">拍照自动加水泉沟·山居专属水印</div>
+      <button class="btn btn-outline" onclick="openCamera()" style="width:auto;display:inline-block;padding:10px 32px;">
+        📷 拍照打卡
+      </button>
+    </div>
+
+    <!-- 管理入口 QR -->
+    <div class="admin-section" id="adminQR">
+      <h3>🔗 扫码进入本页面</h3>
+      <p class="hint">将此二维码打印贴在民宿门口，住客微信扫码即可</p>
+      <div id="qrcode"></div>
+      <div class="url-input-row">
+        <input type="text" id="pageUrl" placeholder="输入此页面的线上地址后点生成" />
+        <button onclick="generateQR()">生成</button>
+      </div>
+      <p style="font-size:11px;color:#ccc;margin-top:8px;">
+        💡 提示：需要先将此页面上传到服务器获得URL，<br>再输入URL生成可用二维码
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 游玩攻略页 ===== -->
+  <div class="section" id="sec-route">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🗺️</div>
+        <div>
+          <div class="card-title">承德游玩攻略</div>
+          <div class="card-sub">房东实地踩点 · 不走回头路</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="routeTabs">
+        <button class="tab active" onclick="switchRoute('day1')">1日精华</button>
+        <button class="tab" onclick="switchRoute('day2')">2日深度</button>
+        <button class="tab" onclick="switchRoute('day3')">3日全览</button>
+        <button class="tab" onclick="switchRoute('family')">亲子慢游</button>
+      </div>
+
+      <!-- 1日精华 -->
+      <div class="route-content" id="route-day1">
+        <div class="day-label">📌 一日精华游（适合周末）</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 07:30</div>
+            <div class="tl-text">🥣 <b>老三羊汤</b> — 从民宿步行约10分钟</div>
+            <div class="tl-note">必点：羊汤+烧饼，人均¥25</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 08:30</div>
+            <div class="tl-text">🏛 <b>避暑山庄</b> — 从丽正门进入</div>
+            <div class="tl-note">建议游玩3-4小时，门票¥130，自带干粮和水</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 12:30</div>
+            <div class="tl-text">🍚 <b>午餐·乔家满族八大碗</b></div>
+            <div class="tl-note">必点：鹿肉、满族火锅、杏仁酪</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 14:00</div>
+            <div class="tl-text">🛕 <b>普宁寺</b> — 世界最大木雕千手观音</div>
+            <div class="tl-note">门票¥80，游玩约1.5小时</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 17:00</div>
+            <div class="tl-text">⛰️ <b>磬锤峰</b> — 缆车上山看日落</div>
+            <div class="tl-note">缆车¥50单程，日落时间约18:40</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 19:30</div>
+            <div class="tl-text">🍖 <b>水泉沟夜市烧烤</b> — 步行回民宿路上</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2日深度 -->
+      <div class="route-content" id="route-day2" style="display:none">
+        <div class="day-label">📌 Day 1 — 避暑山庄 + 外八庙精华</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 07:30</div>
+            <div class="tl-text">🥣 老三羊汤（步行10分钟）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 08:30-12:00</div>
+            <div class="tl-text">🏛 避暑山庄（丽正门进 → 博物馆区 → 湖区 → 平原区）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 12:30</div>
+            <div class="tl-text">🍚 午餐·大清花饺子（满族风味）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 14:00-16:30</div>
+            <div class="tl-text">🛕 普陀宗乘之庙（小布达拉宫）+ 须弥福寿之庙</div>
+            <div class="tl-note">两庙联票¥80，是拍照最出片的地方</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 17:30</div>
+            <div class="tl-text">🌅 磬锤峰看日落</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 19:00</div>
+            <div class="tl-text">🍖 乔家满族八大碗（晚餐）</div>
+          </div>
+        </div>
+        <div class="day-label">📌 Day 2 — 周边深度</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 08:00</div>
+            <div class="tl-text">🥣 承德杏仁茶+煎饼（本地特色早餐）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 09:00-11:30</div>
+            <div class="tl-text">⛰️ 双塔山 — 自然奇观，比棒槌山人少</div>
+            <div class="tl-note">门票¥50，游玩约2小时，拍照绝佳</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 12:30</div>
+            <div class="tl-text">🍚 午餐·承德市区（推荐满族火锅）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 14:00</div>
+            <div class="tl-text">🛍 承德特产街 — 杏仁、山楂糕、榛子</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-time">⏰ 16:00</div>
+            <div class="tl-text">🚗 返程，带上一罐杏仁回家~</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3日全览 -->
+      <div class="route-content" id="route-day3" style="display:none">
+        <div class="day-label">📌 Day 1 — 避暑山庄沉浸游</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 07:30</div><div class="tl-text">🥣 老三羊汤</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 08:30-15:00</div><div class="tl-text">🏛 避暑山庄全天深度游（带午餐干粮）</div><div class="tl-note">博物馆→湖区划船→平原区→山区电瓶车，慢慢逛</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 15:30</div><div class="tl-text">🛕 普宁寺（下午光线好，适合拍照）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 18:00</div><div class="tl-text">🍖 乔家满族八大碗</div></div>
+        </div>
+        <div class="day-label">📌 Day 2 — 外八庙 + 磬锤峰</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 07:30</div><div class="tl-text">🥣 杏仁茶+煎饼</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 08:30</div><div class="tl-text">🛕 普陀宗乘之庙（小布达拉宫，2小时）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 10:30</div><div class="tl-text">🛕 须弥福寿之庙（1小时）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 12:30</div><div class="tl-text">🍚 午餐</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 14:00</div><div class="tl-text">⛰️ 磬锤峰国家森林公园</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 18:00</div><div class="tl-text">🍖 水泉沟夜市</div></div>
+        </div>
+        <div class="day-label">📌 Day 3 — 周边探秘</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 08:00</div><div class="tl-text">🥣 早餐</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 09:00</div><div class="tl-text">⛰️ 双塔山 or 棒槌山（二选一）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 12:00</div><div class="tl-text">🍚 农家乐午餐（体验承德农家菜）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 14:00</div><div class="tl-text">🛍 特产采购 → 返程</div></div>
+        </div>
+      </div>
+
+      <!-- 亲子慢游 -->
+      <div class="route-content" id="route-family" style="display:none">
+        <div class="tip-bar">
+          <strong>👨‍👩‍👧 亲子提示：</strong>带孩子节奏放慢一半，以下路线每个景点预留充足休息时间，避暑山庄内可以划船，孩子很喜欢~
+        </div>
+        <div class="day-label">📌 推荐行程（2天1晚）</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 09:00</div><div class="tl-text">🥣 睡到自然醒，慢慢吃个早餐</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 10:00-12:00</div><div class="tl-text">🏛 避暑山庄博物馆 + 湖区划船</div><div class="tl-note">孩子对划船和喂鱼更感兴趣，不用赶景点</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 12:30</div><div class="tl-text">🍚 午餐后回民宿午休</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 15:00</div><div class="tl-text">🛕 普宁寺（1小时足够，孩子看大佛会震撼）</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 17:00</div><div class="tl-text">🎠 承德市区儿童公园 or 武烈河边散步</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">⏰ 18:30</div><div class="tl-text">🍖 晚餐（推荐有包间的餐厅，孩子比较自由）</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;font-size:11px;color:var(--text-light);text-align:center;">
+        💡 以上路线均为房东实地踩点，具体时间可根据实际情况调整
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 美食地图页 ===== -->
+  <div class="section" id="sec-food">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon warm">🍜</div>
+        <div>
+          <div class="card-title">承德美食地图</div>
+          <div class="card-sub">本地人吃了都说好的店</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="foodTabs">
+        <button class="tab active" onclick="switchFoodTab('all')">全部推荐</button>
+        <button class="tab" onclick="switchFoodTab('breakfast')">早餐</button>
+        <button class="tab" onclick="switchFoodTab('lunch')">正餐</button>
+        <button class="tab" onclick="switchFoodTab('snack')">小吃特产</button>
+      </div>
+
+      <div id="foodList">
+        <!-- JS 动态渲染 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 紧急联系页 ===== -->
+  <div class="section" id="sec-emergency">
+    <div class="card" style="text-align:center">
+      <div style="font-size:56px;margin-bottom:12px;">🆘</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;">需要帮助？</div>
+      <div style="font-size:13px;color:var(--text-light);margin-bottom:20px;">房东随时在线，有事别客气</div>
+      <button class="btn btn-primary" onclick="callHost()" style="margin-bottom:10px;">
+        📞 拨打房东电话
+      </button>
+      <button class="btn btn-outline" onclick="copyHostWechat()">
+        💬 复制房东微信
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🏥</div>
+        <div><div class="card-title">常用紧急电话</div></div>
+      </div>
+      <div style="font-size:14px;line-height:2.2;">
+        <div>🚑 急救中心：<b>120</b></div>
+        <div>🚒 火警：<b>119</b></div>
+        <div>👮 报警：<b>110</b></div>
+        <div>🏥 承德市中心医院：<b>0314-2022468</b></div>
+        <div>🚕 打车叫车：滴滴 / 高德打车</div>
+        <div>🏪 最近药房：步行约15分钟</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== 底部导航 ====== -->
+<div class="bottom-bar">
+  <div class="nav-item active" onclick="navigateTo('home')" id="nav-home">
+    <div class="ni-icon">🏠</div>
+    <div>首页</div>
+  </div>
+  <div class="nav-item" onclick="navigateTo('route')" id="nav-route">
+    <div class="ni-icon">🗺️</div>
+    <div>攻略</div>
+  </div>
+  <div class="nav-item" onclick="navigateTo('food')" id="nav-food">
+    <div class="ni-icon">🍜</div>
+    <div>美食</div>
+  </div>
+  <div class="nav-item" onclick="navigateTo('emergency')" id="nav-emergency">
+    <div class="ni-icon">🆘</div>
+    <div>帮助</div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== 数据配置（房东可修改这里） ==========
+const CONFIG = {
+  hostName: '小王',
+  hostPhone: '138XXXXXXXX',  // 替换为真实号码
+  hostWechat: 'watervalley_host',  // 替换为真实微信
+  wifiName: '水泉沟山居',
+  wifiPassword: 'chengde2024',
+  doorPassword: Math.floor(100000 + Math.random() * 900000).toString(), // 每次刷新更换演示密码
+  pageURL: '', // 部署后的线上地址，用于生成二维码
+};
+
+const FOOD_DATA = [
+  { name: '老三羊汤', stars: 4.8, category: 'breakfast', rank: 1, distance: '步行10分钟', price: '¥25/人', tag: '30年老店', desc: '承德人从小吃到大的羊汤馆，汤白味浓，一定要配烧饼' },
+  { name: '乔家满族八大碗', stars: 4.6, category: 'lunch', rank: 2, distance: '3公里', price: '¥60/人', tag: '满族风味', desc: '鹿肉、野猪肉、满族火锅，体验正宗满族大餐' },
+  { name: '杏仁茶老店', stars: 4.5, category: 'breakfast', rank: 3, distance: '步行8分钟', price: '¥8/人', tag: '特色早餐', desc: '承德特产杏仁做的热饮，配煎饼果子一绝' },
+  { name: '大清花饺子', stars: 4.4, category: 'lunch', rank: 4, distance: '2.5公里', price: '¥40/人', tag: '满族饺子', desc: '满族传统饺子馆，酸菜猪肉馅必点，量大实惠' },
+  { name: '满族火锅城', stars: 4.3, category: 'lunch', rank: 5, distance: '3公里', price: '¥70/人', tag: '冬季首选', desc: '铜锅炭火，满族传统火锅，天冷时吃最舒服' },
+  { name: '水泉沟烧烤夜市', stars: 4.2, category: 'snack', rank: 6, distance: '步行5分钟', price: '¥35/人', tag: '夜宵', desc: '本地人晚上的聚集地，烤串+啤酒，烟火气十足' },
+  { name: '承德山楂糕', stars: 4.7, category: 'snack', rank: 7, distance: '特产店有售', price: '¥15/盒', tag: '必带特产', desc: '承德山楂是地理标志产品，酸甜可口，送礼佳品' },
+  { name: '承德露露杏仁露', stars: 4.5, category: 'snack', rank: 8, distance: '超市有售', price: '¥5/罐', tag: '本地饮品', desc: '承德本土品牌，杏仁含量高，比外面的浓很多' },
+];
+
+// ========== 天气模拟（生产环境对接和风天气API） ==========
+function updateWeather() {
+  const now = new Date();
+  const hour = now.getHours();
+  const month = now.getMonth() + 1;
+  let temp, desc, icon;
+
+  if (month >= 6 && month <= 8) {
+    temp = 24 + Math.floor(Math.random() * 10);
+    desc = hour > 18 ? '晴转凉 · 适合散步' : '晴 · 适合出游';
+    icon = hour > 18 ? '🌤️' : '☀️';
+  } else if (month >= 3 && month <= 5) {
+    temp = 12 + Math.floor(Math.random() * 12);
+    desc = '春意渐浓 · 适合出游';
+    icon = '🌤️';
+  } else if (month >= 9 && month <= 11) {
+    temp = 10 + Math.floor(Math.random() * 12);
+    desc = '秋高气爽 · 最佳旅游季';
+    icon = '🍂';
+  } else {
+    temp = -8 + Math.floor(Math.random() * 10);
+    desc = '冬日暖阳 · 适合温泉';
+    icon = '❄️';
+  }
+
+  document.getElementById('weatherTemp').textContent = temp + '°C';
+  document.getElementById('weatherDesc').textContent = desc;
+  document.getElementById('weatherIcon').textContent = icon;
+
+  // 模拟日出和避暑山庄时间
+  const sunriseHour = month >= 6 && month <= 8 ? '05:12' : (month >= 3 ? '06:15' : '07:20');
+  document.getElementById('sunrise').textContent = sunriseHour;
+  document.getElementById('bishuTime').textContent = month >= 11 || month <= 2 ? '08:30-16:30' : '08:00-17:30';
+}
+
+function updateDate() {
+  const now = new Date();
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  document.getElementById('todayDate').textContent =
+    `${now.getMonth()+1}月${now.getDate()}日 周${weekdays[now.getDay()]}`;
+}
+
+// ========== 导航切换 ==========
+function navigateTo(section) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const sec = document.getElementById('sec-' + section);
+  if (sec) sec.classList.add('active');
+  const nav = document.getElementById('nav-' + section);
+  if (nav) nav.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== 路线切换 ==========
+function switchRoute(route) {
+  document.querySelectorAll('#routeTabs .tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.route-content').forEach(r => r.style.display = 'none');
+  const target = document.getElementById('route-' + route);
+  if (target) target.style.display = 'block';
+}
+
+// ========== 美食切换 ==========
+function switchFoodTab(cat) {
+  document.querySelectorAll('#foodTabs .tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderFood(cat);
+}
+
+function renderFood(cat) {
+  const list = document.getElementById('foodList');
+  const filtered = cat === 'all' ? FOOD_DATA : FOOD_DATA.filter(f => f.category === cat);
+  const rankClass = (r) => r === 1 ? '' : r === 2 ? ' r2' : ' r3';
+
+  list.innerHTML = filtered.map(f => `
+    <div class="food-item">
+      <div class="food-rank${rankClass(f.rank)}">${f.rank}</div>
+      <div class="food-info">
+        <div class="food-name">
+          ${f.name}
+          <span class="food-stars">★ ${f.stars}</span>
+          <span class="food-tag">${f.tag}</span>
+        </div>
+        <div class="food-meta">${f.distance} · ${f.price}</div>
+        <div style="font-size:12px;color:#888;margin-top:2px;">${f.desc}</div>
+      </div>
+      <button class="food-nav" onclick="event.stopPropagation();openMap('${f.name}')">🧭 导航</button>
+    </div>
+  `).join('');
+}
+
+// ========== 功能 ==========
+function copyWiFi() {
+  const text = `WiFi: ${CONFIG.wifiName}\n密码: ${CONFIG.wifiPassword}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('✅ WiFi信息已复制'));
+  } else {
+    showToast('📶 ' + CONFIG.wifiName + ' | 密码: ' + CONFIG.wifiPassword);
+  }
+}
+
+function callHost() {
+  window.location.href = 'tel:' + CONFIG.hostPhone;
+}
+
+function copyHostWechat() {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(CONFIG.hostWechat).then(() => showToast('✅ 微信已复制: ' + CONFIG.hostWechat));
+  } else {
+    showToast('💬 微信: ' + CONFIG.hostWechat);
+  }
+}
+
+function openMap(place) {
+  showToast('🗺️ 即将打开地图导航到: ' + place);
+  // 生产环境接入高德/百度地图URI
+  // window.location.href = `https://uri.amap.com/search?keyword=${encodeURIComponent(place)}`;
+}
+
+function openCamera() {
+  showToast('📸 请用手机相机拍照，发朋友圈记得@我们哦~');
+}
+
+// 开门密码复制
+document.getElementById('unlockCard').addEventListener('click', function(e) {
+  if (e.target.tagName === 'BUTTON') return;
+  const pwd = document.getElementById('doorPassword').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(pwd).then(() => showToast('✅ 密码已复制: ' + pwd));
+  }
+});
+
+// ========== QR二维码生成 ==========
+function generateQR() {
+  const url = document.getElementById('pageUrl').value.trim();
+  if (!url) {
+    showToast('⚠️ 请先输入页面的线上地址');
+    return;
+  }
+  CONFIG.pageURL = url;
+  document.getElementById('qrcode').innerHTML = '';
+  new QRCode(document.getElementById('qrcode'), {
+    text: url,
+    width: 180,
+    height: 180,
+    colorDark: '#2C3E2D',
+    colorLight: '#FFFFFF',
+  });
+  showToast('✅ 二维码已生成，可截图打印');
+}
+
+// Toast
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+// ========== 初始化 ==========
+function init() {
+  updateWeather();
+  updateDate();
+  renderFood('all');
+  document.getElementById('doorPassword').textContent = CONFIG.doorPassword;
+  document.getElementById('guestName').textContent = 'Hi~ 欢迎入住 🎉';
+
+  // 默认生成一个示例二维码
+  const defaultUrl = CONFIG.pageURL || window.location.href;
+  document.getElementById('pageUrl').value = defaultUrl;
+  if (defaultUrl && defaultUrl.startsWith('http')) {
+    generateQR();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
