@@ -231,16 +231,19 @@ function isImageURL(str) {
 }
 // 图片加载失败时的全局回退函数（避免模板字符串嵌套转义问题）
 window._imgFallback = function(el, h, iconSize) {
-  el.outerHTML = '<div style=\"text-align:center;color:#fff;height:'+h+'px;display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:'+iconSize+'px;\">🏛️</div></div>';
+  var div = document.createElement('div');
+  div.style.cssText = 'text-align:center;color:#fff;height:' + h + 'px;display:flex;align-items:center;justify-content:center;';
+  div.innerHTML = '<div style="font-size:' + iconSize + 'px;">🏛️</div>';
+  el.parentNode.replaceChild(div, el);
 };
 
 function renderScenicImage(image, size) {
-  const h = size === 'detail' ? 180 : 130;
-  const iconSize = size === 'detail' ? 50 : 42;
+  var h = size === 'detail' ? 180 : 130;
+  var iconSize = size === 'detail' ? 50 : 42;
   if (isImageURL(image)) {
-    return '<img src=\"' + image + '\" style=\"width:100%;height:' + h + 'px;object-fit:cover;display:block;\" alt=\"\" loading=\"lazy\" onerror=\"window._imgFallback(this,' + h + ',' + iconSize + ')\" />';
+    return '<img src="' + image + '" style="width:100%;height:' + h + 'px;object-fit:cover;display:block;" alt="" loading="lazy" onerror="window._imgFallback(this,' + h + ',' + iconSize + ')" />';
   } else {
-    return '<div style=\"text-align:center;color:#fff;height:' + h + 'px;display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:' + iconSize + 'px;\">' + (image || '🏛️') + '</div></div>';
+    return '<div style="text-align:center;color:#fff;height:' + h + 'px;display:flex;align-items:center;justify-content:center;"><div style="font-size:' + iconSize + 'px;">' + (image || '🏛️') + '</div></div>';
   }
 }
 
