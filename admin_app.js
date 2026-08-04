@@ -1,4 +1,5 @@
 // AUTH 已内联到 admin.html 中，此处不再重复
+window._adminJsLoaded = true;
 // 自动登录或手动登录后门禁已隐藏，立即初始化
 if (window._autoLogin || window._needInit) { init(); }
 

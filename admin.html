@@ -203,6 +203,18 @@ function doLogout(){ if(confirm('确定退出登录？')){try{localStorage.remov
 window._autoLogin = isAuth();
 if(window._autoLogin){ document.getElementById('gate').style.display='none'; }
 </script>
-<script src="admin_app.js?v=2"></script>
+<script>
+// 监控外部JS加载状态
+window._adminJsLoaded = false;
+</script>
+<script src="admin_app.js?v=3" onerror="document.getElementById('diagBanner').textContent='❌ admin_app.js 加载失败！请刷新重试';document.getElementById('diagBanner').style.background='#e74c3c';"></script>
+<script>
+// 兜底：如果3秒后还没加载成功，显示提示
+setTimeout(function(){
+  if(!window._adminJsLoaded){
+    document.getElementById('diagBanner').textContent='⏳ 加载中... 若持续显示请刷新';
+  }
+},3000);
+</script>
 </body>
 </html>
