@@ -512,10 +512,16 @@ async function loadDB() {
   if (REMOTE_DATA_URL && REMOTE_DATA_URL.startsWith('http')) {
     try {
       // 5秒超时，防止网络请求卡住导致loading界面永久显示
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 5000);
-      const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
-      clearTimeout(timeout);
+      let resp;
+      if (typeof AbortController !== 'undefined') {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
+        clearTimeout(timeout);
+      } else {
+        // 旧浏览器不支持 AbortController，直接 fetch
+        resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now());
+      }
       if (resp.ok) {
         const remoteData = await resp.json();
         // Merge: remote data wins, but keep local cache for offline

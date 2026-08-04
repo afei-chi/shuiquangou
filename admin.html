@@ -177,10 +177,15 @@ function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); touchMod
 async function syncFromRemote() {
   // 管理端启动时从线上同步最新数据（5秒超时）
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-    const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
-    clearTimeout(timeout);
+    let resp;
+    if (typeof AbortController !== 'undefined') {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
+      clearTimeout(timeout);
+    } else {
+      resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now());
+    }
     if (resp.ok) {
       const remoteData = await resp.json();
       if (remoteData && remoteData.config) {
