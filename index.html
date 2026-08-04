@@ -332,7 +332,16 @@ body {
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<!-- 诊断横幅：JS加载后自动变色 -->
+<div id="diagBanner" style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#e74c3c;color:#fff;text-align:center;padding:4px;font-size:11px;font-weight:bold;pointer-events:none;">
+  ⚠️ JavaScript 未运行
+</div>
+<noscript>
+<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#e74c3c;color:#fff;text-align:center;padding:4px;font-size:11px;">
+  ❌ 请启用 JavaScript 后刷新页面
+</div>
+</noscript>
+<div class="app" id="app" style="padding-top:24px;">
 
 <!-- Loading Overlay -->
 <div class="loading-overlay" id="loadingOverlay">
@@ -1024,6 +1033,13 @@ async function init() {
 
   // 无论如何都要隐藏loading（CSS动画也会在10秒后兜底隐藏）
   if (overlay) overlay.classList.add('hidden');
+
+  // 更新诊断横幅
+  const banner = document.getElementById('diagBanner');
+  if (banner) {
+    banner.style.background = '#27ae60';
+    banner.textContent = '✅ JS v' + APP_VERSION + ' | 数据源:' + (window._dataSource||'?') + ' | 景区:' + (DB.scenicSpots?DB.scenicSpots.length:'?') + '个 | 美食:' + (DB.foods?DB.foods.length:'?') + '个';
+  }
 
   // Update data source indicator
   const ft = document.getElementById('dataFooter');
