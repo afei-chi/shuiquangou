@@ -146,13 +146,13 @@ tr:hover td { background:#FDFDFC; }
     <div class="icon">🔐</div>
     <h2>水泉沟·山居</h2>
     <div class="sub">总管后台 · 请输入管理密码</div>
-    <input type="password" id="gatePwd" placeholder="输入密码" maxlength="20" onkeydown="if(event.key==='Enter'&&typeof checkGate==='function')checkGate()" />
+    <input type="password" id="gatePwd" placeholder="输入密码" maxlength="20" onkeydown="if(event.key==='Enter')checkGate()" />
     <div class="err" id="gateErr">密码错误，请重试</div>
     <div class="hint">默认密码: <b>chengde2024</b></div>
     <label style="display:flex;align-items:center;gap:8px;justify-content:center;margin-top:12px;font-size:13px;color:#666;cursor:pointer;padding:8px;">
       <input type="checkbox" id="gateRemember" style="width:20px;height:20px;margin:0;accent-color:var(--gold);cursor:pointer;" /> 保持登录（下次自动进入）
     </label>
-    <button class="btn btn-ok" style="margin-top:12px;width:100%;" onclick="if(typeof checkGate==='function')checkGate();else{alert('JS未加载完成，请刷新页面');location.reload();}">进入后台</button>
+    <button class="btn btn-ok" style="margin-top:12px;width:100%;" onclick="checkGate()">进入后台</button>
   </div>
 </div>
 
@@ -170,7 +170,7 @@ tr:hover td { background:#FDFDFC; }
     <div class="sidebar-group">⚙️ 系统</div>
     <div class="sidebar-item" data-pg="pwd" onclick="nav('pwd')"><span class="si">🔐</span>门锁密码</div>
     <div class="sidebar-item" data-pg="cfg" onclick="nav('cfg')"><span class="si">⚙️</span>全局设置</div>
-    <div class="sidebar-footer">🔗 afei-chi.github.io/shuiquangou<br><a href="javascript:logout()" style="color:#506070;font-size:9px;">🚪 退出登录</a></div>
+    <div class="sidebar-footer">🔗 afei-chi.github.io/shuiquangou<br><a href="javascript:doLogout()" style="color:#506070;font-size:9px;">🚪 退出登录</a></div>
   </div>
   <div class="main" id="main"></div>
 </div>
@@ -179,6 +179,30 @@ tr:hover td { background:#FDFDFC; }
 <div class="toast" id="toast"></div>
 
 
+<!-- 登录逻辑内联，确保手机端秒开 -->
+<script>
+const GATE_PWD='chengde2024';
+const AUTH_KEY='shuiquangou_auth';
+function isAuth(){ try{return localStorage.getItem(AUTH_KEY)==='1'}catch(e){return false} }
+function checkGate(){
+  var v=document.getElementById('gatePwd').value.trim();
+  if(v===GATE_PWD){
+    if(document.getElementById('gateRemember')&&document.getElementById('gateRemember').checked){
+      try{localStorage.setItem(AUTH_KEY,'1')}catch(e){}
+    }
+    document.getElementById('gate').style.display='none';
+    if(typeof init==='function'){ init(); }
+    else { window._needInit=true; } // JS还没加载完，标记等会儿初始化
+  }else{
+    document.getElementById('gateErr').style.display='block';
+    document.getElementById('gatePwd').value='';
+  }
+}
+function doLogout(){ if(confirm('确定退出登录？')){try{localStorage.removeItem(AUTH_KEY)}catch(e){} location.reload();} }
+// 已登录则标记自动跳过，等 admin_app.js 加载后由 init() 渲染
+window._autoLogin = isAuth();
+if(window._autoLogin){ document.getElementById('gate').style.display='none'; }
+</script>
 <script src="admin_app.js?v=2"></script>
 </body>
 </html>

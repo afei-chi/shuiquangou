@@ -1,42 +1,6 @@
-// ==================== AUTH ====================
-const GATE_PWD = 'chengde2024';
-const AUTH_KEY = 'shuiquangou_auth';
-
-function isAuthenticated() {
-  try { return localStorage.getItem(AUTH_KEY) === '1'; } catch(e) { return false; }
-}
-function setAuthenticated(v) {
-  try { if(v) localStorage.setItem(AUTH_KEY,'1'); else localStorage.removeItem(AUTH_KEY); } catch(e) {}
-}
-function logout() {
-  if (confirm('确定退出登录？')) {
-    setAuthenticated(false);
-    location.reload();
-  }
-}
-
-function checkGate() {
-  const v = document.getElementById('gatePwd').value.trim();
-  if (v === GATE_PWD) {
-    // 记住登录
-    if (document.getElementById('gateRemember')?.checked) {
-      setAuthenticated(true);
-    }
-    document.getElementById('gate').style.display = 'none';
-    init();
-  } else {
-    document.getElementById('gateErr').style.display = 'block';
-    document.getElementById('gatePwd').value = '';
-  }
-}
-
-// 自动登录：如果之前勾选了记住，跳过门禁
-function autoLogin() {
-  if (isAuthenticated()) {
-    document.getElementById('gate').style.display = 'none';
-    init();
-  }
-}
+// AUTH 已内联到 admin.html 中，此处不再重复
+// 自动登录或手动登录后门禁已隐藏，立即初始化
+if (window._autoLogin || window._needInit) { init(); }
 
 // ==================== GITHUB CONFIG ====================
 const GITHUB_OWNER = 'afei-chi';
@@ -719,6 +683,3 @@ async function init() {
     if (banner) banner.textContent = '⚠️ JS OK | 数据源:💾本地 | 景区:' + DB.scenicSpots.length + '个（同步失败）';
   }
 }
-
-// 页面加载时自动检测是否已登录
-autoLogin();
