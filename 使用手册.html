@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水泉沟·山居 — 使用手册</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#F5F0EB; color:#2C2C2C; line-height:1.8; }
+.container { max-width:700px; margin:0 auto; padding:20px; }
+.header { background:linear-gradient(135deg,#5C2828,#8B3A3A); color:#fff; text-align:center; padding:30px 20px; border-radius:16px; margin-bottom:24px; }
+.header h1 { font-size:24px; letter-spacing:3px; }
+.header p { font-size:13px; opacity:0.8; margin-top:6px; }
+.card { background:#fff; border-radius:12px; padding:20px 24px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+.card h2 { font-size:17px; color:#5C2828; border-left:3px solid #C9A96E; padding-left:10px; margin-bottom:12px; }
+.card h3 { font-size:14px; color:#4A7A8C; margin:14px 0 6px; }
+.step { display:flex; gap:10px; margin:10px 0; align-items:flex-start; }
+.step-num { background:#8B3A3A; color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; flex-shrink:0; margin-top:2px; }
+.step-text { font-size:13px; flex:1; }
+.url { display:inline-block; background:#F0F5F8; padding:4px 12px; border-radius:6px; font-family:monospace; font-size:12px; color:#4A7A8C; word-break:break-all; }
+.btn { display:inline-block; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:600; background:#5B8C5A; color:#fff; }
+.btn-red { background:#8B3A3A; }
+.btn-gold { background:#C9A96E; color:#fff; }
+.tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+.tag-owner { background:#FDF0F0; color:#8B3A3A; }
+.tag-guest { background:#E8F5E8; color:#5B8C5A; }
+.tip { background:#FFF9F0; border-left:3px solid #C9A96E; padding:8px 12px; border-radius:0 8px 8px 0; font-size:11px; color:#8B6914; margin:8px 0; }
+.warn { background:#FDF0F0; border-left:3px solid #c0392b; padding:8px 12px; border-radius:0 8px 8px 0; font-size:11px; color:#8B3A3A; margin:8px 0; }
+table { width:100%; border-collapse:collapse; font-size:12px; margin:8px 0; }
+th { background:#F8F8F6; padding:8px 10px; text-align:left; font-weight:600; }
+td { padding:8px 10px; border-bottom:1px solid #eee; }
+img { max-width:100%; border-radius:8px; }
+@media (max-width:500px) {
+  .container { padding:12px; }
+  .card { padding:14px 16px; }
+  .header { padding:20px 14px; }
+  .header h1 { font-size:20px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🏛️ 水泉沟·山居</h1>
+  <p>扫码入住系统 · 使用手册</p>
+</div>
+
+<!-- ====== 住客篇 ====== -->
+<div class="card">
+  <h2>🧳 住客篇 — 扫码入住</h2>
+
+  <h3>1. 扫码打开</h3>
+  <div class="step"><span class="step-num">1</span><span class="step-text">用微信/浏览器扫描民宿提供的二维码</span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">页面自动打开，顶部显示天气和日期</span></div>
+  <div class="tip">💡 也可以直接打开：<span class="url">https://afei-chi.github.io/shuiquangou/</span></div>
+
+  <h3>2. 获取门锁密码</h3>
+  <div class="step"><span class="step-num">1</span><span class="step-text">首页顶部显示 <b>6位数字密码</b></span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">点击密码区域 → 自动复制到剪贴板</span></div>
+  <div class="step"><span class="step-num">3</span><span class="step-text">在门锁上输入密码即可进入</span></div>
+  <div class="tip">🔐 密码退房后自动失效，每次入住密码不同</div>
+
+  <h3>3. 浏览信息</h3>
+  <table>
+    <tr><th>Tab</th><th>内容</th></tr>
+    <tr><td>🏛️ <b>首页</b></td><td>门锁密码、WiFi、今日贴士</td></tr>
+    <tr><td>🗺️ <b>游线</b></td><td>一日/两日/三日/亲子游玩路线</td></tr>
+    <tr><td>🍜 <b>御膳</b></td><td>周边美食推荐，附距离和导航</td></tr>
+    <tr><td>🏯 <b>胜景</b></td><td>18个承德景点详细介绍，含门票和贴士</td></tr>
+    <tr><td>🏛️ <b>行宫</b></td><td>入住信息、WiFi、一键拨号</td></tr>
+  </table>
+
+  <h3>4. 实用功能</h3>
+  <div class="step"><span class="step-num">📶</span><span class="step-text">点击首页WiFi卡片 → 自动复制WiFi密码</span></div>
+  <div class="step"><span class="step-num">📞</span><span class="step-text">行宫页「传唤总管」→ 一键拨打房东电话</span></div>
+  <div class="step"><span class="step-num">🧭</span><span class="step-text">美食页每项都有导航按钮</span></div>
+</div>
+
+<!-- ====== 房东篇 ====== -->
+<div class="card">
+  <h2>🏠 房东篇 — 管理后台</h2>
+
+  <h3>1. 登录后台</h3>
+  <div class="step"><span class="step-num">1</span><span class="step-text">打开 <span class="url">https://afei-chi.github.io/shuiquangou/admin.html</span></span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">输入管理密码：<b>chengde2024</b></span></div>
+  <div class="step"><span class="step-num">3</span><span class="step-text">勾选「<b>保持登录</b>」→ 点「进入后台」</span></div>
+  <div class="tip">💡 勾选保持登录后，下次打开直接进入，无需输密码</div>
+
+  <h3>2. 首次配置（只需做一次）</h3>
+  <div class="step"><span class="step-num">1</span><span class="step-text">点击侧边栏 <b>⚙️ 全局设置</b></span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">粘贴 GitHub Token</span></div>
+  <div class="step"><span class="step-num">3</span><span class="step-text">点「💾 保存Token」→ 再点「🚀 测试发布」</span></div>
+  <div class="tip">💡 Token只需配置一次，发布后其他手机/电脑打开管理端自动同步</div>
+
+  <h3>3. 日常操作</h3>
+
+  <h4>📊 数据看板</h4>
+  <div class="step"><span class="step-text">首页看板显示景区、美食、路线数量，以及发布状态</span></div>
+  <div class="step"><span class="step-text">点 <b>🔄 同步</b> 从线上拉取最新数据</span></div>
+  <div class="step"><span class="step-text">点 <b>🚀 发布</b> 将修改推送到线上，客户端自动更新</span></div>
+  <div class="warn">⚠️ 修改内容后记得点「🚀 发布」才能生效！修改前先点「🔄 同步」避免覆盖线上数据！</div>
+
+  <h4>🏯 景区管理</h4>
+  <div class="step"><span class="step-num">1</span><span class="step-text">点击「+ 添加景区」或点击已有景区的 ✏️ 编辑</span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">填写名称、分类、介绍等</span></div>
+  <div class="step"><span class="step-num">3</span><span class="step-text">🖼️ 添加图片：粘贴图片URL 或 点击上传本地图片</span></div>
+  <div class="step"><span class="step-num">4</span><span class="step-text">保存后回到看板 → 点「🚀 发布」</span></div>
+
+  <h4>🍜 美食 / 📜 路线 / 💡 贴士</h4>
+  <div class="step"><span class="step-text">操作方式同上：编辑 → 保存 → 🚀 发布</span></div>
+
+  <h4>🔐 门锁密码</h4>
+  <div class="step"><span class="step-num">1</span><span class="step-text">新客人入住前，点「🔄 生成新密码」</span></div>
+  <div class="step"><span class="step-num">2</span><span class="step-text">填写住客姓名、入住/退房日期</span></div>
+  <div class="step"><span class="step-num">3</span><span class="step-text">保存 → 🚀 发布</span></div>
+
+  <h3>4. 手机桌面快捷方式</h3>
+  <div class="step"><span class="step-num">iPhone</span><span class="step-text">Safari打开 → 底部分享按钮 →「添加到主屏幕」</span></div>
+  <div class="step"><span class="step-num">Android</span><span class="step-text">Chrome打开 → 右上角菜单 →「添加到主屏幕」</span></div>
+  <div class="tip">📱 添加到桌面后像App一样全屏打开</div>
+</div>
+
+<!-- ====== 常见问题 ====== -->
+<div class="card">
+  <h2>❓ 常见问题</h2>
+
+  <table>
+    <tr><th>问题</th><th>解决方法</th></tr>
+    <tr><td>住客看不到最新内容</td><td>管理端点 🔄 同步 → 🚀 发布，等2分钟生效</td></tr>
+    <tr><td>发布失败</td><td>检查⚙️全局设置中Token是否配置正确</td></tr>
+    <tr><td>忘记管理密码</td><td>默认密码 chengde2024，可在代码中修改</td></tr>
+    <tr><td>页面显示异常</td><td>按 Ctrl+Shift+R 强制刷新</td></tr>
+    <tr><td>新手机/电脑登录管理端</td><td>打开管理端 → 自动从线上同步Token（无需重配）</td></tr>
+    <tr><td>退出登录</td><td>侧边栏底部「🚪 退出登录」</td></tr>
+  </table>
+</div>
+
+<div class="card" style="text-align:center;color:#999;font-size:11px;">
+  <p>水泉沟·山居 扫码入住系统</p>
+  <p style="margin-top:4px;">管理后台：<span class="url">https://afei-chi.github.io/shuiquangou/admin.html</span></p>
+  <p>客户端：<span class="url">https://afei-chi.github.io/shuiquangou/</span></p>
+</div>
+
+</div>
+</body>
+</html>
