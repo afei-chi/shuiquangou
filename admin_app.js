@@ -44,6 +44,10 @@ const GITHUB_REPO = 'shuiquangou';
 const GITHUB_PATH = 'data.json';
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
 
+function getToken() {
+  return localStorage.getItem('github_token') || '';
+}
+
 // ==================== DATA ====================
 const DB_KEY = 'shuiquangou_miniapp_v2';
 const META_KEY = 'shuiquangou_meta_v2';
@@ -537,7 +541,7 @@ function savePwdInfo() { DB.password.guestName=document.getElementById('pgName')
 // ===== CONFIG =====
 function cfgPg(m) {
   const c = DB.config; const meta = getMeta();
-  const token = localStorage.getItem('github_token') || '';
+  const token = getToken();
   m.innerHTML = `
     <div class="topbar"><div><h1>⚙️ 全局设置</h1></div></div>
     <div class="card"><h3>🔧 基础配置</h3>
@@ -585,7 +589,7 @@ function saveGHToken() {
 
 // ===== PUBLISH =====
 async function publish() {
-  const token = localStorage.getItem('github_token');
+  const token = getToken();
   if (!token) { toast('⚠️ 请先在"全局设置"中配置GitHub Token'); nav('cfg'); return; }
 
   toast('🚀 正在发布...');
@@ -628,7 +632,7 @@ async function publish() {
 
 // ===== IMAGE UPLOAD TO GITHUB =====
 async function uploadScenicImage(file, spotId) {
-  const token = localStorage.getItem('github_token');
+  const token = getToken();
   if (!token) { toast('⚠️ 请先配置GitHub Token'); return null; }
   const ext = (file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'');
   const filename = `images/scenic/${spotId}_${Date.now()}.${ext}`;
