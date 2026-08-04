@@ -1,0 +1,15 @@
+{
+  "name": "水泉沟·山居 总管后台",
+  "short_name": "山居后台",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#F0F2F5",
+  "theme_color": "#8B3A3A",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2720%27 fill=%27%238B3A3A%27/><text y=%27.75em%27 x=%2750%27 text-anchor=%27middle%27 font-size=%2760%27>🏛️</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
