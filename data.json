@@ -238,18 +238,6 @@
       "desc": "地理标志产品",
       "rank": 7,
       "active": true
-    },
-    {
-      "id": "f8",
-      "name": "承德露露杏仁露",
-      "category": "snack",
-      "stars": 4.5,
-      "distance": "超市有售",
-      "price": "¥5/罐",
-      "tag": "本地饮品",
-      "desc": "杏仁含量高",
-      "rank": 8,
-      "active": true
     }
   ],
   "scenicSpots": [
