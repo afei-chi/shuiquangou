@@ -191,6 +191,7 @@ async function syncFromRemote() {
         if (!pendingChanges) {
           saveDB(remoteData);
           DB = remoteData;
+          window._dataSource = 'remote';
           return true;
         } else {
           // 有未发布修改时，提示用户
@@ -203,6 +204,18 @@ async function syncFromRemote() {
     console.warn('⚠️ 远程同步失败，使用本地数据', e.message);
   }
   return false;
+}
+
+// 手动触发同步（从看板按钮调用）
+async function remoteSync() {
+  toast('🔄 正在从线上同步...');
+  const synced = await syncFromRemote();
+  if (synced) {
+    toast('✅ 同步成功！共' + DB.scenicSpots.length + '个景区');
+    if (current === 'dash') nav('dash');
+  } else {
+    toast('⚠️ 同步失败，请检查网络后重试');
+  }
 }
 
 function getDefaultDB() {
@@ -266,6 +279,7 @@ function dash(m) {
       <div><h1>📈 数据看板</h1></div>
       <div class="publish-bar">
         <span class="publish-status"><span class="dot ${pendingChanges?'unsynced':'synced'}"></span> ${pendingChanges?'有未发布修改':'已同步到云端'}</span>
+        <button class="btn btn-pri" onclick="remoteSync()" title="从线上拉取最新数据">🔄 同步</button>
         <button class="btn btn-pub" onclick="publish()" title="一键发布到线上">🚀 发布到线上</button>
       </div>
     </div>
@@ -286,6 +300,15 @@ function dash(m) {
     <div class="card"><h3>💡 今日贴士</h3>
       <div style="background:#FFF9F0;border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;">
         <b>${DB.dailyTip.date} · ${DB.dailyTip.weather} ${DB.dailyTip.temp}°C：</b>${DB.dailyTip.content}
+      </div>
+    </div>
+    <div class="card"><h3>📡 数据状态</h3>
+      <div style="font-size:11px;color:#555;line-height:1.8;">
+        <div>📊 数据来源：<b>${window._dataSource === 'remote' ? '🌐 线上同步' : window._dataSource === 'cache' ? '💾 本地缓存' : '📦 默认数据'}</b></div>
+        <div>🏯 景区总数：<b>${DB.scenicSpots.length}</b>（显示：${DB.scenicSpots.filter(s=>s.active).length}）</div>
+        <div>🍜 美食总数：<b>${DB.foods.length}</b>（启用：${DB.foods.filter(f=>f.active).length}）</div>
+        <div>📜 路线总数：<b>${DB.routes.length}</b>（启用：${DB.routes.filter(r=>r.active).length}）</div>
+        <div style="margin-top:4px;"><button class="btn btn-sm btn-pri" onclick="remoteSync()">🔄 从线上重新同步</button></div>
       </div>
     </div>
     <div class="card"><h3>🔗 快捷操作</h3>
@@ -767,12 +790,18 @@ function toast(msg) {
 // ===== INIT =====
 async function init() {
   DB = loadDB();
-  // 先从线上同步最新数据
+  window._dataSource = 'cache';  // 初始为本地缓存
+  // 先立即渲染本地数据，避免长时间白屏
+  nav('dash');
+  // 后台从线上同步最新数据
   const synced = await syncFromRemote();
   if (synced) {
     console.log('✅ 已从线上同步数据，共' + DB.scenicSpots.length + '个景区');
+    // 同步成功后刷新看板
+    if (current === 'dash') nav('dash');
+  } else if (!window._dataSource || window._dataSource === 'cache') {
+    window._dataSource = 'cache';
   }
-  nav('dash');
 }
 </script>
 </body>
