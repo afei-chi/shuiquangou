@@ -78,6 +78,10 @@ async function syncFromRemote() {
     if (resp.ok) {
       const remoteData = await resp.json();
       if (remoteData && remoteData.config) {
+        // 跨浏览器同步Token
+        if (remoteData.config.githubToken && !localStorage.getItem('github_token')) {
+          localStorage.setItem('github_token', remoteData.config.githubToken);
+        }
         // 合并远程数据到本地（保留本地未发布的修改）
         const local = loadDB();
         const meta = getMeta();
@@ -555,7 +559,7 @@ function cfgPg(m) {
       <p style="font-size:11px;color:#888;margin-bottom:8px;">配置GitHub Token后，可在任何页面点击"发布到线上"按钮，自动将数据上传到GitHub，客户端自动同步。</p>
       <div class="form-row"><label>GitHub Token</label><input id="ghtoken" type="password" value="${token}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" /></div>
       <div style="font-size:10px;color:#999;margin-left:90px;margin-bottom:8px;">
-        ① <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--lake);">点击这里创建Token</a>（打不开？手动进 github.com → Settings → Developer settings → Tokens → Generate new token）→ ② Note填<b>水泉沟</b>，选<b>No expiration</b> → ③ 勾选<b>repo</b> → ④ 粘贴Token到上方
+        ① 粘贴Token → ② 点💾保存 → ③ 点🚀发布<br>发布后其他手机/电脑打开管理端自动同步Token！
       </div>
       <div class="form-row"><label>仓库路径</label><input id="ghrepo" value="${GITHUB_OWNER}/${GITHUB_REPO}" readonly style="background:#f8f8f8;" /></div>
       <div class="form-row"><label>数据文件</label><input id="ghpath" value="${GITHUB_PATH}" readonly style="background:#f8f8f8;" /></div>
@@ -583,8 +587,17 @@ function saveCfg() {
 }
 function saveGHToken() {
   const t=document.getElementById('ghtoken')?.value.trim();
-  if(t) localStorage.setItem('github_token',t); else localStorage.removeItem('github_token');
-  toast('✅ Token已保存');
+  if(t) {
+    localStorage.setItem('github_token',t);
+    // 同步写入数据配置，发布后其他浏览器也能获取
+    DB.config.githubToken = t;
+    saveDB(DB); pendingChanges=true;
+  } else {
+    localStorage.removeItem('github_token');
+    delete DB.config.githubToken;
+    saveDB(DB); pendingChanges=true;
+  }
+  toast('✅ Token已保存（点🚀发布后其他浏览器自动同步）');
 }
 
 // ===== PUBLISH =====
