@@ -142,10 +142,10 @@ tr:hover td { background:#FDFDFC; }
     <div class="icon">🔐</div>
     <h2>水泉沟·山居</h2>
     <div class="sub">总管后台 · 请输入管理密码</div>
-    <input type="password" id="gatePwd" placeholder="输入密码" maxlength="20" onkeydown="if(event.key==='Enter')checkGate()" />
+    <input type="password" id="gatePwd" placeholder="输入密码" maxlength="20" onkeydown="if(event.key==='Enter'&&typeof checkGate==='function')checkGate()" />
     <div class="err" id="gateErr">密码错误，请重试</div>
     <div class="hint">默认密码: <b>chengde2024</b></div>
-    <button class="btn btn-ok" style="margin-top:12px;width:100%;" onclick="checkGate()">进入后台</button>
+    <button class="btn btn-ok" style="margin-top:12px;width:100%;" onclick="if(typeof checkGate==='function')checkGate();else{alert('JS未加载完成，请刷新页面');location.reload();}">进入后台</button>
   </div>
 </div>
 
@@ -172,6 +172,6 @@ tr:hover td { background:#FDFDFC; }
 <div class="toast" id="toast"></div>
 
 
-<script src="admin_app.js"></script>
+<script src="admin_app.js?v=2"></script>
 </body>
 </html>
