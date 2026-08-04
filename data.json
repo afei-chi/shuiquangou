@@ -1,0 +1,232 @@
+{
+  "config": {
+    "wifiName": "水泉沟山居",
+    "wifiPassword": "chengde2024",
+    "hostPhone": "1380314XXXX",
+    "hostWechat": "watervalley_host"
+  },
+  "password": {
+    "code": "882566",
+    "guestName": "住客",
+    "checkIn": "2026-08-04",
+    "checkOut": "2026-08-06"
+  },
+  "dailyTip": {
+    "date": "2026-08-04",
+    "content": "今日山庄游人适中，建议辰时（早8点）入园，从丽正门进，先游博物馆区，再乘舟游湖。傍晚可去磬锤峰看日落~",
+    "weather": "晴",
+    "temp": 28,
+    "sunrise": "05:12",
+    "openTime": "08:00-17:30"
+  },
+  "routes": [
+    {
+      "id": "r1",
+      "name": "一日精华",
+      "type": "day1",
+      "intro": "仿帝王巡游路线，一日看尽承德精华",
+      "active": true,
+      "days": [
+        {
+          "label": "一日精华游",
+          "items": [
+            { "time": "07:30", "place": "老三羊汤", "desc": "早餐·步行8分钟", "tip": "必点：羊汤+烧饼，人均¥25" },
+            { "time": "08:30", "place": "避暑山庄", "desc": "丽正门入·3-4小时", "tip": "门票¥130，自带干粮和水" },
+            { "time": "12:30", "place": "乔家满族八大碗", "desc": "午餐·满族风味", "tip": "鹿肉、满族火锅必点" },
+            { "time": "14:00", "place": "普宁寺", "desc": "世界最大木雕千手观音", "tip": "门票¥80，约1.5小时" },
+            { "time": "17:00", "place": "磬锤峰", "desc": "缆车观日落", "tip": "缆车¥50单程" },
+            { "time": "19:30", "place": "水泉沟夜市", "desc": "烧烤·步行回民宿", "tip": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "name": "两日深度",
+      "type": "day2",
+      "intro": "慢游承德，体验皇家与民间",
+      "active": true,
+      "days": [
+        {
+          "label": "Day 1 — 避暑山庄 + 外八庙",
+          "items": [
+            { "time": "07:30", "place": "老三羊汤", "desc": "早餐", "tip": "步行10分钟" },
+            { "time": "08:30-12:00", "place": "避暑山庄", "desc": "丽正门进 → 博物馆 → 湖区 → 平原区", "tip": "门票¥130" },
+            { "time": "12:30", "place": "大清花饺子", "desc": "午餐·满族风味", "tip": "" },
+            { "time": "14:00-16:30", "place": "普陀宗乘之庙+须弥福寿之庙", "desc": "小布达拉宫", "tip": "联票¥80" },
+            { "time": "17:30", "place": "磬锤峰", "desc": "看日落", "tip": "" },
+            { "time": "19:00", "place": "乔家满族八大碗", "desc": "晚餐", "tip": "" }
+          ]
+        },
+        {
+          "label": "Day 2 — 周边深度",
+          "items": [
+            { "time": "08:00", "place": "承德杏仁茶", "desc": "特色早餐", "tip": "" },
+            { "time": "09:00-11:30", "place": "双塔山", "desc": "自然奇观", "tip": "门票¥50" },
+            { "time": "12:30", "place": "满族火锅", "desc": "午餐", "tip": "" },
+            { "time": "14:00", "place": "承德特产街", "desc": "杏仁·山楂糕·榛子", "tip": "" },
+            { "time": "16:00", "place": "返程", "desc": "带上一罐杏仁回家~", "tip": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "name": "三日全览",
+      "type": "day3",
+      "intro": "深度承德，不留遗憾",
+      "active": true,
+      "days": [
+        {
+          "label": "Day 1 — 皇家园林",
+          "items": [
+            { "time": "07:30", "place": "老三羊汤", "desc": "早餐", "tip": "" },
+            { "time": "08:30-15:00", "place": "避暑山庄全园", "desc": "博物馆+湖区+平原区+山区", "tip": "自带午餐" },
+            { "time": "17:00", "place": "磬锤峰", "desc": "看日落", "tip": "" }
+          ]
+        },
+        {
+          "label": "Day 2 — 外八庙",
+          "items": [
+            { "time": "08:00", "place": "普宁寺", "desc": "千手观音", "tip": "¥80" },
+            { "time": "10:00", "place": "普陀宗乘之庙", "desc": "小布达拉宫", "tip": "¥80" },
+            { "time": "14:00", "place": "须弥福寿之庙", "desc": "班禅行宫", "tip": "" }
+          ]
+        },
+        {
+          "label": "Day 3 — 周边",
+          "items": [
+            { "time": "08:00", "place": "双塔山", "desc": "", "tip": "¥50" },
+            { "time": "12:00", "place": "特产采购", "desc": "杏仁·山楂糕", "tip": "" },
+            { "time": "14:00", "place": "返程", "desc": "", "tip": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r4",
+      "name": "亲子御游",
+      "type": "family",
+      "intro": "带娃慢游，不赶路不早起",
+      "active": true,
+      "days": [
+        {
+          "label": "2天1晚 — 轻松版",
+          "items": [
+            { "time": "09:00", "place": "自然醒+早餐", "desc": "", "tip": "" },
+            { "time": "10:00", "place": "避暑山庄游船", "desc": "孩子最爱", "tip": "" },
+            { "time": "14:00", "place": "普宁寺", "desc": "看大佛", "tip": "" },
+            { "time": "16:00", "place": "承德博物馆", "desc": "室内凉快", "tip": "免费" }
+          ]
+        }
+      ]
+    }
+  ],
+  "foods": [
+    { "id": "f1", "name": "老三羊汤", "category": "breakfast", "stars": 4.8, "distance": "步行8分钟", "price": "¥25/人", "tag": "30年老店", "desc": "承德人从小吃到大的羊汤馆，汤白肉嫩", "rank": 1, "active": true },
+    { "id": "f2", "name": "乔家满族八大碗", "category": "lunch", "stars": 4.6, "distance": "3公里", "price": "¥60/人", "tag": "满族风味", "desc": "鹿肉、满族火锅，地道承德味", "rank": 2, "active": true },
+    { "id": "f3", "name": "杏仁茶老店", "category": "breakfast", "stars": 4.5, "distance": "步行5分钟", "price": "¥8/人", "tag": "特色早餐", "desc": "承德特产杏仁做的热饮，暖胃香甜", "rank": 3, "active": true },
+    { "id": "f4", "name": "大清花饺子", "category": "lunch", "stars": 4.4, "distance": "2.5公里", "price": "¥40/人", "tag": "满族饺子", "desc": "酸菜猪肉馅必点，个大皮薄", "rank": 4, "active": true },
+    { "id": "f5", "name": "满族火锅城", "category": "lunch", "stars": 4.3, "distance": "3公里", "price": "¥70/人", "tag": "冬季首选", "desc": "铜锅炭火，酸菜白肉锅底", "rank": 5, "active": true },
+    { "id": "f6", "name": "水泉沟烧烤夜市", "category": "snack", "stars": 4.2, "distance": "步行3分钟", "price": "¥35/人", "tag": "夜宵", "desc": "烟火气十足，烤串配啤酒", "rank": 6, "active": true },
+    { "id": "f7", "name": "承德山楂糕", "category": "snack", "stars": 4.7, "distance": "特产店有售", "price": "¥15/盒", "tag": "必带特产", "desc": "地理标志产品，酸甜可口", "rank": 7, "active": true },
+    { "id": "f8", "name": "承德露露杏仁露", "category": "snack", "stars": 4.5, "distance": "超市有售", "price": "¥5/罐", "tag": "本地饮品", "desc": "承德原产，杏仁含量高", "rank": 8, "active": true }
+  ],
+  "scenicSpots": [
+    {
+      "id": "s1",
+      "name": "避暑山庄",
+      "category": "皇家园林",
+      "location": "承德市双桥区丽正门大街",
+      "distance": "距民宿3km",
+      "openTime": "08:00-17:30",
+      "ticket": "¥130/人",
+      "duration": "3-4小时",
+      "tags": ["世界遗产", "5A"],
+      "history": "始建于1703年，中国现存最大的皇家园林，占地564万平方米。康熙、乾隆每年有半年在此处理朝政。1994年列入世界文化遗产。",
+      "highlights": ["丽正门", "澹泊敬诚殿", "烟雨楼", "热河泉"],
+      "tips": "建议早8点入园，自带干粮和水，进门先拿导览图",
+      "images": ["🏛️", "🏞️", "🌊"],
+      "rating": 4.7,
+      "reviewCount": "3.2万",
+      "sort": 1,
+      "active": true
+    },
+    {
+      "id": "s2",
+      "name": "普陀宗乘之庙",
+      "category": "外八庙",
+      "location": "承德市双桥区狮子沟镇",
+      "distance": "距民宿4km",
+      "openTime": "08:00-17:30",
+      "ticket": "¥80/人",
+      "duration": "2小时",
+      "tags": ["世界遗产"],
+      "history": "建于1767年，乾隆为庆祝自己60寿辰和母亲80寿辰而建，仿西藏布达拉宫样式，外八庙中规模最大。",
+      "highlights": ["大红台", "万法归一殿", "琉璃牌坊"],
+      "tips": "建议上午去光线好，大红台拍照绝佳",
+      "images": ["🛕", "🏯", "⛩️"],
+      "rating": 4.6,
+      "reviewCount": "1.8万",
+      "sort": 2,
+      "active": true
+    },
+    {
+      "id": "s3",
+      "name": "普宁寺",
+      "category": "外八庙",
+      "location": "承德市双桥区普宁路",
+      "distance": "距民宿3.5km",
+      "openTime": "08:00-17:30",
+      "ticket": "¥80/人",
+      "duration": "1.5小时",
+      "tags": ["世界遗产"],
+      "history": "建于1755年，寺内供奉世界最大的木雕千手千眼观音，高22.28米，用松柏榆杉椴五种木材拼成。",
+      "highlights": ["千手观音像", "大乘之阁", "藏传佛教壁画"],
+      "tips": "寺内可请香，观音像前拍照要关闪光灯",
+      "images": ["🛕", "🙏", "📿"],
+      "rating": 4.5,
+      "reviewCount": "1.5万",
+      "sort": 3,
+      "active": true
+    },
+    {
+      "id": "s4",
+      "name": "磬锤峰",
+      "category": "自然奇观",
+      "location": "承德市双桥区",
+      "distance": "距民宿5km",
+      "openTime": "08:00-17:00",
+      "ticket": "¥50/人",
+      "duration": "2小时",
+      "tags": ["国家地质公园"],
+      "history": "高38米的天然石柱，形如棒槌，康熙赐名'磬锤峰'。是承德十大名山之一。",
+      "highlights": ["磬锤峰观景台", "索道缆车", "夕阳晚照"],
+      "tips": "建议下午4点去，坐缆车上山看日落，景色绝美",
+      "images": ["⛰️", "🚡", "🌅"],
+      "rating": 4.4,
+      "reviewCount": "1.2万",
+      "sort": 4,
+      "active": true
+    },
+    {
+      "id": "s5",
+      "name": "双塔山",
+      "category": "自然奇观",
+      "location": "承德市双滦区",
+      "distance": "距民宿12km",
+      "openTime": "08:00-17:00",
+      "ticket": "¥50/人",
+      "duration": "2小时",
+      "tags": ["国家地质公园"],
+      "history": "两座巨大岩柱并立，顶上各有一座辽代古塔，古人如何建塔至今是谜。",
+      "highlights": ["双塔奇观", "登山步道", "辽代古塔"],
+      "tips": "距市区稍远，建议安排在第二天上午",
+      "images": ["🗼", "🏔️", "🧗"],
+      "rating": 4.3,
+      "reviewCount": "0.9万",
+      "sort": 5,
+      "active": true
+    }
+  ]
+}
