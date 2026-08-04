@@ -74,54 +74,31 @@ tr:hover td { background:#FDFDFC; }
 .publish-status .dot.unsynced { background:#E0C060; }
 
 /* === Gate === */
-.gate-overlay { position:fixed; inset:0; background:var(--bg); z-index:9998; display:flex; align-items:center; justify-content:center; padding:20px; }
-.gate-card { background:#fff; border-radius:16px; padding:32px 28px; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.12); width:320px; max-width:100%; }
+.gate-overlay { position:fixed; inset:0; background:var(--bg); z-index:9998; display:flex; align-items:center; justify-content:center; }
+.gate-card { background:#fff; border-radius:16px; padding:32px 28px; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.12); width:320px; }
 .gate-card .icon { font-size:48px; margin-bottom:8px; }
 .gate-card h2 { font-size:18px; margin-bottom:4px; }
 .gate-card .sub { font-size:11px; color:#888; margin-bottom:16px; }
-.gate-card input { width:100%; padding:12px 14px; border:1px solid #DDD; border-radius:8px; font-size:16px; text-align:center; outline:none; letter-spacing:4px; font-family:monospace; -webkit-appearance:none; }
+.gate-card input { width:100%; padding:10px 14px; border:1px solid #DDD; border-radius:8px; font-size:14px; text-align:center; outline:none; letter-spacing:4px; font-family:monospace; }
 .gate-card input:focus { border-color:var(--gold); }
 .gate-card .err { font-size:10px; color:var(--red); margin-top:6px; display:none; }
 .gate-card .hint { font-size:10px; color:#bbb; margin-top:10px; }
-.gate-card button { margin-top:12px; width:100%; padding:12px; font-size:15px; border-radius:8px; }
-
-/* === Table scroll wrapper === */
-.table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 
 /* === MOBILE === */
 @media (max-width:768px) {
   .layout { flex-direction:column; }
-  .sidebar { width:100%; flex-direction:row; overflow-x:auto; padding:4px 6px; flex-shrink:0; }
+  .sidebar { width:100%; flex-direction:row; overflow-x:auto; padding:0; flex-shrink:0; }
   .sidebar-logo { display:none; }
   .sidebar-group { display:none; }
   .sidebar-footer { display:none; }
-  .sidebar-item { flex-shrink:0; padding:10px 14px; font-size:11px; white-space:nowrap; border-left:none; border-bottom:2px solid transparent; min-height:40px; display:flex; align-items:center; }
+  .sidebar-item { flex-shrink:0; padding:10px 12px; font-size:10px; white-space:nowrap; border-left:none; border-bottom:2px solid transparent; }
   .sidebar-item.active { border-left:none; border-bottom-color:var(--gold); }
-  .main { padding:12px; }
+  .main { padding:14px; }
   .topbar { flex-direction:column; align-items:flex-start; gap:8px; }
-  .stat-row { flex-wrap:wrap; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .stat-card { min-width:0; padding:12px 8px; }
-  .stat-card .val { font-size:22px; }
+  .stat-row { flex-wrap:wrap; }
+  .stat-card { min-width:calc(50% - 6px); }
   .form-row { flex-direction:column; }
   .form-row label { width:auto; text-align:left; padding-top:0; }
-  .btn { padding:10px 16px; font-size:12px; min-height:40px; }
-  .btn-sm { padding:6px 10px; font-size:11px; min-height:32px; }
-  table { font-size:10px; }
-  th, td { padding:6px 8px; }
-  .card { padding:12px 14px; }
-  .gate-card { padding:24px 18px; }
-  .gate-card .icon { font-size:40px; }
-  .gate-card h2 { font-size:16px; }
-  input, select, textarea { font-size:16px !important; }
-}
-
-/* Small phone */
-@media (max-width:400px) {
-  .sidebar-item { padding:8px 10px; font-size:10px; min-height:36px; }
-  .sidebar-item .si { font-size:14px; width:16px; }
-  .stat-card .val { font-size:20px; }
-  .stat-card .lbl { font-size:9px; }
-  .topbar h1 { font-size:16px; }
 }
 </style>
 </head>
