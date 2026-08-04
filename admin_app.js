@@ -166,6 +166,15 @@ function dash(m) {
         <b>${DB.dailyTip.date} · ${DB.dailyTip.weather} ${DB.dailyTip.temp}°C：</b>${DB.dailyTip.content}
       </div>
     </div>
+    <div class="card"><h3>📡 数据状态</h3>
+      <div style="font-size:11px;color:#555;line-height:1.8;">
+        <div>📊 数据来源：<b>${window._dataSource === 'remote' ? '🌐 线上同步' : window._dataSource === 'cache' ? '💾 本地缓存' : '📦 默认数据'}</b></div>
+        <div>🏯 景区总数：<b>${DB.scenicSpots.length}</b>（显示：${DB.scenicSpots.filter(s=>s.active).length}）</div>
+        <div>🍜 美食总数：<b>${DB.foods.length}</b>（启用：${DB.foods.filter(f=>f.active).length}）</div>
+        <div>📜 路线总数：<b>${DB.routes.length}</b>（启用：${DB.routes.filter(r=>r.active).length}）</div>
+        <div style="margin-top:4px;"><button class="btn btn-sm btn-pri" onclick="remoteSync()">🔄 从线上重新同步</button></div>
+      </div>
+    </div>
     <div class="card"><h3>🔗 快捷操作</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-pri" onclick="nav('pwd')">🔐 更新密码</button>
@@ -645,15 +654,24 @@ function toast(msg) {
 // ===== INIT =====
 async function init() {
   DB = loadDB();
-  window._dataSource = 'cache';
+  window._dataSource = 'cache';  // 初始为本地缓存
+  // 更新诊断横幅
+  const banner = document.getElementById('diagBanner');
+  if (banner) {
+    banner.style.background = '#27ae60';
+    banner.textContent = '✅ JS OK | 数据源:cache | 景区:' + (DB.scenicSpots?DB.scenicSpots.length:'?') + '个 | 美食:' + (DB.foods?DB.foods.length:'?') + '个';
+  }
   // 先立即渲染本地数据，避免长时间白屏
   nav('dash');
   // 后台从线上同步最新数据
   const synced = await syncFromRemote();
   if (synced) {
     console.log('✅ 已从线上同步数据，共' + DB.scenicSpots.length + '个景区');
+    if (banner) banner.textContent = '✅ JS OK | 数据源:🌐线上 | 景区:' + DB.scenicSpots.length + '个 | 美食:' + DB.foods.length + '个';
+    // 同步成功后刷新看板
     if (current === 'dash') nav('dash');
   } else if (!window._dataSource || window._dataSource === 'cache') {
     window._dataSource = 'cache';
+    if (banner) banner.textContent = '⚠️ JS OK | 数据源:💾本地 | 景区:' + DB.scenicSpots.length + '个（同步失败）';
   }
 }

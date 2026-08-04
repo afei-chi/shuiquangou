@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>JS测试</title></head>
+<body style="font-family:sans-serif;padding:40px;text-align:center;">
+<h1 id="result" style="color:red;font-size:48px;">❌ JS 不可用</h1>
+<p>如果你看到红色文字，说明 JavaScript 没有执行</p>
+<p style="color:gray;font-size:12px;">请检查浏览器是否禁用了 JavaScript</p>
+
+<noscript>
+<div style="background:#e74c3c;color:#fff;padding:20px;margin:20px;border-radius:10px;">
+  <h2>🚫 浏览器已禁用 JavaScript</h2>
+  <p>请在浏览器设置中启用 JavaScript 后刷新此页面</p>
+</div>
+</noscript>
+
+<script>
+// 最简单的JS测试
+document.getElementById('result').textContent = '✅ JS 完全可用';
+document.getElementById('result').style.color = 'green';
+document.body.style.background = '#e8f5e9';
+console.log('JS测试通过！浏览器支持JavaScript');
+</script>
+</body>
+</html>
