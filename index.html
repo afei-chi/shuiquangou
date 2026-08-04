@@ -497,7 +497,11 @@ async function loadDB() {
   // 1. Try remote data first (if REMOTE_DATA_URL is configured)
   if (REMOTE_DATA_URL && REMOTE_DATA_URL.startsWith('http')) {
     try {
-      const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now());
+      // 8秒超时，防止网络请求卡住导致loading界面永久显示
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
+      clearTimeout(timeout);
       if (resp.ok) {
         const remoteData = await resp.json();
         // Merge: remote data wins, but keep local cache for offline
@@ -670,7 +674,12 @@ function getDefaultDB() {
   };
 }
 
-let DB = loadDB();
+// 先用同步默认数据初始化，避免 DB 为 Promise 导致渲染错误
+// init() 中会用远程/缓存数据覆盖
+let DB = (function() {
+  try { const d = localStorage.getItem(DB_KEY); if (d) return JSON.parse(d); } catch(e) {}
+  return getDefaultDB();
+})();
 
 // ==================== RENDER HELPERS ====================
 let currentTab = 0;

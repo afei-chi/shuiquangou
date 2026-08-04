@@ -162,6 +162,7 @@ const GITHUB_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/
 // ==================== DATA ====================
 const DB_KEY = 'shuiquangou_miniapp_v2';
 const META_KEY = 'shuiquangou_meta_v2';
+const REMOTE_DATA_URL = 'https://afei-chi.github.io/shuiquangou/data.json';
 
 function getMeta() { try { return JSON.parse(localStorage.getItem(META_KEY)||'{}'); } catch(e) { return {}; } }
 function saveMeta(m) { localStorage.setItem(META_KEY, JSON.stringify(m)); }
@@ -172,6 +173,37 @@ function loadDB() {
   const def = getDefaultDB(); saveDB(def); return def;
 }
 function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); touchMod(); }
+
+async function syncFromRemote() {
+  // 管理端启动时从线上同步最新数据
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const resp = await fetch(REMOTE_DATA_URL + '?t=' + Date.now(), { signal: controller.signal });
+    clearTimeout(timeout);
+    if (resp.ok) {
+      const remoteData = await resp.json();
+      if (remoteData && remoteData.config) {
+        // 合并远程数据到本地（保留本地未发布的修改）
+        const local = loadDB();
+        const meta = getMeta();
+        // 如果本地没有未发布的修改，则直接用远程数据覆盖
+        if (!pendingChanges) {
+          saveDB(remoteData);
+          DB = remoteData;
+          return true;
+        } else {
+          // 有未发布修改时，提示用户
+          console.log('📌 检测到本地有未发布修改，保留本地数据');
+          return false;
+        }
+      }
+    }
+  } catch(e) {
+    console.warn('⚠️ 远程同步失败，使用本地数据', e.message);
+  }
+  return false;
+}
 
 function getDefaultDB() {
   return {
@@ -733,8 +765,13 @@ function toast(msg) {
 }
 
 // ===== INIT =====
-function init() {
+async function init() {
   DB = loadDB();
+  // 先从线上同步最新数据
+  const synced = await syncFromRemote();
+  if (synced) {
+    console.log('✅ 已从线上同步数据，共' + DB.scenicSpots.length + '个景区');
+  }
   nav('dash');
 }
 </script>
