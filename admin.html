@@ -261,6 +261,7 @@ function nav(pg) {
 // ==================== RENDER ====================
 function render(pg) {
   const m = document.getElementById('main');
+  if (!m) { console.error('❌ main 元素未找到，页面可能未加载完成'); return; }
   switch(pg) {
     case 'dash': dash(m); break;
     case 'routes': routesPg(m); break;
