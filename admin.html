@@ -149,7 +149,7 @@ tr:hover td { background:#FDFDFC; }
     <input type="password" id="gatePwd" placeholder="输入密码" maxlength="20" onkeydown="if(event.key==='Enter')checkGate()" />
     <div class="err" id="gateErr">密码错误，请重试</div>
     <div class="hint">默认密码: <b>chengde2024</b></div>
-    <div id="gateRememberBox" onclick="var cb=document.getElementById('gateRemember');cb.checked=!cb.checked;this.classList.toggle('checked',cb.checked);" style="display:flex;align-items:center;gap:10px;justify-content:center;margin-top:12px;padding:12px;background:#f8f8f8;border-radius:8px;cursor:pointer;font-size:14px;color:#555;user-select:none;-webkit-tap-highlight-color:transparent;min-height:48px;">
+    <div id="gateRememberBox" onclick="toggleRemember()" style="display:flex;align-items:center;gap:10px;justify-content:center;margin-top:12px;padding:12px;background:#f8f8f8;border-radius:8px;cursor:pointer;font-size:14px;color:#555;user-select:none;-webkit-tap-highlight-color:transparent;min-height:48px;">
       <span id="gateRememberIcon" style="font-size:24px;">☐</span> 保持登录（下次免密码）
       <input type="checkbox" id="gateRemember" style="display:none;" />
     </div>
@@ -185,6 +185,14 @@ tr:hover td { background:#FDFDFC; }
 const GATE_PWD='chengde2024';
 const AUTH_KEY='shuiquangou_auth';
 function isAuth(){ try{return localStorage.getItem(AUTH_KEY)==='1'}catch(e){return false} }
+function toggleRemember(){
+  var cb=document.getElementById('gateRemember');
+  var icon=document.getElementById('gateRememberIcon');
+  var box=document.getElementById('gateRememberBox');
+  cb.checked=!cb.checked;
+  if(cb.checked){ icon.textContent='☑'; box.style.background='#FFF9F0'; box.style.border='2px solid var(--gold)'; }
+  else { icon.textContent='☐'; box.style.background='#f8f8f8'; box.style.border='2px solid transparent'; }
+}
 function checkGate(){
   var v=document.getElementById('gatePwd').value.trim();
   if(v===GATE_PWD){
