@@ -1,16 +1,5 @@
-console.log("======== app.js 已加载 v2.0.3 ========");
-// 全局错误捕获 — 帮助诊断JS问题
-window._jsErrors = [];
-window.addEventListener('error', function(e) {
-  window._jsErrors.push(e.message);
-  console.error('JS错误:', e.message, e.filename, e.lineno);
-});
 const REMOTE_DATA_URL = 'https://afei-chi.github.io/shuiquangou/data.json';
-const APP_VERSION = '2.0.2';
-
-// 最简单的JS测试 — banner立即变绿证明JS能执行
-document.getElementById('diagBanner').style.background='#27ae60';
-document.getElementById('diagBanner').textContent='✅ JS基础测试通过 | 若此条仍为红色则JS被禁用';
+const APP_VERSION = '2.0.3';
 
 // ==================== DATA STORE ====================
 const DB_KEY = 'shuiquangou_miniapp';
@@ -550,13 +539,6 @@ async function init() {
 
   // 无论如何都要隐藏loading（CSS动画也会在10秒后兜底隐藏）
   if (overlay) overlay.classList.add('hidden');
-
-  // 更新诊断横幅
-  const banner = document.getElementById('diagBanner');
-  if (banner) {
-    banner.style.background = '#27ae60';
-    banner.textContent = '✅ JS v' + APP_VERSION + ' | 数据源:' + (window._dataSource||'?') + ' | 景区:' + (DB.scenicSpots?DB.scenicSpots.length:'?') + '个 | 美食:' + (DB.foods?DB.foods.length:'?') + '个';
-  }
 
   // Update data source indicator
   const ft = document.getElementById('dataFooter');
